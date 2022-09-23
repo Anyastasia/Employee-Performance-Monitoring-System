@@ -49,9 +49,9 @@
                             <x-table.row>Marisa Kirisame</x-table.row>
                             <x-table.row>Active</x-table.row>
                             <x-table.row>
-                                <div class="flex">
+                                <div class="flex justify-content-center">
                                     <x-button>Assign</x-button>
-                                    <x-button variant="text">View Tasks</x-button>
+                                    <a class="button button-text" href="{{url('/profile/id')}}">View Profile</a>
                                     <x-button variant="text">Evaluate</x-button>
                                 </div>
                             </x-table.row>

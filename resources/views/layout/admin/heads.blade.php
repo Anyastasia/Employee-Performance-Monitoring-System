@@ -75,8 +75,9 @@
                     <label for="search">Search</label>
                     <input type="search" name="search" id="search" class="px--75 py--5">
                 </section>
-
-                <section class="table-container px-4 py-1"">
+            </div>
+            
+                <section class="table-container px-4 py-1 mx-3">
                     <table class="table">
                         <thead>
                             <tr>
@@ -100,7 +101,6 @@
                         </tbody>
                     </table>
                 </section>
-            </div>
         </main>
     </div>
 

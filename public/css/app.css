@@ -286,6 +286,11 @@ body {
     background-color: var(--hover);
 }
 
+
+.justify-content-center {
+    justify-content: center;
+}
+
 .justify-self-start {
     justify-self: flex-start;
 }
@@ -832,9 +837,9 @@ h1 {
 
 
 
-/* .table {
-    
-} */
+.table {
+    width: 100%;
+}
 
 .table > thead > tr > th {
     padding-block: .75em;

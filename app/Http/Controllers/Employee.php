@@ -12,11 +12,11 @@
         }
 
         public function home() {
-            return view('layout.employee.home');
+            return view('layout.employee.home2');
         }
 
         public function profile() {
-            return view('layout.employee.profile');
+            return view('layout.employee.profile2');
         }
 
         public function task() {

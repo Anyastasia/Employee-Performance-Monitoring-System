@@ -26,9 +26,9 @@
             </a>
             <h1 class="display-inline">Departments</h1>
 
-            <div class="flex flex-center">
-                <section class="table-container px-4 py-1">
-                    <table class="table m-inline-auto">
+            <div class="">
+                <section class="table-container mx-3 my-3 px-4 py-1">
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>Department Name</th>
@@ -62,6 +62,6 @@
 
         </main>
     </div>
-    <script src="{{url('js/admin.js')}}"></script>
+    <script src="{{url('js/dropdown.js')}}"></script>
 </body>
 </html>
