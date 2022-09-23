@@ -1,0 +1,911 @@
+:root {
+    --corner-radius: 10px;
+    --sidebar-hover-corners: 5px;
+    /* --primary: #9575cd; */
+    --primary: #333;
+    --primary-dark: #65499c;
+    --primary-light: #c7a4ff;
+    --surface: #f6f6fd;
+    --hover: hsl(240 7.69% 84.71% / .3);
+    --white: #fff;
+    --black: #000;
+    --box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.2);
+    --sidebar-font-size: 0.75rem;
+    --font-size-base: 16px;
+    --h1-fluid: clamp(2rem, 1.88rem + 2vw, 3rem);
+    --h2-fluid: clamp(1.5rem, 1.88rem + 2vw, 1.66rem);
+    --h3-fluid: clamp(1.17rem, 1.88rem + 2vw, 3rem);
+    --h4-fluid: clamp(1rem, 1.88rem + 2vw, 3rem);
+    --h5-fluid: clamp(0.83rem, 1.88rem + 2vw, 3rem);
+    --h6-fluid: clamp(0.75rem, 1.88rem + 2vw, 3rem);
+    --h1: 2rem;
+    --h2: 1.5rem;
+    --h3: 1.17rem;
+    --h4: 1rem;
+    --h5: 0.83rem;
+    --h6: 0.75rem;
+
+    --step--2: clamp(0.69rem, calc(0.63rem + 0.33vw), 0.96rem);
+    --step--1: clamp(0.83rem, calc(0.74rem + 0.46vw), 1.20rem);
+    --step-0: clamp(1.00rem, calc(0.88rem + 0.63vw), 1.50rem);
+    --step-1: clamp(1.20rem, calc(1.03rem + 0.84vw), 1.88rem);
+    --step-2: clamp(1.44rem, calc(1.21rem + 1.13vw), 2.34rem);
+    --step-3: clamp(1.73rem, calc(1.43rem + 1.50vw), 2.93rem);
+    --step-4: clamp(2.07rem, calc(1.68rem + 1.99vw), 3.66rem);
+    --step-5: clamp(2.49rem, calc(1.97rem + 2.61vw), 4.58rem);
+}
+
+
+/* CSS RESET */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	box-sizing: border-box;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* END OF CSS RESET */
+
+
+
+
+html {
+    font-size: var(--font-size-base);
+}
+body {
+    background-color: var(--surface);
+}
+
+
+
+.add-staff-dialog form .name > div {
+    display: inline-block;
+}
+
+.add-staff-dialog form > div {
+    margin-block-end: 1rem;
+}
+
+.add-staff-dialog form label {
+    display: block;
+    margin-block-end: .5rem;
+}
+
+.add-staff-dialog form input {
+    padding: .75rem;
+}
+
+.align-self-left {
+    align-self: flex-start;
+}
+
+.button { 
+    padding-inline: 1em;
+    padding-block: .5em;
+    border: 0;
+    color: white;
+    background-color: var(--primary);
+    border-radius: var(--corner-radius)
+}
+
+.button-text {
+    border: 0;
+    background-color: inherit;
+    color: var(--primary);
+}
+
+.button-text:hover {
+    background-color: var(--hover);
+}
+
+.button-text-underlined {
+    text-decoration: underline;
+}
+
+.button-outline-primary {
+    border: solid 2px var(--primary);
+    background-color: inherit;
+    color: var(--primary);
+}
+
+.button-outline:hover {
+    background-color: var(--primary);
+    color: white;
+}
+
+.button > i {
+    margin-inline-end: .5em;
+}
+
+.button-extend {
+    width: 100%;
+}
+
+.dropdown {
+    display: inline-block;
+}
+
+.dropdown > .dropdown-button {
+    cursor: pointer;
+    position: relative;
+    border: 0;
+    border-radius: 50%;
+}
+
+.dropdown > .dropdown-button > img {
+    height: 40px;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 50%;
+}
+
+.dropdown .dropdown-content {
+    display: none;
+    cursor: pointer;
+    margin-top: 2.75em;
+    position: absolute;
+    border-radius: 8px;
+    padding-inline: .75em;
+    z-index: 1;
+    background-color: white;
+    box-shadow:  var(--box-shadow);
+}
+
+.dropdown-button > i {
+    font-size: .75rem;
+}
+
+.display-inline {
+    display: inline;
+}
+.display-inline-block {
+    display: inline-block;
+}
+
+.display-block .dropdown-content {
+    display: block;
+}
+
+.dropdown-content .dropdown-item {
+    margin-block: 1em;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-center {
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.flex-right {
+    justify-content: flex-end;
+}
+
+.flex-row {
+    flex-direction: row;
+}
+
+.flex-col{
+    flex-direction: column;
+}
+
+.g-1 {
+    gap: 1rem;
+}
+.g-2 {
+    gap: 2rem;
+}
+
+.g-3 {
+    gap: 3rem;
+}
+
+.g-4 {
+    gap: 4rem;
+}
+
+.g-5 {
+    gap: 5rem;
+}
+
+.h1 {
+    font-size: var(--h1);
+}
+
+.h2 {
+    font-size: var(--h2);
+}
+
+.h3 {
+    font-size: var(--h3);
+}
+
+.h4 {
+    font-size: var(--h4);
+}
+
+.h5 {
+    font-size: var(--h5);
+}
+
+.h6 {
+    font-size: var(--h6);
+}
+
+
+.icon-link {
+    color: black;
+}
+
+.icon-link:hover {
+    background-color: var(--hover);
+}
+
+.justify-self-start {
+    justify-self: flex-start;
+}
+
+
+.login-portal-container {
+    row-gap: 1rem;
+}
+
+.login-portal-container > a {
+    padding-inline: 1em;
+    padding-block: .5em;
+    background-color: inherit;
+    border: solid 1px black;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    color: black;
+    text-decoration: none;
+}
+
+.width-90 {
+    width: 90%;
+}
+
+
+.mr-auto {
+    margin-right: auto;
+}
+
+.ml-auto {
+    margin-left: auto;
+}
+
+.m-block-end-auto {
+    margin-block-end: auto;
+}
+
+.m-block-start-auto {
+    margin-block-start: auto;
+}
+
+.m-inline-auto {
+    margin-inline: auto;
+}
+
+.m-block-auto {
+    margin-block: auto;
+}
+
+.mr-1 {
+    margin-inline-end: 1em;
+}
+.mr-2 {
+    margin-inline-end: 2em;
+}
+.mr-3 {
+    margin-inline-end: 3em;
+}
+.mr-4 {
+    margin-inline-end: 4em;
+}
+.mr-5 {
+    margin-inline-end: 5em;
+}
+
+.ml-1 {
+    margin-inline-start: 1em;
+}
+.ml-2 {
+    margin-inline-start: 2em;
+}
+.ml-3 {
+    margin-inline-start: 3em;
+}
+.ml-4 {
+    margin-inline-start: 4em;
+}
+.ml-5 {
+    margin-inline-start: 5em;
+}
+
+
+.mt-1 {
+    margin-block-start: 1em;
+}
+.mt-2 {
+    margin-block-start: 2em;
+}
+.mt-3 {
+    margin-block-start: 3em;
+}
+.mt-4 {
+    margin-block-start: 4em;
+}
+.mt-5 {
+    margin-block-start: 5em;
+}
+
+.mb-1 {
+    margin-block-end: 1em;
+}
+.mb-2 {
+    margin-block-end: 2em;
+}
+.mb-3 {
+    margin-block-end: 3em;
+}
+.mb-4 {
+    margin-block-end: 4em;
+}
+.mb-5 {
+    margin-block-end: 5em;
+}
+
+.mx-1 {
+    margin-inline: 1rem;
+}
+.mx-2 {
+    margin-inline: 2rem;
+}
+.mx-3 {
+    margin-inline: 3rem;
+}
+.mx-4 {
+     margin-inline: 4rem;
+}
+.mx-5 {
+    margin-inline: 5rem;
+}
+
+.my--5 {
+    margin-block: .5rem;
+}
+
+.my--75 {
+    margin-block: .75rem;
+}
+.my-1 {
+    margin-block: 1rem;
+}
+.my-2 {
+    margin-block: 2rem;
+}
+.my-3 {
+    margin-block: 3rem;
+}
+.my-4 {
+    margin-block: 4rem;
+}
+.my-5 {
+    margin-block: 5rem;
+}
+
+
+
+.mis-10 {
+    margin-inline-start: 10rem;
+}
+
+
+.profile-container > div > img {
+    border-radius: 50%;
+    height: 100px;
+    max-width: 100%;
+}
+
+.profile-container > div {
+    margin-block: 1rem;
+}
+
+.profile-container > article {
+    margin-block-end: .75rem;
+}
+
+.profile-container > article > h2 {
+    font-size: var(--h2);
+}
+
+.profile-container > article > h3 {
+    font-size: var(--h3);
+}
+
+
+h1 {
+    font-size: var(--h1);
+}
+
+.pl-1 {
+    padding-inline-start: 1rem;
+}
+
+.pl-2 {
+    padding-inline-start: 2rem;
+}
+
+.pl-3 {
+    padding-inline-start: 3rem;
+}
+
+.pl-4 {
+    padding-inline-start: 4rem;
+}
+
+.pl-5 {
+    padding-inline-start: 5rem;
+}
+
+.pr-1 {
+    padding-inline-end: 1rem;
+}
+
+.pr-2 {
+    padding-inline-end: 2rem;
+}
+
+.pr-3 {
+    padding-inline-end: 3rem;
+}
+
+.pr-4 {
+    padding-inline-end: 4rem;
+}
+
+.pr-5 {
+    padding-inline-end: 5rem;
+}
+
+.pt-1 {
+    padding-block-start: 1rem;
+}
+
+.pt-2 {
+    padding-block-start: 2rem;
+}
+
+.pt-3 {
+    padding-block-start: 3rem;
+}
+
+.pt-4 {
+    padding-block-start: 4rem;
+}
+
+.pt-5 {
+    padding-block-start: 5rem;
+}
+
+.pb-1 {
+    padding-block-end: 1rem;
+}
+
+.pb-2 {
+    padding-block-end: 2rem;
+}
+
+.pb-3 {
+    padding-block-end: 3rem;
+}
+
+.pb-4 {
+    padding-block-end: 4rem;
+}
+
+.pb-5 {
+    padding-block-end: 5rem;
+}
+
+.px--5 {
+    padding-inline: .5rem;
+}
+.px--75 {
+    padding-inline: .75rem;
+}
+.px-1 {
+    padding-inline: 1rem;
+}
+.px-2 {
+    padding-inline: 2rem;
+}
+.px-3 {
+    padding-inline: 3rem;
+}
+.px-4 {
+    padding-inline: 4rem;
+}
+.px-5 {
+    padding-inline: 5rem;
+}
+
+.py--5 {
+    padding-block: .5rem;
+}
+.py--75 {
+    padding-block: .75rem;
+}
+.py-1 {
+    padding-block: 1rem;
+}
+.py-2 {
+    padding-block: 2rem;
+}
+.py-3 {
+    padding-block: 3rem;
+}
+.py-4 {
+    padding-block: 4rem;
+}
+.py-5 {
+    padding-block: 5rem;
+}
+.col-gap-2 {
+    column-gap: 2rem;
+}
+
+.row-gap-2 {
+    row-gap: 2rem;
+}
+
+.x {
+    border: solid 1px black;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: row;
+    padding: 1em;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    border-radius: var(--corner-radius);
+}
+
+.login-form label {
+    display: block;
+    margin-block-end: .5rem;
+}
+
+.login-form input[type="text"], .login-form input[type="password"] {
+    padding-inline: .75em;
+    padding-block: 1em;
+    margin-bottom: .5rem
+}
+
+.login-form > button {
+    width: 100%;
+}
+.vh-90 {
+    height: 90vh;
+}
+
+
+.pe-3 {
+    padding-inline-end: 3rem;
+}
+
+.pt-3 {
+    padding-block-start: 3rem;
+}
+
+.push-right {
+    justify-content: end;
+}
+.sidenav {
+    display: inline-block;
+    position: relative;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    background-color: aliceblue;
+    grid-area: sidebar;
+}
+
+
+.main-wrapper {
+    display: grid;
+    grid-template-areas: "sidenav content";
+}
+
+.main-wrapper > nav {
+    grid-area: sidenav;
+    border: solid 1px black;
+    padding-inline: 1em;
+}
+
+.main-wrapper > main {
+    grid-area: content;
+    border: solid 1px blue;
+}
+
+
+.mx-5 {
+    margin-inline: 5em;
+}
+.x-button > i {
+    margin-right: .5em;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+
+.dashboard-flex {
+    display: flex;
+    column-gap: 1em;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin-block-start: 3em;
+}
+
+.xcard {
+    display: block;
+    color: black;
+    text-decoration: none;
+    background-color: #fff;
+    border-radius: 15px;
+    width: fit-content;
+    text-align: center;
+    padding-inline: 1em;
+    padding-block: 1em;
+}
+
+.xcard-icon {
+    display: block;
+    font-size: 5em;
+}
+
+.dashboard-grid {
+    display: grid;
+}
+
+.dialog {
+    display: absolute;
+    inset: 0 0 50% 0;
+    border: none;
+    border-radius: var(--corner-radius);
+}
+
+.dialog::backdrop {
+    background-color: hsla(0 0 0 0.2);
+}
+
+.master-grid {
+    display: grid;
+    grid-template-areas: 
+    "sidebar nav"
+    "sidebar content";
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr;
+}
+
+.master-grid > .sidebar {
+    grid-area: sidebar;
+    background-color: var(--primary);
+    height: 100vh;
+    padding-block: 1.5rem;
+}
+
+
+.notification {
+    display: absolute;
+    inset: 0 0 45% 0;
+    border: none;
+    border-radius: var(--corner-radius);
+}
+
+.notification > h1 {
+    margin-inline: 1rem;
+    margin-block: .75rem;
+}
+
+.notification > h1 {
+    margin-block-end: 2.5rem;
+}
+.notification > .notification-container > a {
+    display: block;
+    padding-block: 1.2rem;
+    text-decoration: none;
+    color: black;
+    border-radius: var(--corner-radius);
+    padding-inline: 1rem;
+    padding-block: .75rem;
+}
+
+.notification-container > a > li > h5 {
+    margin-block-start: 1rem;
+    font-size: var(--h5);
+}
+
+.notification > .notification-container > a:hover {
+    background-color: var(--hover);
+}
+
+.notification::backdrop {
+    background-color: hsla(0 0 0 0.2);
+}
+
+
+.required::after {
+    content: "*";
+    color: red;
+}
+.sidebar .sidebar-item {
+    text-decoration: none;
+    color: white;
+}
+
+.sidebar .sidebar-item > div {
+    padding-block: 1rem;
+}
+
+.sidebar .sidebar-item:hover > div {
+    background-color: white;
+    color: black;
+    border-radius: var(--sidebar-hover-corners);
+}
+
+/* .sidebar-item::before {
+    content: "";
+    border: solid 2px black;
+} */
+
+
+.sidebar-item > div > i {
+    display: block;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.sidebar-item > div > li {
+    text-align: center;
+    font-size: var(--sidebar-font-size);
+}
+
+.sr-only:not(:focus):not(:active) {
+    clip: rect(0 0 0 0); 
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap; 
+    width: 1px;
+  }
+
+
+
+/* .table {
+    
+} */
+
+.table > thead > tr > th {
+    padding-block: .75em;
+    padding-inline: 1em;
+    text-align: center;
+    border-bottom: solid 1px gray;
+}
+.table > tbody > tr > td {
+    padding-block: .75em;
+    padding-inline: 1em;
+    text-align: center;
+    border-bottom: solid 1px gray;
+}
+
+.table > tbody > tr:hover {
+    background-color: var(--hover);
+}
+
+.table > tbody > tr:nth-child(even) {
+    background-color: #D3D3D3;
+}
+
+.table > tbody > tr > td > div {
+    display: flex;
+    gap: .5rem;
+}
+
+.table-container {
+    background-color: white;
+    border-radius: var(--corner-radius);
+}
+
+.task-submission-container > div > label {
+    display: block;
+    margin-block-end: .5rem;    
+}
+
+.task-submission-container > div {
+    margin-block: 1rem;
+}
+
+.task-submission-container input::file-selector-button{
+    color: var(--primary);
+    border: 0;
+    background-color: inherit;
+}
+
+.tasks > a {
+    text-decoration: none;
+    color: black;
+}
+
+.tasks > a > li {
+    background-color: white;
+    border-radius: var(--corner-radius);
+    margin-bottom: .75rem;
+    padding: 1rem .75rem
+}
+
+.tasks > a > li > h5 {
+    font-size: var(--h5);
+    margin-top: .75rem;
+}
+
+
+.sidebar ul {
+    padding-inline: .5rem;
+}
+.master-grid > header {
+    grid-area: nav;
+}
+.master-grid > main {
+    grid-area: content;
+}
