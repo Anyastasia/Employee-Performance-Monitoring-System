@@ -5,6 +5,12 @@
     use App\Http\Controllers\Controller;
     use Illuminate\Http\Request;
 
+    use App\Models\Employee;
+    use App\Models\Division;
+    use App\Models\Head;
+    
+    use Inertia\Inertia;
+
     class Admin extends Controller {
 
         public function login() {
@@ -23,16 +29,16 @@
             return view('layout.admin.dashboard');
         }
 
-        public function departments() {
-            return view('layout.admin.departments');
+        public function divisions() {
+            return Inertia('Admin/AdminDivision', ['divisions' => Division::all()]);
         }
 
         public function heads() {
-            return view('layout.admin.heads');
+            return Inertia('Admin/AdminHead', ['heads' => Head::all(), 'divisions' => Division::all()]);
         }
 
         public function employees() {
-            return view('layout.admin.employees');
+            return Inertia('Admin/AdminEmployee', ['employees' => Employee::all(), 'divisions' => Division::all()]);
         }
     }
 

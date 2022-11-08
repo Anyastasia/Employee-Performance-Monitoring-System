@@ -19,7 +19,7 @@ return [
     ],
 
     /*
-    |--------------------------------------------------------------------------
+    |----------------------employees----------------------------------------------------
     | Authentication Guards
     |--------------------------------------------------------------------------
     |
@@ -38,8 +38,20 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'employees',
         ],
+
+        'employee' => [
+            'driver' => 'session',
+            'provider' => 'employees',
+        ],
+
+        'head' => [
+            'driver' => 'session',
+            'provider' => 'heads',
+        ],
+
+        
     ],
 
     /*
@@ -60,9 +72,19 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'employees' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\Employee::class,
+        ],
+
+        'heads' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Head::class,
+        ],
+
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
         ],
 
         // 'users' => [

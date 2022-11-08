@@ -2,39 +2,44 @@
 
     namespace App\Http\Controllers;
 
+    use Illuminate\Support\Facades\Auth;
     use App\Http\Controllers\Controller;
-
+    use App\Models\Employee as EmployeeModel;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Redirect;
 
     class Employee extends Controller {
         
-        public function login() {
-            return view('layout.employee.login');
+        public function __construct()
+        {
+            $this->middleware('employee');
+        }
+ 
+        public function home() {
+            return Inertia('Employee/EmployeeHome');
         }
 
-        public function home() {
-            return view('layout.employee.home2');
-        }
 
         public function profile() {
-            return view('layout.employee.profile2');
+            return Inertia('Employee/EmployeeProfile');
         }
 
         public function task() {
-
-            $xdata = [
-                "header" => "header1",
-                "description" => "lorem dolor lmao",
-                "date" => "october 17 2022"
-            ];
-            return view('layout.employee.task', $xdata);
+            return Inertia('Employee/EmployeeTask');
         }
 
-        public function notifications() {
-            return view('layout.employee.notifications');
-        }
-        
 
-        
+        public function logout(Request $request) {
+
+            Auth::logout();
+
+            $request->session()->invalidate();
+
+            $request->session()->regenerateToken();
+
+            return Redirect::route('login_employee');
+        }
+            
     }
 
 ?>

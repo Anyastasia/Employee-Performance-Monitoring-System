@@ -1,0 +1,86 @@
+
+:root {
+    --corner-radius: 10px;
+    --sidebar-hover-corners: 5px;
+    /* --primary: #9575cd; */
+    --primary: #333;
+    --primary-dark: #65499c;
+    --primary-light: #c7a4ff;
+    --surface: #f6f6fd;
+    --hover: hsl(240 7.69% 84.71% / .3);
+    --white: #fff;
+    --black: #000;
+    --box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.2);
+    --sidebar-font-size: 0.75rem;
+    --font-size-base: 16px;
+    --h1-fluid: clamp(2rem, 1.88rem + 2vw, 3rem);
+    --h2-fluid: clamp(1.5rem, 1.88rem + 2vw, 1.66rem);
+    --h3-fluid: clamp(1.17rem, 1.88rem + 2vw, 3rem);
+    --h4-fluid: clamp(1rem, 1.88rem + 2vw, 3rem);
+    --h5-fluid: clamp(0.83rem, 1.88rem + 2vw, 3rem);
+    --h6-fluid: clamp(0.75rem, 1.88rem + 2vw, 3rem);
+    --h1: 2rem;
+    --h2: 1.5rem;
+    --h3: 1.17rem;
+    --h4: 1rem;
+    --h5: 0.83rem;
+    --h6: 0.75rem;
+
+    --step--2: clamp(0.69rem, calc(0.63rem + 0.33vw), 0.96rem);
+    --step--1: clamp(0.83rem, calc(0.74rem + 0.46vw), 1.20rem);
+    --step-0: clamp(1.00rem, calc(0.88rem + 0.63vw), 1.50rem);
+    --step-1: clamp(1.20rem, calc(1.03rem + 0.84vw), 1.88rem);
+    --step-2: clamp(1.44rem, calc(1.21rem + 1.13vw), 2.34rem);
+    --step-3: clamp(1.73rem, calc(1.43rem + 1.50vw), 2.93rem);
+    --step-4: clamp(2.07rem, calc(1.68rem + 1.99vw), 3.66rem);
+    --step-5: clamp(2.49rem, calc(1.97rem + 2.61vw), 4.58rem);   
+}
+
+/* CSS RESET */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	box-sizing: border-box;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* END OF CSS RESET */
