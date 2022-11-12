@@ -12,5 +12,5 @@ class SubmittedTask extends Model
     protected $fillable = [
         'submitted_attachments',
         'notes',
-    ]
+    ];
 }
