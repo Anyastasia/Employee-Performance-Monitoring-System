@@ -14,7 +14,7 @@
 
                 <section>
                     <Task>
-                        <TaskItem v-for="(item, index) in items" href="/task/id" :key="item.id" :title="item.title" :dueDate="item.dueDate"/>
+                        <TaskItem v-for="(item, index) in items" :href="`/employee/task/${item.id}`" :key="item.id" :title="item.task_title" :dueDate="item.submission_due_date"/>
                         <!-- <TaskItem href="/task/id" title="Task 1" dueDate="September 17, 2021"/>
                         <TaskItem title="Task 1" dueDate="September 17, 2021"/>
                         <TaskItem title="Task 1" dueDate="September 17, 2021"/> -->
@@ -39,25 +39,10 @@
             TaskItem,
         },
 
-        data() {
-            return {
-                items: [{
-                    id: 1,
-                    title: "Task 1",
-                    dueDate: "September 17, 2021"
-                },
-                {
-                    id: 2,
-                    title: "Task 2",
-                    dueDate: "September 17, 2021"
-                },
-                {
-                    id: 3,
-                    title: "Task 3",
-                    dueDate: "September 17, 2021"
-                }
-                ]
-            }
-        }
+        props: {
+            id: Number,
+            items: Object,
+        },
     }
+    
 </script>

@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class SubmittedTask extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'submitted_attachments',
+        'notes',
+    ]
 }

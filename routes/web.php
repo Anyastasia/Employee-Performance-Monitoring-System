@@ -51,7 +51,7 @@ Route::controller(Employee::class)->middleware('employee')->group(function() {
     Route::get('/employee', [Employee::class, 'home']);
     Route::get('/employee/home', [Employee::class, 'home']);
     Route::get('/employee/profile', [Employee::class, 'profile']);
-    Route::get('/employee/tasks', [Employee::class, 'tasks']);
+    Route::get('/employee/task/{id}', [Employee::class, 'task']);
     Route::post('employee/logout', [Employee::class, 'logout']);
 });
 

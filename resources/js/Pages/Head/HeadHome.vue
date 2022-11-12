@@ -17,7 +17,7 @@
                     
                     <Dialog :show="show" :exit="close" class="my-3">
                         <section>
-                            <form @submit.prevent="" class="add-staff">
+                            <form @submit.prevent="submitAddEmployee" class="add-staff">
                                 <h1 class="my-1 h1">Add Employee</h1>
                                 <h6 class="my-1 h6">
                                     <em>All fields required</em>
@@ -111,10 +111,11 @@
                                     <Table>
                                         <template #table-header>
                                             <TableRow>
-                                                <TableCell :isHeader="true">
+                                                <!-- <TableCell :isHeader="true">
                                                     <input type="checkbox" v-model="all" name="" id="" @click="triggerAll">
                                                     All
-                                                </TableCell>
+                                                </TableCell> -->
+                                                <TableCell :isHeader="true"> </TableCell>
                                                 <TableCell :isHeader="true">Employee</TableCell>
                                             </TableRow>
 
@@ -125,7 +126,7 @@
                                             
                                             <TableRow v-for="employee in employees"  :key="employee.id">
                                                 <TableCell>
-                                                    <input v-model="taskForm.employees" type="checkbox" name="checkbox" ref="xitems" :value="employee.id">
+                                                    <input v-model="taskForm.employee_id" type="checkbox" name="checkbox" ref="xitems" :value="employee.id">
                                                 </TableCell>
                                                 <TableCell>
                                                     <span>{{employee.first_name + ' ' + employee.last_name}}</span>
@@ -245,7 +246,7 @@
                 },
 
                 taskForm: {
-                    'employees': [],
+                    'employee_id': [],
                     'head_id': this.head,
                     'task_title': '',
                     'task_description': '',
@@ -285,25 +286,47 @@
             },
 
             submitAssignedTask() {
-                console.log(this.taskForm)
+
+                if (this.assignTo === 'all') {
+                    this.employees.forEach((employee) => {
+                        this.taskForm.employee_id.push(employee.id)
+                    })
+                } //else {
+                //     this.taskForm.employee_id.forEach((employee) => {
+                //         xdata.push({
+                //             'employee_id': employee.id,
+                //             'head_id': this.taskForm.head_id,
+                //             'task_title': this.taskForm.task_title,
+                //             'task_description': this.taskForm.task_description,
+                //             'attachments': this.taskForm.attachments,
+                //             'submission_start_date': this.taskForm.submission_start_date,
+                //             'submission_start_time': this.taskForm.submission_start_time,
+                //             'submission_due_date': this.taskForm.submission_due_date,
+                //             'submission_due_time': this.taskForm.submission_due_time,
+                //         })
+                //     })
+                // }
+                // console.log(xdata)
+
                 Inertia.post('/assign/task/store', this.taskForm)
             },
 
         },
 
         watch: {
-            all() {
-                if (this.all === true) {
-                    this.$refs.xitems.forEach(item => {
-                        item.checked = true
-                        this.taskForm.employees.concat(item)
-                    });
-                } else {
-                    this.$refs.xitems.forEach(item => {
-                        item.checked = false
-                    });
-                }
-            },
+            // all() {
+            //     if (this.all === true) {
+            //         this.$refs.xitems.forEach(item => {
+            //             item.checked = true
+            //             this.taskForm.employee_id.push(item)
+            //         });
+            //     } else {
+            //         this.$refs.xitems.forEach(item => {
+            //             item.checked = false
+            //             this.taskForm.employee_id.pop()
+            //         });
+            //     }
+            // },
         },
     }
 </script>

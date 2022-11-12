@@ -5,6 +5,7 @@
     use Illuminate\Support\Facades\Auth;
     use App\Http\Controllers\Controller;
     use App\Models\Employee as EmployeeModel;
+    use App\Models\AssignedTask;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Redirect;
 
@@ -16,7 +17,12 @@
         }
  
         public function home() {
-            return Inertia('Employee/EmployeeHome');
+
+            $id = Auth::guard('employee')->id();
+            return Inertia('Employee/EmployeeHome', [
+                "id" => $id,
+                "items" => AssignedTask::where('employee_id', $id)->get(),
+            ]);
         }
 
 
@@ -24,8 +30,10 @@
             return Inertia('Employee/EmployeeProfile');
         }
 
-        public function task() {
-            return Inertia('Employee/EmployeeTask');
+        public function task($task_id) {
+            return Inertia('Employee/EmployeeTask', [
+                "task" => AssignedTask::where('id', $task_id)->get()[0],
+            ]);
         }
 
 
