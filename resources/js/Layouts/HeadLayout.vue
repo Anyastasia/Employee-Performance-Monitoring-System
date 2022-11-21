@@ -10,7 +10,7 @@
                     <template #dropdown-content>
                         <DropdownItem>Settings</DropdownItem>
                         <DropdownItem>
-                            <Link method='post' href="/employee/logout" as="span">Log out</Link>
+                            <Link method='post' href="/head/logout" as="span">Log out</Link>
                         </DropdownItem>
                     </template>
                 </DropdownContainer>

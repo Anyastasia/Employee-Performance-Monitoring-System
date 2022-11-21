@@ -10,7 +10,9 @@ class SubmittedTask extends Model
     use HasFactory;
 
     protected $fillable = [
+        'task_id',
         'submitted_attachments',
         'notes',
+        'status',
     ];
 }

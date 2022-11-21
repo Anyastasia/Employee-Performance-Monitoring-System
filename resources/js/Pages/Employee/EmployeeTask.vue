@@ -8,6 +8,7 @@
                 </section>
 
                 <a download :href="task.attachments">{{task.attachments}}</a>
+                <form v-if="submissionForm.status === 'active'" @submit.prevent="submitTask">
                 <section class="task-submission-container">
                     <div>
                         <label for="attachments">Attachments</label>
@@ -19,10 +20,25 @@
                         <textarea v-model="submissionForm.notes" name="notes" id="notes" cols="50" rows="5"></textarea>
                     </div>
                  </section>
+                 <PrimaryButton type="submit" v-if="submissionForm.status === 'active'">Submit</PrimaryButton>
+                 
+                </form>
 
+                <form v-else @submit.prevent="resubmitTask">
+                    <section class="task-submission-container">
+                        <div>
+                            <label for="attachments">Attachments</label>
+                            <input @change="uploadAttachments" type="file" name="attachments" ref="attachments" id="attachments">
+                        </div>
 
-                 <PrimaryButton type="submit">Submit</PrimaryButton>
+                        <div>
+                            <label for="notes">Notes (Optional)</label>
+                            <textarea v-model="submissionForm.notes" name="notes" id="notes" cols="50" rows="5"></textarea>
+                        </div>
+                    </section>
 
+                    <PrimaryButton type="submit">Re-submit</PrimaryButton>
+                </form>
             </main>
         </template>
     </EmployeeLayout>
@@ -45,26 +61,40 @@ export default {
     data() {
         return {
             submissionForm: {
-                attachments: '',
-                notes: '',
+                task_id: '',
+                attachments: '' || this.task.attachments,
+                notes: '' || this.task.notes,
+                status: this.task.status,
             },
-            url: 'http://localhost:8000/',
         }
     },
 
     props: {
         task: Object,
+        // submitted_task: Object,
     },
 
     methods: {
         submitTask() {
-            Inertia.post('/task/submit', this.submissionForm)
+            this.submissionForm.task_id = this.task.task_id
+            this.submissionForm.status = 'submitted'
+            Inertia.post('/task/submit/store', this.submissionForm)
+        },
+
+        resubmitTask() {
+            this.submissionForm['id'] = this.task.id
+            this.submissionForm.status = 'active'
+            Inertia.post('/task/submit/update', this.submissionForm)
         },
 
         uploadAttachments() {
-            this.submissionForm.attachments = this.$refs.attachments.files
+            this.submissionForm.attachments = this.$refs.attachments.files[0]
         }
-    }
+    },
+
+    // mounted() {
+    //     console.log(this.task)
+    // },
 
 }
 </script>   

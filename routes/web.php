@@ -3,6 +3,7 @@
 use App\Http\Controllers\Head;
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Employee;
+use App\Http\Controllers\AssignedTask;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -15,7 +16,7 @@ use App\Http\Controllers\Login\LoginEmployee;
 use App\Http\Controllers\Login\LoginHead;
 use App\Http\Controllers\Login\LoginAdmin;
 
-use App\Http\Controllers\AssignedTask;
+use App\Http\Controllers\SubmittedTask;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,7 +53,7 @@ Route::controller(Employee::class)->middleware('employee')->group(function() {
     Route::get('/employee/home', [Employee::class, 'home']);
     Route::get('/employee/profile', [Employee::class, 'profile']);
     Route::get('/employee/task/{id}', [Employee::class, 'task']);
-    Route::post('employee/logout', [Employee::class, 'logout']);
+    Route::post('/employee/logout', [Employee::class, 'logout']);
 });
 
 
@@ -68,7 +69,12 @@ Route::controller(Head::class)->middleware('head')->group(function() {
     Route::get('/head/home', [Head::class, 'home']);
     Route::get('/head/employees', [Head::class, 'home']);
     Route::get('/head/dashboard', [Head::class, 'dashboard']);
+    Route::get('/head/employee/{id}',[Head::class, 'employee']);
+    Route::get('head/view/task/{id}', [Head::class, 'view_task']);
+    Route::post('/head/logout', [Head::class, 'logout']);
 });
+
+
 
 
 Route::get('/login/employee', [LoginEmployee::class, 'create'])->name('login_employee');
@@ -87,6 +93,8 @@ Route::get('/task/id', function(){
 
 Route::post('/assign/task/store', [AssignedTask::class, 'store']);
 
+Route::post('/task/submit/store', [SubmittedTask::class, 'store']);
+Route::post('/task/submit/update', [SubmittedTask::class, 'update']);
 
 Route::post('/register/employee/store', [RegisterEmployee::class, 'store']);
 Route::post('/register/division/store', [RegisterDivision::class, 'store']);

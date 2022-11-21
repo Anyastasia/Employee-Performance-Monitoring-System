@@ -175,14 +175,12 @@
                                     <TableCell>{{employee.email}}</TableCell>
                                     <TableCell>
                                         <!-- employee.division_id == division[division_id] -->
-                                        {{divisions[employee.division_id - 1].name}}
+                                        {{divisions.name}}
                                     </TableCell>
                                     <TableCell>{{employee.position}}</TableCell>
                                     <TableCell>
                                         <div class="flex justify-content-center">
-                                            <TextButton>Assign Task</TextButton>
-                                            <LinkButton>View</LinkButton>
-                                            <LinkButton>Evaluate</LinkButton>
+                                            <LinkButton :href="`/head/employee/${employee.id}`">View</LinkButton>
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -232,7 +230,6 @@
                 closeAssignTasks: false,
                 assignTo: 'all',
                 all: false,
-                items: ['Marisa Kirisame', 'Alice Margatroid', 'Reisin Inaba'],
                 filterDivision: 0,
 
                 addEmployeeForm: {
@@ -312,7 +309,6 @@
             },
 
         },
-
         watch: {
             // all() {
             //     if (this.all === true) {

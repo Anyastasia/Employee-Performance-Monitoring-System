@@ -6,6 +6,7 @@
     use App\Http\Controllers\Controller;
     use App\Models\Employee as EmployeeModel;
     use App\Models\AssignedTask;
+    use App\Models\SubmittedTask;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Redirect;
 
@@ -31,9 +32,28 @@
         }
 
         public function task($task_id) {
-            return Inertia('Employee/EmployeeTask', [
-                "task" => AssignedTask::where('id', $task_id)->get()[0],
-            ]);
+
+            $submitted_task = SubmittedTask::where('task_id', $task_id)->get(['id', 'task_id', 'submitted_attachments', 'notes', 'status']);
+            if (count($submitted_task) == 0) {
+                $task = AssignedTask::where('id', $task_id)->get()[0];
+                $task['status'] = 'active';
+                // dd($task);
+                return Inertia('Employee/EmployeeTask', ["task" => $task]);
+            }
+            else {
+                return Inertia('Employee/EmployeeTask', [
+                    // "task" => AssignedTask::where('id', $task_id)->get()[0],
+                    "task" => AssignedTask::join('submitted_tasks', 'assigned_tasks.id', '=', 'submitted_tasks.task_id')
+                    ->where('assigned_tasks.id', $task_id)
+                    ->get()[0], 
+                ]);
+            }
+
+            // return Inertia('Employee/EmployeeTask', [
+            //     "task" => AssignedTask::join('submitted_tasks', 'assigned_tasks.id', '=', 'submitted_tasks.task_id')
+            //     ->where('assigned_tasks.id', $task_id)
+            //     ->get()[0],
+            // ]);
         }
 
 
