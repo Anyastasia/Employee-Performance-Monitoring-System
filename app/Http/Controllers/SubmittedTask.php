@@ -27,20 +27,28 @@ class SubmittedTask extends Controller
         //     "notes" => ['nullable'],
         // ]);
 
-        Model::create([
-            "task_id" => $request->input('task_id'),
-            "submitted_attachments" => $request->file('attachments')->store('images'),
-            "notes" => $request->input('notes'),
-            "status" => 'submitted',
-        ]);
+        dd($request);
+        // Model::create([
+        //     "task_id" => $request->input('task_id'),
+        //     "submitted_attachments" => $request->file('attachments')->store('images'),
+        //     "notes" => $request->input('notes'),
+        //     "status" => 'submitted',
+        // ]);
     }
 
     public function update(Request $request){
         $model = Model::find($request->input('id'));
-        // $model->update([
-        //     "status" => $request->input('active')
-        // ]);
         $model->status = $request->input('status');
         $model->save();
+    }
+    
+    public function resubmit(Request $request){
+        $model = Model::find($request->input('id'));
+        dd($model);
+        // $model->submitted_attachments = $request->file('attachments')->store('images');
+        // $model->notes = $request->input('notes');
+        // $model->status = $request->input('status');
+
+        // $model->save();
     }
 }

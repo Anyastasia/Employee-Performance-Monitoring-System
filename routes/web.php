@@ -95,6 +95,7 @@ Route::post('/assign/task/store', [AssignedTask::class, 'store']);
 
 Route::post('/task/submit/store', [SubmittedTask::class, 'store']);
 Route::post('/task/submit/update', [SubmittedTask::class, 'update']);
+Route::post('/task/submit/resubmit', [SubmittedTask::class, 'resubmit']);
 
 Route::post('/register/employee/store', [RegisterEmployee::class, 'store']);
 Route::post('/register/division/store', [RegisterDivision::class, 'store']);

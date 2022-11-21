@@ -9,22 +9,36 @@
 
                 <a download :href="task.attachments">{{task.attachments}}</a>
                 <form v-if="submissionForm.status === 'active'" @submit.prevent="submitTask">
-                <section class="task-submission-container">
-                    <div>
-                        <label for="attachments">Attachments</label>
-                        <input @change="uploadAttachments" type="file" name="attachments" ref="attachments" id="attachments">
-                    </div>
+                    <section class="task-submission-container">
+                        <div>
+                            <label for="attachments">Attachments</label>
+                            <input @change="uploadAttachments" type="file" name="attachments" ref="attachments" id="attachments">
+                        </div>
 
-                    <div>
-                        <label for="notes">Notes (Optional)</label>
-                        <textarea v-model="submissionForm.notes" name="notes" id="notes" cols="50" rows="5"></textarea>
-                    </div>
-                 </section>
-                 <PrimaryButton type="submit" v-if="submissionForm.status === 'active'">Submit</PrimaryButton>
-                 
+                        <div>
+                            <label for="notes">Notes (Optional)</label>
+                            <textarea v-model="submissionForm.notes" name="notes" id="notes" cols="50" rows="5"></textarea>
+                        </div>
+                    </section>
+                    <PrimaryButton type="submit" v-if="submissionForm.status === 'active'">Submit</PrimaryButton>
                 </form>
 
-                <form v-else @submit.prevent="resubmitTask">
+                <form v-else-if="submissionForm.status === 'resubmit'" @submit.prevent="resubmitTask">
+                    <section class="task-submission-container">
+                        <div>
+                            <label for="attachments">Attachments</label>
+                            <input @change="uploadAttachments" type="file" name="attachments" ref="attachments" id="attachments">
+                        </div>
+
+                        <div>
+                            <label for="notes">Notes (Optional)</label>
+                            <textarea v-model="submissionForm.notes" name="notes" id="notes" cols="50" rows="5"></textarea>
+                        </div>
+                    </section>
+                    <PrimaryButton type="submit" v-if="submissionForm.status === 'resubmit'">Submit Again</PrimaryButton>
+                </form>
+
+                <form v-else @submit.prevent="update">
                     <section class="task-submission-container">
                         <div>
                             <label for="attachments">Attachments</label>
@@ -39,6 +53,8 @@
 
                     <PrimaryButton type="submit">Re-submit</PrimaryButton>
                 </form>
+
+
             </main>
         </template>
     </EmployeeLayout>
@@ -76,15 +92,21 @@ export default {
 
     methods: {
         submitTask() {
-            this.submissionForm.task_id = this.task.task_id
+            this.submissionForm.task_id = this.task.id
             this.submissionForm.status = 'submitted'
             Inertia.post('/task/submit/store', this.submissionForm)
         },
 
+        update() {
+            this.submissionForm['id'] = this.task.id
+            this.submissionForm.status = 'resubmit'
+            Inertia.post('/task/submit/update', this.submissionForm)
+        },
+
         resubmitTask() {
             this.submissionForm['id'] = this.task.id
-            this.submissionForm.status = 'active'
-            Inertia.post('/task/submit/update', this.submissionForm)
+            this.submissionForm.status = 'submitted'
+            Inertia.post('/task/submit/resubmit', this.submissionForm)
         },
 
         uploadAttachments() {
@@ -92,9 +114,9 @@ export default {
         }
     },
 
-    // mounted() {
-    //     console.log(this.task)
-    // },
+    mounted() {
+        console.log(this.task)
+    },
 
 }
 </script>   
