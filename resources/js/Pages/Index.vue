@@ -1,6 +1,6 @@
 <template>
 <main>
-    <section class="width-90 margin-auto">
+    <section class="margin-auto">
         <h1 class="mx-3 my-5">Employee Performance Monitoring System</h1>
         <div class="login-portal-container flex flex-column flex-center my-5">
             <Link href="/login/admin">Admin Login</Link>
