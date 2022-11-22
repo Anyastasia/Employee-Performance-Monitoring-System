@@ -13,7 +13,7 @@
                     
                     <template #dropdown-content>
                         <DropdownItem>
-                            <Link href="admin/logout" method="post" as="span">Log out</Link>
+                            <Link href="/admin/logout" method="post" as="span">Log out</Link>
                         </DropdownItem>
                     </template>
                 </DropdownContainer>

@@ -19,7 +19,7 @@
 
         <template #sidebar>
             <SidebarItem icon="bi bi-bell" @click="openNotifications" :notLink="true">Notifications</SidebarItem>
-            <SidebarItem icon="bi bi-person">Profile</SidebarItem>
+            <SidebarItem icon="bi bi-person" href="/head/profile">Profile</SidebarItem>
             <SidebarItem icon="bi bi-journal" href="/head/employees">Employees</SidebarItem>
             <SidebarItem icon="bi bi-pie-chart" href="/head/dashboard">Dashboard</SidebarItem>
         </template>

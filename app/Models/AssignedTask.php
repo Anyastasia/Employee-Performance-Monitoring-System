@@ -23,9 +23,4 @@ class AssignedTask extends Model
         'submission_due_time',
     ];
 
-    public function employees() {
-        return $this->hasMany(Employee::class);
-    }
-
-
 }

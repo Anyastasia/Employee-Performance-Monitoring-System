@@ -8,7 +8,8 @@
     use App\Models\Employee;
     use App\Models\Division;
     use App\Models\Head;
-    
+    use Illuminate\Support\Facades\Redirect;
+    use Illuminate\Support\Facades\Auth;
     use Inertia\Inertia;
 
     class Admin extends Controller {
@@ -39,6 +40,17 @@
 
         public function employees() {
             return Inertia('Admin/AdminEmployee', ['employees' => Employee::all(), 'divisions' => Division::all()]);
+        }
+
+        public function logout(Request $request) {
+
+            Auth::logout();
+
+            $request->session()->invalidate();
+
+            $request->session()->regenerateToken();
+
+            return Redirect::route('login_admin');
         }
     }
 

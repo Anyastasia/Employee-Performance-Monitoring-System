@@ -42,12 +42,12 @@
                     <section class="task-submission-container">
                         <div>
                             <label for="attachments">Attachments</label>
-                            <input @change="uploadAttachments" type="file" name="attachments" ref="attachments" id="attachments">
+                            <input disabled @change="uploadAttachments" type="file" name="attachments" ref="attachments" id="attachments">
                         </div>
 
                         <div>
                             <label for="notes">Notes (Optional)</label>
-                            <textarea v-model="submissionForm.notes" name="notes" id="notes" cols="50" rows="5"></textarea>
+                            <textarea disabled v-model="submissionForm.notes" name="notes" id="notes" cols="50" rows="5"></textarea>
                         </div>
                     </section>
 

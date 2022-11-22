@@ -8,6 +8,7 @@
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Redirect;
 
+
     use App\Models\Employee;
     use App\Models\Division;
 
@@ -38,7 +39,10 @@ use Inertia\Testing\Assert;
         }
         
         public function profile() {
-            return view('layout.head.profile');
+            $head = Auth::guard('head')->user();
+            return Inertia('Head/HeadProfile', [
+                "head" => HeadModel::where('id', $head['id'])->get(['first_name', 'last_name', 'email', 'position'])[0],
+            ]);
         }
 
         public function employee(Request $request, $id){

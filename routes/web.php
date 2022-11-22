@@ -29,24 +29,18 @@ use App\Http\Controllers\SubmittedTask;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+// Route::get('/', function () {
+//     return Inertia::render('Welcome', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// });
+
+Route::get('/', function(){
+    return Inertia::render('Index');
 });
-
-
-Route::get('/sample', function(){
-    return Inertia::render('Employee/EmployeeHome');
-});
-
-Route::get('/sample2', function(){
-    return Inertia::render('Sample');
-});
-
 
 Route::controller(Employee::class)->middleware('employee')->group(function() {
     Route::get('/employee', [Employee::class, 'home']);
@@ -56,16 +50,17 @@ Route::controller(Employee::class)->middleware('employee')->group(function() {
     Route::post('/employee/logout', [Employee::class, 'logout']);
 });
 
-
-Route::controller(Admin::class)->group(function() {
+Route::controller(Admin::class)->middleware('admin')->group(function() {
     Route::get('/admin/employees', [Admin::class, 'employees']);
     Route::get('/admin/divisions', [Admin::class, 'divisions']);
     Route::get('/admin/heads', [Admin::class, 'heads']);
+    Route::post('/admin/logout', [Admin::class, 'logout']);
 });
 
 
 Route::controller(Head::class)->middleware('head')->group(function() {
     Route::get('/head', [Head::class, 'home'])->name('head_home');
+    Route::get('/head/profile', [Head::class, 'profile']);
     Route::get('/head/home', [Head::class, 'home']);
     Route::get('/head/employees', [Head::class, 'home']);
     Route::get('/head/dashboard', [Head::class, 'dashboard']);
@@ -73,8 +68,6 @@ Route::controller(Head::class)->middleware('head')->group(function() {
     Route::get('head/view/task/{id}', [Head::class, 'view_task']);
     Route::post('/head/logout', [Head::class, 'logout']);
 });
-
-
 
 
 Route::get('/login/employee', [LoginEmployee::class, 'create'])->name('login_employee');

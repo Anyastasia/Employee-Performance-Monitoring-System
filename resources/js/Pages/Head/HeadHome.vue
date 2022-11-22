@@ -288,22 +288,7 @@
                     this.employees.forEach((employee) => {
                         this.taskForm.employee_id.push(employee.id)
                     })
-                } //else {
-                //     this.taskForm.employee_id.forEach((employee) => {
-                //         xdata.push({
-                //             'employee_id': employee.id,
-                //             'head_id': this.taskForm.head_id,
-                //             'task_title': this.taskForm.task_title,
-                //             'task_description': this.taskForm.task_description,
-                //             'attachments': this.taskForm.attachments,
-                //             'submission_start_date': this.taskForm.submission_start_date,
-                //             'submission_start_time': this.taskForm.submission_start_time,
-                //             'submission_due_date': this.taskForm.submission_due_date,
-                //             'submission_due_time': this.taskForm.submission_due_time,
-                //         })
-                //     })
-                // }
-                // console.log(xdata)
+                } 
 
                 Inertia.post('/assign/task/store', this.taskForm)
             },

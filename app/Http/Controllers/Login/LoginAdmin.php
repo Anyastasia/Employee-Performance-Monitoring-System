@@ -21,14 +21,13 @@ class LoginAdmin extends Controller
             'password' => ['required'],
         ]);
 
+        $attempt =Auth::guard('admin')->attempt($user);
 
-        if (Auth::attempt($user)) {
+        if ($attempt) {
             $request->session()->regenerate();
-
-            return Redirect::intended('/admin/home');
+            return Redirect::intended('/admin/employees');
         }
         
-
         return back()->withErrors([
             'username' => 'Credentials do not match'
         ]);

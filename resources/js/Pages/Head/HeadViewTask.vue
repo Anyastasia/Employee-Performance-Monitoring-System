@@ -66,9 +66,5 @@ export default {
             Inertia.post(`/head/task/approve/${id}`)
         },
     },
-
-    mounted(){
-        console.log(this.task)
-    }
 }
 </script>

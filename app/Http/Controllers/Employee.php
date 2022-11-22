@@ -4,7 +4,7 @@
 
     use Illuminate\Support\Facades\Auth;
     use App\Http\Controllers\Controller;
-    use App\Models\Employee as EmployeeModel;
+    use App\Models\Employee as Model;
     use App\Models\AssignedTask;
     use App\Models\SubmittedTask;
     use Illuminate\Http\Request;
@@ -28,7 +28,10 @@
 
 
         public function profile() {
-            return Inertia('Employee/EmployeeProfile');
+            $id = Auth::guard('employee')->id();
+            return Inertia('Employee/EmployeeProfile', [
+                "employee" => Model::where('id', $id)->get(['first_name', 'last_name', 'email', 'position'])[0],
+            ]);
         }
 
         public function task($task_id) {

@@ -935,7 +935,7 @@ h1 {
 }
 
 .table > tbody > tr:nth-child(even) {
-    background-color: #D3D3D3;
+    /* background-color: #D3D3D3; */
 }
 
 .table > tbody > tr > td > div {

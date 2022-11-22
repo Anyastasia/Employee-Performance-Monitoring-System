@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\AssignedTask as Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 
 
@@ -34,7 +35,11 @@ class AssignedTask extends Controller
     //     'submission_due_date' => $request->input('submission_due_date'),
     //     'submission_due_time' => $request->input('submission_due_time'),
     // ]);
+    $file_name = '';
 
+    if ($request->hasFile('attachments')) {
+        $file_name = Storage::putFile('uploads', $request->attachments[0]);
+    }
     // $model->employees()->createMany($employee);
     for ($index = 0; $index < $length; $index++) {
         $model = Model::create([
@@ -42,7 +47,7 @@ class AssignedTask extends Controller
                 'employee_id' => $request->input('employee_id')[$index],
                 'task_title' => $request->input('task_title'),
                 'task_description' => $request->input('task_description'),
-                'attachments' => $request->file('attachments')[0]->store('images'),
+                'attachments' => $file_name,
                 'submission_start_date' => $request->input('submission_start_date'),
                 'submission_start_time' => $request->input('submission_start_time'),
                 'submission_due_date' => $request->input('submission_due_date'),

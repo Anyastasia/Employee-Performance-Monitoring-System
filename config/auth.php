@@ -51,6 +51,11 @@ return [
             'provider' => 'heads',
         ],
 
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
+
         
     ],
 
