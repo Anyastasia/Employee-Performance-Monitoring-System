@@ -45,6 +45,8 @@ Route::get('/', function(){
 Route::controller(Employee::class)->middleware('employee')->group(function() {
     Route::get('/employee', [Employee::class, 'home']);
     Route::get('/employee/home', [Employee::class, 'home']);
+    Route::get('/employee/completed', [Employee::class, 'completed']);
+    Route::get('/employee/active', [Employee::class, 'active']);
     Route::get('/employee/profile', [Employee::class, 'profile']);
     Route::get('/employee/task/{id}', [Employee::class, 'task']);
     Route::post('/employee/logout', [Employee::class, 'logout']);
@@ -62,7 +64,7 @@ Route::controller(Head::class)->middleware('head')->group(function() {
     Route::get('/head', [Head::class, 'home'])->name('head_home');
     Route::get('/head/profile', [Head::class, 'profile']);
     Route::get('/head/home', [Head::class, 'home']);
-    Route::get('/head/employees', [Head::class, 'home']);
+    Route::get('/head/employees', [Head::class, 'home'])->name('head_employees');
     Route::get('/head/dashboard', [Head::class, 'dashboard']);
     Route::get('/head/employee/{id}',[Head::class, 'employee']);
     Route::get('head/view/task/{id}', [Head::class, 'view_task']);

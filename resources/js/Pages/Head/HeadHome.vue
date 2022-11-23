@@ -5,14 +5,14 @@
                 <h1 class="mx-3 my-1">Employee List</h1>
                 <div class="mx-3 my-1 table-container px-2 py-1">
                     <div class="flex g-1 my-1">
-                        <PrimaryButton @click="toggleDialog">
+                        <PrimaryButton @click="toggleAssignTasks('open')">
                             <i class="bi bi-plus mr--5"></i>
-                            Add Employee
+                            Assign Task
                         </PrimaryButton>
 
-                        <TextButton @click="toggleAssignTasks('open')">
-                            Assign Task
-                        </TextButton>
+                        <!-- <TextButton >
+                            aaa
+                        </TextButton> -->
                     </div>
                     
                     <Dialog :show="show" :exit="close" class="my-3">
@@ -139,7 +139,7 @@
                             </section>
                         </section>
                         <section class="flex mt-2">
-                            <TextButton class="ml-auto" @click="toggleAssignTasks('close')">Cancel</TextButton>
+                            <TextButton type='button' class="ml-auto" @click="toggleAssignTasks('close')">Cancel</TextButton>
                             <PrimaryButton type="submit">Assign</PrimaryButton>
                         </section>
                     </form>
@@ -203,6 +203,7 @@
     import TableRow from '@/Components/Table/TableRow.vue';
     import Dialog from '@/Components/Dialog/CustomDialog.vue';
     import {Inertia} from '@inertiajs/inertia';
+    import { useForm } from '@inertiajs/inertia-vue3';
     
     export default {
         components: {
@@ -242,7 +243,7 @@
                     password: '',
                 },
 
-                taskForm: {
+                taskForm: useForm({
                     'employee_id': [],
                     'head_id': this.head,
                     'task_title': '',
@@ -252,7 +253,7 @@
                     'submission_start_time': '',
                     'submission_due_date': '',
                     'submission_due_time': '',
-                }
+                }),
             }
         },
 
@@ -290,7 +291,12 @@
                     })
                 } 
 
-                Inertia.post('/assign/task/store', this.taskForm)
+                Inertia.post('/assign/task/store', this.taskForm, {
+                    onSuccess: ()=> {
+                        this.taskForm.reset()
+                        this.toggleAssignTasks('close')
+                    } 
+                })
             },
 
         },
@@ -309,5 +315,9 @@
             //     }
             // },
         },
+
+        mounted() {
+            console.log(this.taskForm)
+        }
     }
 </script>

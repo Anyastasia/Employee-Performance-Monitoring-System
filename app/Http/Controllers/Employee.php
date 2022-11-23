@@ -59,7 +59,30 @@
             // ]);
         }
 
+        public function completed() {
+            $id = Auth::guard('employee')->id();
+            $submitted_task = AssignedTask::join('submitted_tasks', 'assigned_tasks.id', '=', 'submitted_tasks.task_id')
+            ->where('employee_id',$id)
+            ->where('submitted_tasks.status', 'completed')
+            ->get();
 
+            return Inertia('Employee/EmployeeHome', [
+                "items" => $submitted_task
+            ]);
+        }
+
+        public function active() {
+            $id = Auth::guard('employee')->id();
+            $submitted_task = AssignedTask::join('submitted_tasks', 'assigned_tasks.id', '=', 'submitted_tasks.task_id')
+            ->where('employee_id',$id)
+            ->get();
+
+            return Inertia('Employee/EmployeeHome', [
+                "items" => $submitted_task
+            ]);
+        }
+
+        
         public function logout(Request $request) {
 
             Auth::logout();

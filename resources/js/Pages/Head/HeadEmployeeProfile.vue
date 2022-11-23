@@ -2,7 +2,9 @@
     <HeadLayout>
         <template #content>
             <main>
-                <section>Employee name: {{employee.first_name}}</section>
+                <section class="mx-3">
+                    Employee name: {{employee.first_name + ' ' + employee.last_name}}
+                </section>
 
                 <section class="my-3 table-container mx-3 px-1 py-1">
                     <Table>
@@ -32,7 +34,7 @@
                                 <TableCell>
                                     <div class="flex g--75 justify-content-center">
                                         <PrimaryButton :disabled="checkStatus(task.status)" @click="openDialog">Evaluate</PrimaryButton>
-                                        <LinkButton :href="`/head/view/task/${task.id}`">View</LinkButton>
+                                        <LinkButton :href="`/head/view/task/${task.task_id}`">View</LinkButton>
                                     </div>
 
                                 </TableCell>
@@ -142,7 +144,6 @@ export default {
     },
 
     mounted() {
-        console.log(this.xtask)
     },
 
 

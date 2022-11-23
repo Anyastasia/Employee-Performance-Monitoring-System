@@ -47,8 +47,8 @@ use Inertia\Testing\Assert;
 
         public function employee(Request $request, $id){
             return Inertia::render('Head/HeadEmployeeProfile', [
-                "employee" => Employee::where('id', $id)->get(['id', 'first_name', 'last_name', 'email', 'avatar_path', 'division_id', 'position'])[0],
-                "assigned_tasks" => AssignedTask::where('employee_id', $id)->get(),
+                "employee" => Employee::where('id', $id)->get(['id', 'first_name', 'last_name', 'email', 'avatar_path', 'division_id', 'position'])->first(),
+                "assigned_tasks" => AssignedTask::join('submitted_tasks', 'assigned_tasks.id', '=', 'submitted_tasks.task_id')->where('employee_id', $id)->get(),
             ]);
         }
 
@@ -56,7 +56,7 @@ use Inertia\Testing\Assert;
             return Inertia::render('Head/HeadViewTask', [
                 "task" => AssignedTask::join('submitted_tasks', 'assigned_tasks.id', '=', 'submitted_tasks.task_id')
                 ->where('task_id', $id)
-                ->get()[0],
+                ->get()->first(),
             ]);
         }
 

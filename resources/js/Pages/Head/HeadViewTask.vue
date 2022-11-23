@@ -18,9 +18,19 @@
                     <p>{{task.notes}}</p>
                 </section>
 
+
                 <section class="mb-2">
                     <form @submit.prevent="approveTask">
-                        <PrimaryButton type="submit">Approve</PrimaryButton>
+
+                        <div class="mb-1">
+                            <label for="comment" class="display-block mb-1">Comment</label>
+                            <textarea  name="comment" id="comment" cols="50" rows="5"></textarea>
+                        </div>
+
+                        <div class="flex g--75">
+                            <PrimaryButton type="submit">Approve</PrimaryButton>
+                            <PrimaryButton type="submit">Revise</PrimaryButton>
+                        </div>
                     </form>
                 </section>
 
@@ -65,6 +75,13 @@ export default {
         submitTask(id) {
             Inertia.post(`/head/task/approve/${id}`)
         },
+        reviseTask(id) {
+            Inertia.post(`/head/task/revise/${id}`)
+        }
     },
+
+    mounted() {
+        console.log(this.task)
+    }
 }
 </script>

@@ -58,4 +58,5 @@ class SubmittedTask extends Controller
 
         $model->save();
     }
+
 }

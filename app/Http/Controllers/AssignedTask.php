@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AssignedTask as Model;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 
@@ -55,6 +54,7 @@ class AssignedTask extends Controller
         ]);
     }
 
+    return Redirect::route('head_employees');
     // $model->saveMany($request->input('employee_id'));
     // $length = count($request->input('employee_id'));
 

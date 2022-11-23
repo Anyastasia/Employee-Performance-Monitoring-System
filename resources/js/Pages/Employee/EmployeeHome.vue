@@ -6,9 +6,17 @@
 
                 <h1 class="my-2">Tasks</h1>
                 <section class="pb-1">
-                    <div>
-                        <TextButton>Active</TextButton> 
-                        <TextButton>Completed</TextButton>                        
+                    <div> 
+                        <TextButton>
+                            <Link method="get" href="/employee/" as="span">All</Link>  
+                        </TextButton> 
+                        <TextButton>Priority</TextButton>
+                        <TextButton>
+                            <Link method="get" href="/employee/active" as="span">Active</Link>  
+                        </TextButton> 
+                        <TextButton>
+                            <Link method="get" href="/employee/completed" as="span">Completed</Link>  
+                        </TextButton>
                     </div>
                 </section>
 
@@ -31,18 +39,27 @@
     import TextButton from '@/Components/Button/TextButton.vue';
     import Task from '@/Components/Task/Task.vue';
     import TaskItem from '@/Components/Task/TaskItem.vue';
+    import {Link} from '@inertiajs/inertia-vue3';
+    import LinkButton from '@/Components/Button/LinkButton.vue'
     export default {
         components: {
             EmployeeLayout,
             TextButton,
             Task,
             TaskItem,
+            LinkButton,
+            Link
         },
 
-        props: {
-            id: Number,
-            items: Object,
-        },
+        // props: {
+        //     id: Number,
+        //     items: Object,
+        // },
+        props: ['id', 'items'],
+
+        mounted() {
+            // console.log(this.items)
+        }
     }
     
 </script>
