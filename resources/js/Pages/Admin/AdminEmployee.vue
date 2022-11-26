@@ -95,8 +95,8 @@
                                     <TableCell>{{employee.position}}</TableCell>
                                     <TableCell>
                                         <div class="flex justify-content-center">
-                                            <TextButton>Edit</TextButton>
-                                            <LinkButton>Delete</LinkButton>
+                                            <LinkButton>Edit</LinkButton>
+                                            <LinkButton method='post' :href="`/admin/delete/employee/${employee.id}`">Delete</LinkButton>
                                         </div>
                                     </TableCell>
                                 </TableRow>

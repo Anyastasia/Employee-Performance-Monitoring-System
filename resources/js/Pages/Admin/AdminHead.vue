@@ -92,7 +92,7 @@
                                     <TableCell>
                                         <div class="flex justify-content-center">
                                             <LinkButton>Edit</LinkButton>
-                                            <LinkButton>Delete</LinkButton>
+                                            <LinkButton method='post' :href="`/admin/delete/head/${head.id}`">Delete</LinkButton>
                                         </div>
                                     </TableCell>
                                 </TableRow>

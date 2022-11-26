@@ -16,6 +16,8 @@ use App\Http\Controllers\Login\LoginEmployee;
 use App\Http\Controllers\Login\LoginHead;
 use App\Http\Controllers\Login\LoginAdmin;
 
+use App\Http\Controllers\Change\Employee\Password as EmployeeChangePassword;
+use App\Http\Controllers\Change\Head\Password as HeadChangePassword;
 use App\Http\Controllers\SubmittedTask;
 
 /*
@@ -42,20 +44,24 @@ Route::get('/', function(){
     return Inertia::render('Index');
 });
 
-Route::controller(Employee::class)->middleware('employee')->group(function() {
+Route::controller(Employee::class)->middleware(['employee'])->group(function() {
     Route::get('/employee', [Employee::class, 'home']);
     Route::get('/employee/home', [Employee::class, 'home']);
     Route::get('/employee/completed', [Employee::class, 'completed']);
     Route::get('/employee/active', [Employee::class, 'active']);
-    Route::get('/employee/profile', [Employee::class, 'profile']);
-    Route::get('/employee/task/{id}', [Employee::class, 'task']);
+    Route::get('/employee/profile', [Employee::class, 'profile'])->name('employee.profile');
+    Route::get('/employee/task/{id}', [Employee::class, 'task'])->name('employee.task');
     Route::post('/employee/logout', [Employee::class, 'logout']);
 });
 
 Route::controller(Admin::class)->middleware('admin')->group(function() {
+    Route::get('/admin', [Admin::class, 'employees']);
     Route::get('/admin/employees', [Admin::class, 'employees']);
     Route::get('/admin/divisions', [Admin::class, 'divisions']);
     Route::get('/admin/heads', [Admin::class, 'heads']);
+    Route::post('/admin/delete/division/{id}', [Admin::class, 'deactivate_division']);
+    Route::post('/admin/delete/employee/{id}', [Admin::class, 'deactivate_employee']);
+    Route::post('/admin/delete/head/{id}', [Admin::class, 'deactivate_division']);
     Route::post('/admin/logout', [Admin::class, 'logout']);
 });
 
@@ -67,9 +73,11 @@ Route::controller(Head::class)->middleware('head')->group(function() {
     Route::get('/head/employees', [Head::class, 'home'])->name('head_employees');
     Route::get('/head/dashboard', [Head::class, 'dashboard']);
     Route::get('/head/employee/{id}',[Head::class, 'employee']);
+    Route::get('/head/task/{id}',[Head::class, 'task']);
     Route::get('head/view/task/{id}', [Head::class, 'view_task']);
     Route::post('/head/logout', [Head::class, 'logout']);
 });
+
 
 
 Route::get('/login/employee', [LoginEmployee::class, 'create'])->name('login_employee');
@@ -87,6 +95,8 @@ Route::get('/task/id', function(){
 });
 
 Route::post('/assign/task/store', [AssignedTask::class, 'store']);
+Route::post('/head/task/approve/{id}', [AssignedTask::class, 'update_status']);
+Route::post('/head/task/revise/{id}', [AssignedTask::class, 'revise']);
 
 Route::post('/task/submit/store', [SubmittedTask::class, 'store']);
 Route::post('/task/submit/update', [SubmittedTask::class, 'update']);
@@ -96,6 +106,9 @@ Route::post('/register/employee/store', [RegisterEmployee::class, 'store']);
 Route::post('/register/division/store', [RegisterDivision::class, 'store']);
 Route::post('/register/head/store', [RegisterHead::class, 'store']);
 
+
+Route::post('/employee/profile/changePassword', [EmployeeChangePassword::class, 'update']);
+Route::post('/head/profile/changePassword', [HeadChangePassword::class, 'update']);
 
 Route::post('/something', function() {
     return inertia('Welcome');

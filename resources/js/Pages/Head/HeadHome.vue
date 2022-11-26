@@ -15,55 +15,6 @@
                         </TextButton> -->
                     </div>
                     
-                    <Dialog :show="show" :exit="close" class="my-3">
-                        <section>
-                            <form @submit.prevent="submitAddEmployee" class="add-staff">
-                                <h1 class="my-1 h1">Add Employee</h1>
-                                <h6 class="my-1 h6">
-                                    <em>All fields required</em>
-                                </h6>
-                                <div class="add-staff-name">
-                                    <div>
-                                        <label for="first_name" class="required">First Name</label>
-                                        <input type="text" id="firstname" v-model="addEmployeeForm.first_name" name="first_name" required>
-                                    </div>
-
-                                    <div>
-                                        <label for="first_name" class="required">Last Name</label>
-                                        <input type="text" id="lastname" v-model="addEmployeeForm.last_name" name="last_name" required>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label for="email" class="required">Email</label>
-                                    <input type="email" name="email" v-model="addEmployeeForm.email" id="email" required>
-                                </div>
-
-
-
-                                <div>
-                                    <label for="positon" class="required">Position</label>
-                                    <input type="text" name="position" v-model="addEmployeeForm.position" id="position" required>
-                                </div>
-
-                                <div>
-                                    <label for="division" class="required">Division</label>
-                                    <select v-model="addEmployeeForm.division_id" name="division" id="division" required>
-                                        <option disabled value="0">Select Division</option>
-                                        <option v-for="division in divisions" :key="division.id" :value="division.id">{{division.name}}</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="flex g--75">
-                                    <TextButton type="button" @click="closeDialog" class="m-inline-start-auto">Close</TextButton>
-                                    <PrimaryButton type="submit" class="mr-1">Submit</PrimaryButton>
-                                </div>
-
-                            </form>
-                        </section>
-                    </Dialog>
-
-
                     <Dialog :show="showAssignTasks" :exit="closeAssignTasks" class="my-3">
                         <form @submit.prevent="submitAssignedTask">
                         <section>
@@ -140,7 +91,7 @@
                         </section>
                         <section class="flex mt-2">
                             <TextButton type='button' class="ml-auto" @click="toggleAssignTasks('close')">Cancel</TextButton>
-                            <PrimaryButton type="submit">Assign</PrimaryButton>
+                            <PrimaryButton type="submit" :disabled="taskForm.processing">Assign</PrimaryButton>
                         </section>
                     </form>
                     </Dialog>
@@ -232,16 +183,6 @@
                 assignTo: 'all',
                 all: false,
                 filterDivision: 0,
-
-                addEmployeeForm: {
-                    first_name: '',
-                    last_name: '',
-                    email: '',
-                    avatar_path: '',
-                    division_id: 0,
-                    position: '',
-                    password: '',
-                },
 
                 taskForm: useForm({
                     'employee_id': [],

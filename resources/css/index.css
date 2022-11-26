@@ -246,6 +246,10 @@ body {
     background-color: var(--hover);
 }
 
+.error {
+    color: red;
+}
+
 .flex {
     display: flex;
 }
@@ -334,6 +338,9 @@ body {
     background-color: var(--hover);
 }
 
+.italic {
+    font-style: italic;
+}
 
 .justify-content-center {
     justify-content: center;

@@ -30,13 +30,18 @@
                                 <TableCell>
                                     {{task.status.charAt(0).toUpperCase().concat(task.status.substring(1, task.status.length))}}
                                 </TableCell>
-
+                                
+            
                                 <TableCell>
                                     <div class="flex g--75 justify-content-center">
                                         <PrimaryButton :disabled="checkStatus(task.status)" @click="openDialog">Evaluate</PrimaryButton>
-                                        <LinkButton :href="`/head/view/task/${task.task_id}`">View</LinkButton>
-                                    </div>
-
+                                        <span v-if="task.status == 'active'">
+                                            <LinkButton :href="`/head/task/${task.id}`">View</LinkButton>
+                                        </span>
+                                        <span v-else>
+                                            <LinkButton :href="`/head/view/task/${task.id}`">View</LinkButton>
+                                        </span>
+                                    </div> 
                                 </TableCell>
                             </TableRow>
                         </template>
@@ -144,6 +149,7 @@ export default {
     },
 
     mounted() {
+        console.log(this.assigned_tasks)
     },
 
 

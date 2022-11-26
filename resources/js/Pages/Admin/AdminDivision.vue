@@ -65,7 +65,7 @@
                                     <TableCell>
                                         <div class="flex justify-content-center">
                                             <TextButton>Edit</TextButton>
-                                            <LinkButton>Delete</LinkButton>
+                                            <LinkButton method="post" :href="`/admin/delete/division/${division.id}`">Delete</LinkButton>
                                         </div>
                                     </TableCell>
                                 </TableRow>

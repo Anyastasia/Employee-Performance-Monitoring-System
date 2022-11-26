@@ -51,6 +51,7 @@ class AssignedTask extends Controller
                 'submission_start_time' => $request->input('submission_start_time'),
                 'submission_due_date' => $request->input('submission_due_date'),
                 'submission_due_time' => $request->input('submission_due_time'),
+                "comment" => "",
         ]);
     }
 
@@ -87,4 +88,12 @@ class AssignedTask extends Controller
 
     }
 
+
+    
+    public function update_status(Request $request, $id) {
+        $model = Model::find($id);
+        $model->status = $request->input('status');
+        $model->comment = $request->input('comment');
+        $model->save();
+    }
 }

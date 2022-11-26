@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\AssignedTask;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Models\SubmittedTask as Model;
+use App\Models\AssignedTask;
+use Illuminate\Support\Facades\Redirect;
+
 
 class SubmittedTask extends Controller
 {
@@ -26,22 +28,33 @@ class SubmittedTask extends Controller
             $file_name = $request->file('attachments')->store('uploads');
         }
 
-        Model::create([
+        $model = Model::create([
             "task_id" => $request->input('task_id'),
             "submitted_attachments" => $file_name,
             "notes" => $request->input('notes'),
-            "status" => 'submitted',
+            "submission_status" => "submitted"
         ]);
+
+        $assigned_task = AssignedTask::find($model->task_id);
+        $assigned_task->status = 'submitted';
+        $assigned_task->save();
+        return Redirect::route('employee.task', ["id" => $model->id]);
     }
 
     public function update(Request $request){
         $model = Model::find($request->input('id'));
-        $model->status = $request->input('status');
+        $assigned_task = AssignedTask::find($model->task_id);
+        $model->submission_status = 'resubmit';
+        $assigned_task->status = "active";
+        $assigned_task->save();
         $model->save();
+        return Redirect::route('employee.task', ["id" => $model->task_id]);
     }
     
     public function resubmit(Request $request){
         $model = Model::find($request->input('id'));
+        $assigned_task = AssignedTask::find($model->task_id);
+        
 
         $request->validate([
             "submitted_attachments" => ['nullable'],
@@ -54,9 +67,12 @@ class SubmittedTask extends Controller
         }
 
         $model->notes = $request->input('notes');
-        $model->status = $request->input('status');
-
+        $model->submission_status = 'submitted';
+        $assigned_task->status = 'submitted';
+        
         $model->save();
+        $assigned_task->save();
+        return Redirect::route('employee.task', ["id" => $model->id]);
     }
 
 }

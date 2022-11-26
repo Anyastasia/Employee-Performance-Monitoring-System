@@ -21,6 +21,10 @@ class AssignedTask extends Model
         'submission_start_time',
         'submission_due_date',
         'submission_due_time',
+        'comment',
+        'status',
     ];
+
+    
 
 }

@@ -4,6 +4,8 @@
             <main class="px-2 py-2">
                 <section>
                     <h1 class="my-2 h1">{{task.task_title}}</h1>
+                    <p v-if="task.submission_status === 'submitted'" class="italic">{{`Submitted at ${task.updated_at}`}}</p>
+                    <p v-if="task.status === 'completed'" class="italic">{{`Approved at ${task.updated_at}`}}</p>
                     <h3 class="my-1 h3">{{task.task_description}}</h3>
                 </section>
 
@@ -19,17 +21,16 @@
                 </section>
 
 
-                <section class="mb-2">
-                    <form @submit.prevent="approveTask">
-
+                <section v-if="task.status === 'submitted'" class="mb-2">
+                    <form @submit.prevent="approveTask(task.id)">
                         <div class="mb-1">
                             <label for="comment" class="display-block mb-1">Comment</label>
-                            <textarea  name="comment" id="comment" cols="50" rows="5"></textarea>
+                            <textarea  v-model="form.comment" name="comment" id="comment" cols="50" rows="5"></textarea>
                         </div>
 
                         <div class="flex g--75">
-                            <PrimaryButton type="submit">Approve</PrimaryButton>
-                            <PrimaryButton type="submit">Revise</PrimaryButton>
+                            <PrimaryButton type="submit" @click="form.status = 'complete'" value="complete">Approve</PrimaryButton>
+                            <OutlineButton type="submit" @click="form.status = 'revise'" value="revise">Revise</OutlineButton>
                         </div>
                     </form>
                 </section>
@@ -59,28 +60,35 @@
 <script>
 import HeadLayout from '@/Layouts/HeadLayout.vue'
 import PrimaryButton from '@/Components/Button/PrimaryButton.vue';
+import OutlineButton from '@/Components/Button/OutlineButton.vue'
 import TextButton from '@/Components/Button/TextButton.vue';
 import { Inertia } from '@inertiajs/inertia';
+import { useForm } from '@inertiajs/inertia-vue3';
 
 export default {
     components: {
         HeadLayout,
         PrimaryButton,
-        TextButton
+        OutlineButton,
     },
 
     props: ['task'],
-
-    methods: {
-        submitTask(id) {
-            Inertia.post(`/head/task/approve/${id}`)
-        },
-        reviseTask(id) {
-            Inertia.post(`/head/task/revise/${id}`)
+    data() {
+        return {
+            form: useForm({
+                comment: '',
+                status: '',
+            })
         }
     },
+    methods: {
+        approveTask(id) {
+            Inertia.post(`/head/task/approve/${id}`, this.form)
+        },
 
-    mounted() {
+    },
+
+    mounted(){
         console.log(this.task)
     }
 }

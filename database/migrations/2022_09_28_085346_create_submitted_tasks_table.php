@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('task_id')->constrained('assigned_tasks');
             $table->string('submitted_attachments')->nullable();
             $table->string('notes')->nullable();
-            $table->string('status')->default('active');
+            $table->string('submission_status')->default('active');
             $table->timestamps();
         });
     }

@@ -13,6 +13,6 @@ class SubmittedTask extends Model
         'task_id',
         'submitted_attachments',
         'notes',
-        'status',
+        'submission_status',
     ];
 }

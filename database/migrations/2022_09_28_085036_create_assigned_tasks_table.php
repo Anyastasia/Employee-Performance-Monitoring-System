@@ -24,6 +24,7 @@ return new class extends Migration
             $table->time('submission_start_time');
             $table->date('submission_due_date');
             $table->time('submission_due_time');
+            $table->string('comment')->nullable();
             $table->string('status')->default('active');
             $table->timestamps();
         });

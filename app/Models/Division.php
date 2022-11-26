@@ -9,5 +9,10 @@ class Division extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "name",
+        'status',
+    ];
+    
     public $timestamps = false;
 }
