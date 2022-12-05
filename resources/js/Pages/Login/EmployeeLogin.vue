@@ -5,7 +5,7 @@
             <div class="login-form">
                 <form @submit.prevent="submitLogin">
                     <div>
-                        <p v-if="errors.email">Email and Password do not match.</p>
+                        <Error v-if="errors.email" :message="errors.email"></Error>
                         <label for="email">Email</label>
                         <input v-model="loginForm.email" type="text" name="email" id="email" placeholder="johndoe@email.com" required>
                     </div>
@@ -27,12 +27,14 @@
 
 import LoginLayout from '../../Layouts/LoginLayout.vue'
 import PrimaryButton from '../../Components/Button/PrimaryButton.vue';
+import Error from '@/Components/Error.vue';
 import {Inertia} from '@inertiajs/inertia';
 
 export default {
     components: {
         LoginLayout,
         PrimaryButton,
+        Error,
     },
 
     props: ['errors'],

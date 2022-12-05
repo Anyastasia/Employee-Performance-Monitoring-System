@@ -27,8 +27,11 @@ class LoginEmployee extends Controller
             'password' => ['required'],
         ]);
 
-        $attempt =Auth::guard('employee')->attempt($user);
-
+        $attempt =Auth::guard('employee')->attempt([
+            "email" => $user['email'],
+            "password" => $user['password'],
+            "status" => 'active'
+        ]);
 
         if ($attempt) {
             $request->session()->regenerate();
