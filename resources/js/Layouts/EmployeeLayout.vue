@@ -9,7 +9,9 @@
                     
                     <template #dropdown-content>
                         <DropdownItem>Settings</DropdownItem>
-                        <DropdownItem>TimeOut</DropdownItem>
+                        <DropdownItem>
+                            <Link href="/employee/attendance" as="span" >Attendance</Link>
+                        </DropdownItem>
                         <DropdownItem>
                             <Link method='post' href="/employee/logout" as="span">Log out</Link>
                         </DropdownItem>
