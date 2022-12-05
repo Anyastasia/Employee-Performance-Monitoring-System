@@ -4,7 +4,7 @@
             <main class="px-2 py-2">
                 <section>
                     <h1 class="my-2 h1">{{task.task_title}}</h1>
-                    <p v-if="task.submission_status === 'submitted'" class="italic">{{`Submitted at ${task.updated_at}`}}</p>
+                    <p v-if="task.submission_status === 'submitted'" class="italic">{{`Submitted at ${formatDate(task.updated_at)}`}}</p>
                     <p v-if="task.status === 'completed'" class="italic">{{`Approved at ${task.updated_at}`}}</p>
                     <h3 class="my-1 h3">{{task.task_description}}</h3>
                 </section>
@@ -18,6 +18,12 @@
                 <section class="mb-2">
                     <h2 class="h2">Notes</h2>
                     <p>{{task.notes}}</p>
+                </section>
+
+                <section v-if="task.comment">
+                    <h2 v-if="task.status === 'complete'" class="h2">Approval Notes</h2>
+                    <h2 v-else class="h2">Revision Notes</h2>
+                    <p>{{task.comment}}</p>
                 </section>
 
 
@@ -85,11 +91,16 @@ export default {
         approveTask(id) {
             Inertia.post(`/head/task/approve/${id}`, this.form)
         },
-
+        
+        formatDate(date) {
+            const xdate = new Date(date)
+            return `${xdate.toDateString()} ${xdate.toLocaleTimeString()}`
+        }
     },
 
     mounted(){
-        console.log(this.task)
+        const t = new Date(this.task.submission_start_date)
+        console.log(t.toDateString())
     }
 }
 </script>

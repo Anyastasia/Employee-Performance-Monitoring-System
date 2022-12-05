@@ -7,6 +7,8 @@
     use App\Models\Employee as Model;
     use App\Models\AssignedTask;
     use App\Models\SubmittedTask;
+    use App\Models\TimeIn;
+    use App\Models\TimeOut;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Redirect;
 
@@ -83,6 +85,40 @@
             ]);
         }
 
+        public function priority() {
+
+            $id = Auth::guard('employee')->id();
+            return Inertia('Employee/EmployeeHome', [
+                "id" => $id,
+                "items" => AssignedTask::where('employee_id', $id)
+                ->where('is_priority', true)->get(),
+            ]);
+        }
+
+
+        public function attendance() {
+            $id = Auth::guard('employee')->id();
+            return Inertia('Employee/EmployeeAttendance', [
+                "id" => $id,
+                "attendance" => TimeIn::join('time_outs', 'time_ins.shift_date', '=', 'time_outs.shift_date')->where('time_ins.employee_id', $id)->get(),
+            ]);
+        }
+        public function x() {
+
+            $id = Auth::guard('employee')->id();
+            // return Inertia('Employee/EmployeeHome', [
+            //     "id" => $id,
+            //     "items" => AssignedTask::where('employee_id', $id)
+            //     ->where('is_priority', true)->get(),
+
+                
+            // ]);
+            dd(AssignedTask::where('employee_id', $id)
+            ->where('is_priority', true)->get());
+        }
+        
+
+        
         
         public function logout(Request $request) {
 

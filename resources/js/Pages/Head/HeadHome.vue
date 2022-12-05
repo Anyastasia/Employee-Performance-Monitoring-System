@@ -20,7 +20,8 @@
                         <section>
                             <h1 class="h1 mb-1">Assign Task</h1>
                             <section class="mb-1">
-                                <label class="mb--5 display-block" for="taskTitle">Task Title</label>
+                                <Error v-if="errors.task_title" :message="errors.task_title"></Error>
+                                <label class="mb--5 display-block required" for="taskTitle">Task Title</label>
                                 <input v-model="taskForm.task_title" type="text" name="taskTitle">
                             </section>
                             <section class="mb-1">
@@ -35,21 +36,21 @@
                             
                             <section>
                                 <div class="mb-1">
-                                    <h3 class="mb--5">Start date</h3>
-                                    <input v-model="taskForm.submission_start_date" type="date" name="" id="">
-                                    <input v-model="taskForm.submission_start_time" type="time" name="" id="">
+                                    <Error v-if="errors.submission_start_date" :message="errors.submission_start_date"></Error>
+                                    <h3 class="mb--5 required">Start date</h3>
+                                    <input v-model="taskForm.submission_start_date" type="datetime-local" name="submission_start_date" id="">
                                 </div>
 
                                 <div class="mb-1">
-                                    <h3 class="mb--5">Due date</h3>
-                                    <input v-model="taskForm.submission_due_date" type="date" name="" id="">
-                                    <input v-model="taskForm.submission_due_time" type="time" name="" id="">
+                                    <Error v-if="errors.submission_due_date" :message="errors.submission_due_date"></Error>
+                                    <h3 class="mb--5 required">Due date</h3>
+                                    <input v-model="taskForm.submission_due_date" type="datetime-local" name="submission_due_date" id="" >
                                 </div>
 
                             </section>
 
                             <section class="mb-1">
-                                <label for="assignTo" class="mr-1">Assign to</label>
+                                <label for="assignTo" class="mr-1 required">Assign to</label>
                                 <select name="assignTo" id="assignTo" v-model="assignTo">
                                     <option value="all">All</option>
                                     <option value="selected">Selected</option>
@@ -64,8 +65,8 @@
                                             <TableRow>
                                                 <!-- <TableCell :isHeader="true">
                                                     <input type="checkbox" v-model="all" name="" id="" @click="triggerAll">
-                                                    All
-                                                </TableCell> -->
+                                                    Allfalse
+                                                </TableCelcontainerl> -->
                                                 <TableCell :isHeader="true"> </TableCell>
                                                 <TableCell :isHeader="true">Employee</TableCell>
                                             </TableRow>
@@ -73,7 +74,6 @@
                                         </template>
                                         
                                         <template #table-body>
-                                            
                                             
                                             <TableRow v-for="employee in employees"  :key="employee.id">
                                                 <TableCell>
@@ -153,6 +153,7 @@
     import TableCell from '@/Components/Table/TableCell.vue';
     import TableRow from '@/Components/Table/TableRow.vue';
     import Dialog from '@/Components/Dialog/CustomDialog.vue';
+    import Error from '@/Components/Error.vue';
     import {Inertia} from '@inertiajs/inertia';
     import { useForm } from '@inertiajs/inertia-vue3';
     
@@ -166,12 +167,14 @@
             LinkButton,
             PrimaryButton,
             Dialog,
+            Error
         },
 
         props: {
             employees: Object,
             divisions: Object,
             head: Number,
+            errors: Object,
         },
 
         data() {
@@ -190,10 +193,8 @@
                     'task_title': '',
                     'task_description': '',
                     'attachments': '',
-                    'submission_start_date': '',
-                    'submission_start_time': '',
-                    'submission_due_date': '',
-                    'submission_due_time': '',
+                    'submission_start_date': Date(),
+                    'submission_due_date': Date(),
                 }),
             }
         },
@@ -226,6 +227,10 @@
 
             submitAssignedTask() {
 
+
+                // this.taskForm.submission_start_date = new Date(this.taskForm.submission_start_date).toISOString()
+                // this.taskForm.submission_due_date = new Date(this.taskForm.submission_due_date).toISOString()
+
                 if (this.assignTo === 'all') {
                     this.employees.forEach((employee) => {
                         this.taskForm.employee_id.push(employee.id)
@@ -255,10 +260,11 @@
             //         });
             //     }
             // },
-        },
 
+            
+        },  
+        
         mounted() {
-            console.log(this.taskForm)
         }
     }
 </script>

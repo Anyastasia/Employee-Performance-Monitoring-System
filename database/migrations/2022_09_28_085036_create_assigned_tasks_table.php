@@ -18,14 +18,16 @@ return new class extends Migration
             $table->foreignId('employee_id')->constrained('employees');
             $table->foreignId('head_id')->constrained('heads');
             $table->string('task_title');
-            $table->string('task_description');
-            $table->string('attachments');
-            $table->date('submission_start_date');
-            $table->time('submission_start_time');
-            $table->date('submission_due_date');
-            $table->time('submission_due_time');
+            $table->string('task_description')->nullable();
+            $table->string('attachments')->nullable();
+            $table->dateTime('submission_start_date');
+            $table->dateTime('submission_due_date');
+            $table->dateTime('approved_at')->nullable();
+            $table->dateTime('returned_at')->nullable();
             $table->string('comment')->nullable();
             $table->string('status')->default('active');
+            $table->boolean('is_priority')->default(false);
+            $table->boolean('cron_already_ran')->default(false);
             $table->timestamps();
         });
     }

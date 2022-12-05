@@ -70,7 +70,12 @@ use Inertia\Testing\Assert;
         }
 
         public function dashboard() {
-            return Inertia::render('Head/HeadDashboard');
+            $head = HeadModel::find(Auth::guard('head')->id());
+            return Inertia::render('Head/HeadDashboard', [
+                "head" => $head,
+                "employees" => Employee::where('division_id', $head->division_id)->where('status', 'active')->get(),
+                "division" => Division::find($head->division_id)->get('name')->first(),
+            ]);
         }
 
         public function logout(Request $request) {

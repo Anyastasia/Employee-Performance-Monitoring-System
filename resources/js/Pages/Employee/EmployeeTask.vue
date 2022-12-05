@@ -4,7 +4,7 @@
             <main class="px-3">
                 <section>
                     <h1 class="my-2">{{task.task_title}}</h1>
-                    <p v-if="task.submission_status === 'submitted'" class="italic">{{`Submitted at ${task.updated_at}`}}</p>
+                    <p v-if="task.submission_status === 'submitted'" class="italic">{{`Submitted at ${formatDate(task.updated_at)}`}}</p>
                     <div v-if="task.comment">
                         <p v-if="task.status === 'complete'" class="italic display-inline">Task Approved</p>
                         <p v-else class="italic display-inline">Task needs revision</p>
@@ -137,10 +137,14 @@ export default {
         closeCommentDialog() {
             this.exitComment = !this.exitComment
         },
+
+        formatDate(date) {
+            const xdate = new Date(date).toISOString()
+            return `${xdate.toString()} ${xdate.toString()}`
+        }
     },
 
     mounted() {
-        console.log(this.task)
     }
 }
 </script>   

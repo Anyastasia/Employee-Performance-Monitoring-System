@@ -7,12 +7,15 @@ use App\Models\AssignedTask as Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 
+use App\Http\Requests\Head\AssignTaskRequest;
+
+use Carbon\Carbon;
 
 class AssignedTask extends Controller
 {
     //
 
-    public function store(Request $request) {
+    public function store(AssignTaskRequest $request) {
 
     // dd($request);
     // $path = $request->file('attachments')[0]->store('public/images');
@@ -48,9 +51,7 @@ class AssignedTask extends Controller
                 'task_description' => $request->input('task_description'),
                 'attachments' => $file_name,
                 'submission_start_date' => $request->input('submission_start_date'),
-                'submission_start_time' => $request->input('submission_start_time'),
                 'submission_due_date' => $request->input('submission_due_date'),
-                'submission_due_time' => $request->input('submission_due_time'),
                 "comment" => "",
         ]);
     }

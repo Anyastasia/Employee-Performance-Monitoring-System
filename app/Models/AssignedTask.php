@@ -5,11 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use PhpParser\Node\Expr\Empty_;
+
 
 class AssignedTask extends Model
 {
     use HasFactory;
+
+    protected $casts = [
+        'submission_start_date' => 'datetime',
+        'submission_due_date' => 'datetime',
+    ]; 
 
     protected $fillable = [
         'head_id',
@@ -18,11 +23,11 @@ class AssignedTask extends Model
         'task_description',
         'attachments',
         'submission_start_date',
-        'submission_start_time',
         'submission_due_date',
-        'submission_due_time',
         'comment',
         'status',
+        'cron_already_ran',
+        'is_priority',
     ];
 
     
