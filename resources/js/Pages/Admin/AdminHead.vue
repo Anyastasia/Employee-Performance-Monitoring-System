@@ -1,6 +1,6 @@
 <template>
 
-    <AdminLayout>
+    <EmployeeLayout>
         <template #content>
             <main class="px-3">
                 <h1 class="h1">Division Heads</h1>
@@ -102,12 +102,12 @@
                 </div>
             </main>
         </template>
-    </AdminLayout>
+    </EmployeeLayout>
 </template>
 
 <script>
 import {Inertia} from '@inertiajs/inertia';
-import AdminLayout from '../../Layouts/AdminLayout.vue'
+import EmployeeLayout from '../../Layouts/EmployeeLayout.vue'
 import Table from '../../Components/Table/Table.vue';
 import TableRow from '../../Components/Table/TableRow.vue';
 import TableCell from '../../Components/Table/TableCell.vue';

@@ -10,10 +10,10 @@
                     <template #dropdown-content>
                         <DropdownItem>Settings</DropdownItem>
                         <DropdownItem>
-                            <Link href="/employee/attendance" as="span" >Attendance</Link>
+                            <Link href="/attendance" as="span" >Attendance</Link>
                         </DropdownItem>
                         <DropdownItem>
-                            <Link method='post' href="/employee/logout" as="span">Log out</Link>
+                            <Link method='post' href="/logout/employee" as="span">Log out</Link>
                         </DropdownItem>
                     </template>
                 </DropdownContainer>
@@ -22,8 +22,12 @@
 
         <template #sidebar>
             <SidebarItem icon="bi bi-bell" @click="openNotifications" :notLink="true">Notifications</SidebarItem>
-            <SidebarItem icon="bi bi-person" href="/employee/profile">Profile</SidebarItem>
-            <SidebarItem icon="bi bi-journal" href="/employee">Tasks</SidebarItem>
+            <SidebarItem icon="bi bi-person" href="/profile">Profile</SidebarItem>
+            <SidebarItem icon="bi bi-journal" href="/">Tasks</SidebarItem>
+            <SidebarItem v-if="employee.is_division_head" icon="bi bi-journal" href="/list/employees">Employees</SidebarItem>
+            <SidebarItem v-if="employee.is_division_head" icon="bi bi-pie-chart" href="/dashboard">Dashboard</SidebarItem>
+            <SidebarItem v-if="employee.is_admin" icon="bi bi-person" href="/admin/employees">Employees</SidebarItem>
+            <SidebarItem v-if="employee.is_admin" icon="bi bi-building" href="/admin/divisions">Divisions</SidebarItem>
         </template>
 
         <template #main>
@@ -56,7 +60,7 @@
         NotificationItem,
         Link,
 },
-
+        props: ['employee'],
         data() {
             return {
                 showNotifications: false

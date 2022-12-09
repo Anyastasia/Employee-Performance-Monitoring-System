@@ -14,7 +14,6 @@ return new class extends Migration
     public function up()
     {
         Schema::create('employees', function (Blueprint $table) {
-            $table->softDeletes();
             $table->id();
             $table->string('email')->unique();
             $table->string('first_name');
@@ -24,6 +23,8 @@ return new class extends Migration
             $table->string('password');
             $table->string('avatar_path')->nullable();
             $table->string('status')->default('active');
+            $table->boolean('is_admin')->default(false);
+            $table->boolean('is_division_head')->default(false);
             $table->timestamps();
         });
     }

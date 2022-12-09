@@ -1,9 +1,9 @@
 <template>
-    <HeadLayout>
+    <EmployeeLayout :employee="employee">
         <template #content>
                 <h1 class="mx-3 my-1">Dashboard</h1>
                 <div class="card-base px-1 py-1 my-2 mx-3">
-                    <h3 class="h3">{{`${head.first_name} ${head.last_name}`}}</h3>
+                    <h3 class="h3">{{`${employee.first_name} ${employee.last_name}`}}</h3>
                     <h5 class="h5">{{division.name}} Division</h5>
                     <div style="border-block-start: solid 1px black;" class="mt-2">
                         <span class="flex-inline flex-column align-items-center my-1">
@@ -24,19 +24,21 @@
                 </div>
 
         </template>
-    </HeadLayout>
+    </EmployeeLayout>
 </template>
 
 <script>
-    import HeadLayout from '@/Layouts/HeadLayout.vue';
+    // import EmployeeLayout from '@/Layouts/EmployeeLayout.vue';
+    import EmployeeLayout from '@/Layouts/EmployeeLayout.vue';
     import LineChart from '@/Components/Chart/LineChart.vue';
-
+    import PrimaryButton from '@/Components/Button/PrimaryButton.vue'
     export default {
         components: {
-            HeadLayout,
-            LineChart
+            EmployeeLayout,
+            LineChart,
+            PrimaryButton,
         },
-        props: ['head', 'employees', 'division'],
+        props: ['employee', 'employees', 'division',],
     }
 </script>
 

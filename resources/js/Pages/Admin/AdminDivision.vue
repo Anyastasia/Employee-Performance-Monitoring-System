@@ -1,6 +1,6 @@
 <template>
 
-    <AdminLayout>
+    <EmployeeLayout :employee="employee">
         <template #content>
             <main class="px-3">
                 <h1 class="h1">Divisions</h1>
@@ -75,13 +75,13 @@
                 </div>
             </main>
         </template>
-    </AdminLayout>
+    </EmployeeLayout>
 </template>
 
 <script>
 import {Inertia} from '@inertiajs/inertia';
 import {useForm} from '@inertiajs/inertia-vue3';
-import AdminLayout from '../../Layouts/AdminLayout.vue'
+import EmployeeLayout from '../../Layouts/EmployeeLayout.vue'
 import Table from '../../Components/Table/Table.vue';
 import TableRow from '../../Components/Table/TableRow.vue';
 import TableCell from '../../Components/Table/TableCell.vue';
@@ -92,7 +92,7 @@ import Dialog from '../../Components/Dialog/CustomDialog.vue';
 
 export default {
     components: {
-        AdminLayout,
+        EmployeeLayout,
         Table, 
         TableRow,   
         TableCell,
@@ -102,7 +102,7 @@ export default {
         Dialog,
     },
 
-    props: ['divisions'],
+    props: ['divisions', 'employee'],
 
     data() {
         return {

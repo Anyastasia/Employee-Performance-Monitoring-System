@@ -1,6 +1,6 @@
 <template>
 
-    <AdminLayout>
+    <EmployeeLayout :employee="employee">
         <template #content>
             <main class="px-3">
                 <h1 class="h1">Employees</h1>
@@ -59,6 +59,40 @@
                         </section>
                     </Dialog>
 
+                    <Dialog :show="showEditEmployeeForm" :exit="exitEditEmployeeForm">
+                        <form @submit.prevent="submitEditEmployeeForm">
+                            <section>
+                                <h2 class="h2">Edit</h2>
+                                <div>
+                                    <div>
+                                        <label  for="first_name">Name</label>
+                                         <input v-model='editEmployeeForm.first_name' type="text" name="name" id="">
+                                    </div>
+
+                                    <div>
+                                        <label  for="last_name">Last Name</label>
+                                         <input v-model='editEmployeeForm.last_name' type="text" name="name" id="">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="new_position">Position</label>
+                                    <input v-model="editEmployeeForm.position" type="text">
+                                </div>
+
+                                <div>
+                                    <label for="">Promote to Division Head</label>
+                                    <input v-model="editEmployeeForm.is_division_head" type="checkbox" name="promote_checkbox">
+                                </div>                                                                                                  
+                            </section>
+
+                            <section>
+                                <TextButton type="button" @click="closeEditEmployeeForm">Close</TextButton>                                
+                                <PrimaryButton type="submit">Save Changes</PrimaryButton>
+                            </section>
+                        </form>
+                    </Dialog>
+
 
                     <section class="py-1">
                         <label for="search-employee">Search Employee</label>
@@ -95,7 +129,7 @@
                                     <TableCell>{{employee.position}}</TableCell>
                                     <TableCell>
                                         <div class="flex justify-content-center">
-                                            <LinkButton>Edit</LinkButton>
+                                            <TextButton @click="openEditEmployeeForm(employee)">Edit</TextButton>
                                             <LinkButton method='post' :href="`/admin/delete/employee/${employee.id}`">Delete</LinkButton>
                                         </div>
                                     </TableCell>
@@ -106,12 +140,12 @@
                 </div>
             </main>
         </template>
-    </AdminLayout>
+    </EmployeeLayout>
 </template>
 
 <script>
 import {Inertia} from '@inertiajs/inertia';
-import AdminLayout from '../../Layouts/AdminLayout.vue'
+import EmployeeLayout from '../../Layouts/EmployeeLayout.vue'
 import Table from '../../Components/Table/Table.vue';
 import TableRow from '../../Components/Table/TableRow.vue';
 import TableCell from '../../Components/Table/TableCell.vue';
@@ -119,9 +153,10 @@ import PrimaryButton from '../../Components/Button/PrimaryButton.vue';
 import LinkButton from '../../Components/Button/LinkButton.vue';
 import TextButton from '../../Components/Button/TextButton.vue';
 import Dialog from '../../Components/Dialog/CustomDialog.vue';
+import { useForm } from '@inertiajs/inertia-vue3';
 export default {
     components: {
-        AdminLayout,
+        EmployeeLayout,
         Table, 
         TableRow,   
         TableCell,
@@ -132,13 +167,15 @@ export default {
         Inertia,
     },
 
-    props: ['employees', 'divisions', 'errors'],
+    props: ['employees', 'divisions', 'errors', 'employee'],
 
     data() {
         return {
 
             show: false,
             close: false,
+            showEditEmployeeForm: false,
+            exitEditEmployeeForm: false,
             filterDivision: 0,
             selectDivision: 0,
             addEmployeeForm: {
@@ -150,6 +187,14 @@ export default {
                     position: '',
                     password: 'aaa',
                 },
+            editEmployeeForm: useForm({
+                id: '',
+                first_name: '',
+                last_name: '',
+                position: '',
+                division_id: '',
+                is_division_head: false,
+            }),
         }
     },
 
@@ -160,6 +205,24 @@ export default {
 
         closeDialog(){
             this.close = !this.close
+        },
+
+        openEditEmployeeForm(employee) {
+            this.editEmployeeForm.id = employee.id
+            this.editEmployeeForm.first_name = employee.first_name
+            this.editEmployeeForm.last_name = employee.last_name
+            this.editEmployeeForm.position = employee.position
+            this.showEditEmployeeForm = !this.showEditEmployeeForm
+        },
+
+        closeEditEmployeeForm() {
+            this.exitEditEmployeeForm = !this.exitEditEmployeeForm
+            this.exitEditEmployeeForm.reset()
+        },
+
+
+        submitEditEmployeeForm() {
+            Inertia.post("/employee/profile/changeEmployeeDetails", this.editEmployeeForm)
         },
 
         submitAddEmployee() {

@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import LoginLayout from '../../Layouts/LoginLayout.vue'
-import PrimaryButton from '../../Components/Button/PrimaryButton.vue'
+import LoginLayout from '@/Layouts/LoginLayout.vue'
+import PrimaryButton from '@/Components/Button/PrimaryButton.vue'
 import {Inertia} from '@inertiajs/inertia';
 export default {
     components: {

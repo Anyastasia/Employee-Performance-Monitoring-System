@@ -1,5 +1,5 @@
 <template>
-    <EmployeeLayout>
+    <EmployeeLayout :employee="employee">
         <template #content>
             <main class="px-3">
                 <h1 class="h1 my-2">Attendance</h1>
@@ -66,9 +66,8 @@
 
 <script>
 import EmployeeLayout from '@/Layouts/EmployeeLayout.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import PrimaryButton from '@/Components/Button/PrimaryButton.vue'
 import TextButton from '@/Components/Button/TextButton.vue';
-import OutlineButton from '@/Components/Button/OutlineButton.vue';
 import Dialog from '@/Components/Dialog/CustomDialog.vue';
 import Table from '@/Components/Table/Table.vue';
 import TableRow from '@/Components/Table/TableRow.vue';
@@ -79,14 +78,13 @@ export default {
     components: {
         EmployeeLayout,
         PrimaryButton,
-        OutlineButton,
         TextButton,
         Dialog,
         Table,
         TableRow,
         TableCell,
     }, 
-    props: ['id', 'attendance'],
+    props: ['attendance', 'employee'],
     data() {
         return {
             attendanceForm: useForm({
@@ -117,9 +115,9 @@ export default {
 
             console.log(this.attendanceForm)
             if (this.attendanceForm.mode === this.modes[1]) 
-                Inertia.post(`/time-out/store/${this.id}`, this.attendanceForm)
+                Inertia.post(`/time-out/store/${this.employee['id']}`, this.attendanceForm)
             else
-                Inertia.post(`/time-in/store/${this.id}`, this.attendanceForm)
+                Inertia.post(`/time-in/store/${this.employee['id']}`, this.attendanceForm)
         }
     },
 

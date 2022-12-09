@@ -1,5 +1,5 @@
 <template>
-    <EmployeeLayout>
+    <EmployeeLayout :employee="employee">
         <template #content>
             <main class="px-3"> 
                 <h1 class="my-2">Profile</h1>

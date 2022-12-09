@@ -21,6 +21,6 @@ class AuthenticatedEmployee
         if (Auth::guard('employee')->check())
             return $next($request);
 
-        return Redirect::route('login_employee');
+        return Redirect::route('employee.login');
     }
 }

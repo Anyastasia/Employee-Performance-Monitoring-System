@@ -1,5 +1,5 @@
 <template>
-    <HeadLayout>
+    <EmployeeLayout :employee="employee">
         <template #content>
             <main>
                 <h1 class="mx-3 my-1">Employee List</h1>
@@ -17,9 +17,12 @@
                     
                     <Dialog :show="showAssignTasks" :exit="closeAssignTasks" class="my-3">
                         <form @submit.prevent="submitAssignedTask">
+                        
                         <section>
                             <h1 class="h1 mb-1">Assign Task</h1>
-                            <section class="mb-1">
+                            <div class="flex flex-row g-1">
+                                <div class="left">
+                                    <section class="mb-1">
                                 <Error v-if="errors.task_title" :message="errors.task_title"></Error>
                                 <label class="mb--5 display-block required" for="taskTitle">Task Title</label>
                                 <input v-model="taskForm.task_title" type="text" name="taskTitle">
@@ -56,11 +59,12 @@
                                     <option value="selected">Selected</option>
                                 </select>
                             </section>
-
-                            <section v-show="assignTo === 'selected'">
+                                </div>
+                                <div class="right px-1">
+                                    <section v-show="assignTo === 'selected'">
                                 <h2>Select Employee</h2>
                                 <div class="scrollable-y assign-employee">
-                                    <Table>
+                                    <Table class="assign-to">
                                         <template #table-header>
                                             <TableRow>
                                                 <!-- <TableCell :isHeader="true">
@@ -88,6 +92,9 @@
                                     </Table>
                                 </div>
                             </section>
+                                </div>
+                            </div>
+                        
                         </section>
                         <section class="flex mt-2">
                             <TextButton type='button' class="ml-auto" @click="toggleAssignTasks('close')">Cancel</TextButton>
@@ -120,18 +127,18 @@
                             </template>
                             
                             <template #table-body> 
-                                <TableRow v-for="employee in employees" :key="employee.id">
-                                    <TableCell>{{employee.first_name}}</TableCell>
-                                    <TableCell>{{employee.last_name}}</TableCell>
-                                    <TableCell>{{employee.email}}</TableCell>
+                                <TableRow v-for="xemployee in employees" :key="xemployee.id">
+                                    <TableCell>{{xemployee.first_name}}</TableCell>
+                                    <TableCell>{{xemployee.last_name}}</TableCell>
+                                    <TableCell>{{xemployee.email}}</TableCell>
                                     <TableCell>
                                         <!-- employee.division_id == division[division_id] -->
                                         {{divisions.name}}
                                     </TableCell>
-                                    <TableCell>{{employee.position}}</TableCell>
+                                    <TableCell>{{xemployee.position}}</TableCell>
                                     <TableCell>
                                         <div class="flex justify-content-center">
-                                            <LinkButton :href="`/head/employee/${employee.id}`">View</LinkButton>
+                                            <LinkButton :href="`/view/employee/${xemployee.id}`">View</LinkButton>
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -141,12 +148,12 @@
                 </div>
             </main>
         </template>
-    </HeadLayout>
+    </EmployeeLayout>
 </template>
 
 <script>
-    import HeadLayout from '@/Layouts/HeadLayout.vue';
-    import PrimaryButton from '@/Components/PrimaryButton.vue';
+    import EmployeeLayout from '@/Layouts/EmployeeLayout.vue';
+    import PrimaryButton from '@/Components/Button/PrimaryButton.vue';
     import LinkButton from '@/Components/Button/LinkButton.vue';
     import TextButton from '@/Components/Button/TextButton.vue';
     import Table from '@/Components/Table/Table.vue';
@@ -159,7 +166,7 @@
     
     export default {
         components: {
-            HeadLayout,
+            EmployeeLayout,
             Table,
             TableRow,
             TableCell,
@@ -173,8 +180,8 @@
         props: {
             employees: Object,
             divisions: Object,
-            head: Number,
             errors: Object,
+            employee: Object,
         },
 
         data() {
@@ -189,12 +196,12 @@
 
                 taskForm: useForm({
                     'employee_id': [],
-                    'head_id': this.head,
+                    'head_id': this.employee.id,
                     'task_title': '',
                     'task_description': '',
                     'attachments': '',
-                    'submission_start_date': Date(),
-                    'submission_due_date': Date(),
+                    'submission_start_date': '',
+                    'submission_due_date': '',
                 }),
             }
         },
@@ -265,6 +272,7 @@
         },  
         
         mounted() {
+            console.log(this.employees)
         }
     }
 </script>

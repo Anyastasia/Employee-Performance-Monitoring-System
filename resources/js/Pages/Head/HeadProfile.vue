@@ -1,5 +1,5 @@
 <template>
-    <HeadLayout>
+    <EmployeeLayout>
         <template #content>
             <main class="px-3"> 
                 <h1 class="my-2">Profile</h1>
@@ -76,11 +76,11 @@
                 </Dialog>
             </main> 
         </template>
-    </HeadLayout>
+    </EmployeeLayout>
 </template>
 
 <script>
-import HeadLayout from '@/Layouts/HeadLayout.vue';
+import EmployeeLayout from '@/Layouts/HeadLayout.vue';
 import Dialog from '@/Components/Dialog/CustomDialog.vue';
 import PrimaryButton from '@/Components/Button/PrimaryButton.vue';
 import TextButton from '@/Components/Button/TextButton.vue';
@@ -90,7 +90,7 @@ import { useForm} from '@inertiajs/inertia-vue3';
 
 export default {
     components: {
-        HeadLayout,
+        EmployeeLayout,
         Dialog,
         PrimaryButton,
         TextButton,
