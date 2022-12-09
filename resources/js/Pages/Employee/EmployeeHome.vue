@@ -1,6 +1,6 @@
 <template>
     
-    <EmployeeLayout>
+    <EmployeeLayout :employee="employee">
         <template #content>
             <main class="px-3">
 
@@ -8,23 +8,23 @@
                 <section class="pb-1">
                     <div> 
                         <TextButton>
-                            <Link method="get" href="/employee/" as="span">All</Link>  
+                            <Link method="get" href="/" as="span">All</Link>  
                         </TextButton> 
                         <TextButton >
-                            <Link method="get" href="/employee/priority" as="span">Priority</Link>
+                            <Link method="get" href="/priority" as="span">Priority</Link>
                         </TextButton>
                         <TextButton>
-                            <Link method="get" href="/employee/active" as="span">Active</Link>  
+                            <Link method="get" href="/active" as="span">Active</Link>  
                         </TextButton> 
                         <TextButton>
-                            <Link method="get" href="/employee/completed" as="span">Completed</Link>  
+                            <Link method="get" href="/completed" as="span">Completed</Link>  
                         </TextButton>
                     </div>
                 </section>
 
                 <section>
                     <Task>
-                        <TaskItem v-for="(item, index) in items" :href="`/employee/task/${item.id}`" :key="item.id" :title="item.task_title" :dueDate="item.submission_due_date" :isPriority="item.is_priority"/>
+                        <TaskItem v-for="(item, index) in items" :href="`/task/${item.id}`" :key="item.id" :title="item.task_title" :dueDate="item.submission_due_date" :isPriority="item.is_priority"/>
                         <!-- <TaskItem href="/task/id" title="Task 1" dueDate="September 17, 2021"/>
                         <TaskItem title="Task 1" dueDate="September 17, 2021"/>
                         <TaskItem title="Task 1" dueDate="September 17, 2021"/> -->
@@ -50,14 +50,14 @@
             Task,
             TaskItem,
             LinkButton,
-            Link
+            Link,
         },
 
         // props: {
         //     id: Number,
         //     items: Object,
         // },
-        props: ['id', 'items', 'attendance'],
+        props: ['items', 'employee'],
 
         mounted() {
         }

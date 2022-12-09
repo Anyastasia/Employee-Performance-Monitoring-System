@@ -1,5 +1,5 @@
 <template>
-    <HeadLayout>
+    <EmployeeLayout :employee="user">
         <template #content>
             <main>
                 <section class="mx-3">
@@ -24,7 +24,7 @@
                                 </TableCell>
 
                                 <TableCell>
-                                    {{task.submission_due_date + ' ' + task.submission_due_time}}
+                                    {{formatDate(task.submission_due_date)}}
                                 </TableCell>
 
                                 <TableCell>
@@ -34,12 +34,12 @@
             
                                 <TableCell>
                                     <div class="flex g--75 justify-content-center">
-                                        <PrimaryButton :disabled="checkStatus(task.status)" @click="openDialog">Evaluate</PrimaryButton>
+                                        <PrimaryButton :disabled="checkStatus(task.status)" @click="openDialog(task.id)">Evaluate</PrimaryButton>
                                         <span v-if="task.status == 'active'">
-                                            <LinkButton :href="`/head/task/${task.id}`">View</LinkButton>
+                                            <LinkButton :href="`/task/${task.id}`">View</LinkButton>
                                         </span>
                                         <span v-else>
-                                            <LinkButton :href="`/head/view/task/${task.id}`">View</LinkButton>
+                                            <LinkButton :href="`/view/task/${task.id}`">View</LinkButton>
                                         </span>
                                     </div> 
                                 </TableCell>
@@ -52,37 +52,22 @@
                 <Dialog :show="dialogOpen" :exit="dialogClose" class="px-2">
 
                     <section>
-                        <form action="">
+                        <form @submit.prevent="submitEvaluationForm">
                             <article>
                                 
-                                <h2 class="h2">Productivity</h2>
-                                
-                                <input v-model="evaluationForm.productivity" type="radio" name="productivity" value="1" id="">
-                                <input v-model="evaluationForm.productivity" type="radio" name="productivity" value="2" id="">
-                                <input v-model="evaluationForm.productivity" type="radio" name="productivity" value="3" id="">
-                                <input v-model="evaluationForm.productivity" type="radio" name="productivity" value="4" id="">
-                                <input v-model="evaluationForm.productivity" type="radio" name="productivity" value="5" id="">
+                                <h2 class="h2">Efficiency</h2>      
+                                <input v-model="evaluationForm.efficiency" v-for="(xefficiency, index) in efficiency" :key="index" type="radio" name="productivity" :value="xefficiency" id="">
                             </article>
 
                             <article>
                                 
                                 <h2 class="h2">Quality</h2>
-                               
-                                <input v-model="evaluationForm.quality" type="radio" name="quality" value="1" id="">
-                                <input v-model="evaluationForm.quality" type="radio" name="quality" value="2" id="">
-                                <input v-model="evaluationForm.quality" type="radio" name="quality" value="3" id="">
-                                <input v-model="evaluationForm.quality" type="radio" name="quality" value="4" id="">
-                                <input v-model="evaluationForm.quality" type="radio" name="quality" value="5" id="">
-                                
+                                <input v-model="evaluationForm.quality" v-for="(xquality, index) in quality"  :key="index" type="radio" name="quality" :value="xquality" id="">
                             </article>
 
                             <article>
                                 <h2 class="h2">Timeliness</h2>
-                                <input v-model="evaluationForm.timeliness" type="radio" name="timeliness" value="1" id="">
-                                <input v-model="evaluationForm.timeliness" type="radio" name="timeliness" value="2" id="">
-                                <input v-model="evaluationForm.timeliness" type="radio" name="timeliness" value="3" id="">
-                                <input v-model="evaluationForm.timeliness" type="radio" name="timeliness" value="4" id="">
-                                <input v-model="evaluationForm.timeliness" type="radio" name="timeliness" value="5" id="">
+                                <input v-model="evaluationForm.timeliness" v-for="(xtimeliness, index) in timeliness" :key="index" type="radio" name="timeliness" :value="xtimeliness" id="">
                             </article>
 
 
@@ -95,23 +80,24 @@
                 </Dialog>
             </main>
         </template>
-    </HeadLayout>
+    </EmployeeLayout>
 </template>
 
 
 <script>
-import HeadLayout from '@/Layouts/HeadLayout.vue'
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import EmployeeLayout from '@/Layouts/EmployeeLayout.vue';
+import PrimaryButton from '@/Components/Button/PrimaryButton.vue';
 import TextButton from '@/Components/Button/TextButton.vue';
 import LinkButton from '@/Components/Button/LinkButton.vue'
 import Table from '@/Components/Table/Table.vue'
 import TableCell from '@/Components/Table/TableCell.vue';
 import TableRow from '@/Components/Table/TableRow.vue';
 import Dialog from '@/Components/Dialog/CustomDialog.vue';
-
+import {useForm} from '@inertiajs/inertia-vue3'
+import { Inertia } from '@inertiajs/inertia';
 export default {
     components: {
-        HeadLayout,
+        EmployeeLayout,
         PrimaryButton,
         TextButton,
         LinkButton,
@@ -121,35 +107,53 @@ export default {
         Dialog,
     },
 
-    props: ['employee', 'assigned_tasks', 'xtask'],
+    props: ['employee', 'assigned_tasks', 'xtask', 'user'],
 
     data(){
         return {
             dialogOpen: false,
             dialogClose: false,
-            evaluationForm: {
+            quality: [1,2,3,4,5],
+            efficiency: [1,2,3,4,5],
+            timeliness: [1,2,3,4,5],
+            evaluationForm: useForm({
+                employee_id: '',
+                task_id: '',
                 quality: '',
-                productivity: '',
+                efficiency: '',
                 timeliness: '',
-            },
+            }),
         }
     },
 
     methods: {
-        openDialog() {
+        openDialog(id) {
+            this.evaluationForm.task_id = id
+            this.evaluationForm.employee_id = this.employee.id
             this.dialogOpen = !this.dialogOpen
         },
 
         closeDialog(){
             this.dialogClose = !this.dialogClose
+            this.evaluationForm.reset()
         },
         checkStatus(status) {
-            return (status === 'active') ? true : false
-        }
+            return (status === 'complete') ? false : true
+        },
+
+        formatDate(date) {
+            const xdate = new Date(date)
+            return `${xdate.toLocaleDateString()} ${xdate.toLocaleTimeString()}`
+       },
+
+        submitEvaluationForm() {
+            Inertia.post('/evaluate', this.evaluationForm)
+            this.dialogClose = true
+        },
     },
 
     mounted() {
-        console.log(this.assigned_tasks)
+        console.log(this.employee)
     },
 
 

@@ -1,7 +1,7 @@
 <template>
     <LoginLayout>
         <template #content>
-            <h1>Employee Login</h1>
+                <h1>Employee Login</h1>
             <div class="login-form">
                 <form @submit.prevent="submitLogin">
                     <div>
@@ -25,8 +25,9 @@
 
 <script>
 
-import LoginLayout from '../../Layouts/LoginLayout.vue'
-import PrimaryButton from '../../Components/Button/PrimaryButton.vue';
+import LoginLayout from '@/Layouts/LoginLayout.vue'
+import PrimaryButton from '@/Components/Button/PrimaryButton.vue';
+
 import Error from '@/Components/Error.vue';
 import {Inertia} from '@inertiajs/inertia';
 

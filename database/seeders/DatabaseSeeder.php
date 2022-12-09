@@ -17,9 +17,28 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        \App\Models\Admin::factory()->create([
-            'username' => 'admin',
-            'password' => Hash::make('password'),
+        \App\Models\Division::factory()->create([
+            'name' => 'Examiner',
+        ]);
+
+        \App\Models\Employee::factory()->create([
+            'email' => 'alice@email.com',
+            'first_name' => 'Alice',
+            'last_name' => 'Margatroid',
+            'position' => 'Admin',
+            'is_admin' => true,
+            'is_division_head' => true,
+            'division_id' => 1,
+            'password' => Hash::make('aaa'),
+        ]);
+
+        \App\Models\Employee::factory()->create([
+            'email' => 'marisa@email.com',
+            'first_name' => 'Marisa',
+            'last_name' => 'Kirisame',
+            'position' => 'Examiner Agent',
+            'division_id' => 1,
+            'password' => Hash::make('aaa'),
         ]);
     }
 }

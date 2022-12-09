@@ -66,7 +66,7 @@
 
 <script>
 import HeadLayout from '@/Layouts/HeadLayout.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import PrimaryButton from '@/Components/Button/PrimaryButton.vue';
 import TextButton from '@/Components/Button/TextButton.vue';
 import OutlineButton from '@/Components/Button/OutlineButton.vue';
 import Dialog from '@/Components/Dialog/CustomDialog.vue';

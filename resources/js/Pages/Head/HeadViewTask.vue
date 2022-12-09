@@ -1,5 +1,5 @@
 <template>
-    <HeadLayout>
+    <EmployeeLayout :employee="employee">
         <template #content>
             <main class="px-2 py-2">
                 <section>
@@ -60,25 +60,24 @@
                 </form> -->
             </main>
         </template>
-    </HeadLayout>
+    </EmployeeLayout>
 </template>
 
 <script>
-import HeadLayout from '@/Layouts/HeadLayout.vue'
+import EmployeeLayout from '@/Layouts/EmployeeLayout.vue'
 import PrimaryButton from '@/Components/Button/PrimaryButton.vue';
 import OutlineButton from '@/Components/Button/OutlineButton.vue'
-import TextButton from '@/Components/Button/TextButton.vue';
 import { Inertia } from '@inertiajs/inertia';
 import { useForm } from '@inertiajs/inertia-vue3';
 
 export default {
     components: {
-        HeadLayout,
+        EmployeeLayout,
         PrimaryButton,
         OutlineButton,
     },
 
-    props: ['task'],
+    props: ['task', 'employee'],
     data() {
         return {
             form: useForm({

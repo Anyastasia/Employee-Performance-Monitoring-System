@@ -1,5 +1,5 @@
 <template>
-    <EmployeeLayout>
+    <EmployeeLayout :employee="employee">
         <template #content>
             <main class="px-3">
                 <section>
@@ -107,6 +107,7 @@ export default {
 
     props: {
         task: Object,
+        employee: Object,
         // submitted_task: Object,
     },
 
@@ -139,8 +140,8 @@ export default {
         },
 
         formatDate(date) {
-            const xdate = new Date(date).toISOString()
-            return `${xdate.toString()} ${xdate.toString()}`
+            const xdate = new Date(date)
+            return `${xdate.toLocaleString()}`
         }
     },
 

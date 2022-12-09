@@ -28,7 +28,7 @@ use Inertia\Testing\Assert;
 
         public function home(Request $request) {
 
-            $head = Auth::guard('head')->user();
+            $head = Auth::guard('employee')->user();
             $division_id = $head['division_id'];
 
             return Inertia::render('Head/HeadHome', [
@@ -41,7 +41,7 @@ use Inertia\Testing\Assert;
         }
         
         public function profile() {
-            $head = Auth::guard('head')->user();
+            $head = Auth::guard('employee')->user();
             return Inertia('Head/HeadProfile', [
                 "head" => HeadModel::where('id', $head['id'])->get(['first_name', 'last_name', 'email', 'position'])[0],
             ]);
@@ -70,7 +70,7 @@ use Inertia\Testing\Assert;
         }
 
         public function dashboard() {
-            $head = HeadModel::find(Auth::guard('head')->id());
+            $head = HeadModel::find(Auth::guard('employee')->id());
             return Inertia::render('Head/HeadDashboard', [
                 "head" => $head,
                 "employees" => Employee::where('division_id', $head->division_id)->where('status', 'active')->get(),
