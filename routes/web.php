@@ -61,8 +61,8 @@ Route::controller(Employee::class)->middleware(['employee'])->group(function() {
     Route::get('/view/employee/{id}',[Employee::class, 'employee'])->name('employee.view');
     Route::get('/task/assigned/{id}',[Employee::class, 'task']);
     Route::get('/view/task/{id}', [Employee::class, 'view_task']);
-    Route::get('/admin/{id}', [Employee::class, 'employee_list_admin']);
-    Route::get('/admin/employees/{id}', [Employee::class, 'employee_list_admin'])->name('admin.employees');
+    Route::get('/admin', [Employee::class, 'employee_list_admin']);
+    Route::get('/admin/employees', [Employee::class, 'employee_list_admin'])->name('admin.employees');
     Route::get('/admin/divisions', [Employee::class, 'division_list_admin']);
     Route::post('/admin/delete/division/{id}', [Employee::class, 'deactivate_division']);
     Route::post('/admin/delete/employee/{id}', [Employee::class, 'deactivate_employee']);
