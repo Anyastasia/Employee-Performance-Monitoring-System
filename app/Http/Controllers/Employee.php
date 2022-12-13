@@ -93,6 +93,12 @@
             ]);
         }
 
+        public function get_employee_by_division($id) {
+            return Inertia::render('Admin/AdminEmployee', [
+                'employees' => Model::where('division_id', $id)->get()
+            ]); 
+        }
+
         public function employee_list_admin() {
             return Inertia('Admin/AdminEmployee', [
                 'employees' => Model::where('status', 'active')->get(), 'divisions' => Division::where('status', 'active')->get(),
@@ -160,12 +166,12 @@
             ]);
         }
 
-
         public function attendance() {
             $user = Auth::guard('employee')->user();
             return Inertia('Employee/EmployeeAttendance', [
                 "employee" => $user,
-                "attendance" => TimeIn::join('time_outs', 'time_ins.shift_date', '=', 'time_outs.shift_date')->where('time_ins.employee_id', $user['id'])->get(),
+                "attendance" => TimeIn::join('time_outs', 'time_ins.shift_date', '=', 'time_outs.shift_date')->where('time_ins.employee_id', $user->id)->get(),
+                "employees" => Model::where('division_id', $user->division_id)->get(),
             ]);
         }
 
@@ -182,10 +188,7 @@
             dd(AssignedTask::where('employee_id', $id)
             ->where('is_priority', true)->get());
         }
-        
-
-        
-        
+     
         public function logout(Request $request) {
 
             

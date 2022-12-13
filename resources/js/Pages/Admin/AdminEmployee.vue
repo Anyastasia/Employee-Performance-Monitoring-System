@@ -62,26 +62,26 @@
                     <Dialog :show="showEditEmployeeForm" :exit="exitEditEmployeeForm">
                         <form @submit.prevent="submitEditEmployeeForm">
                             <section>
-                                <h2 class="h2">Edit</h2>
+                                <h2 class="h2 mb-1" >Edit</h2>
                                 <div>
-                                    <div>
-                                        <label  for="first_name">Name</label>
-                                         <input v-model='editEmployeeForm.first_name' type="text" name="name" id="">
+                                    <div class="mb-1">
+                                        <label  for="first_name" class="display-block mb--5">Name</label>
+                                         <input class="px--75 py--5" v-model='editEmployeeForm.first_name' type="text" name="name" id="">
                                     </div>
 
-                                    <div>
-                                        <label  for="last_name">Last Name</label>
-                                         <input v-model='editEmployeeForm.last_name' type="text" name="name" id="">
+                                    <div class="mb-1">
+                                        <label  for="last_name" class='display-block mb--5'>Last Name</label>
+                                         <input class="px--75 py--5" v-model='editEmployeeForm.last_name' type="text" name="name" id="">
                                     </div>
                                 </div>
 
-                                <div>
-                                    <label for="new_position">Position</label>
-                                    <input v-model="editEmployeeForm.position" type="text">
+                                <div class="mb-1">
+                                    <label for="new_position" class="display-block mb--5">Position</label>
+                                    <input class="px--75 py--5" v-model="editEmployeeForm.position" type="text">
                                 </div>
 
-                                <div>
-                                    <label for="">Promote to Division Head</label>
+                                <div class="mb-1">
+                                    <label for="" >Promote to Division Head</label>
                                     <input v-model="editEmployeeForm.is_division_head" type="checkbox" name="promote_checkbox">
                                 </div>                                                                                                  
                             </section>

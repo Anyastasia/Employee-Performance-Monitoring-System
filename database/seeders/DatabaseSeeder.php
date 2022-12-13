@@ -25,9 +25,18 @@ class DatabaseSeeder extends Seeder
             'email' => 'alice@email.com',
             'first_name' => 'Alice',
             'last_name' => 'Margatroid',
+            'position' => 'Division Head',
+            'is_division_head' => true,
+            'division_id' => 1,
+            'password' => Hash::make('aaa'),
+        ]);
+
+        \App\Models\Employee::factory()->create([
+            'email' => 'reisen@email.com',
+            'first_name' => 'Reisen',
+            'last_name' => 'Inaba',
             'position' => 'Admin',
             'is_admin' => true,
-            'is_division_head' => true,
             'division_id' => 1,
             'password' => Hash::make('aaa'),
         ]);

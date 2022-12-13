@@ -20,6 +20,7 @@ use App\Http\Controllers\Change\Employee\EmployeeDetails as EmployeeChangeDetail
 use App\Http\Controllers\Change\Employee\Password as EmployeeChangePassword;
 use App\Http\Controllers\Change\Head\Password as HeadChangePassword;
 use App\Http\Controllers\Evaluation;
+use App\Http\Controllers\Leave;
 use App\Http\Controllers\SubmittedTask;
 use App\Http\Controllers\TimeIn;
 use App\Http\Controllers\TimeOut;
@@ -52,7 +53,7 @@ Route::controller(Employee::class)->middleware(['employee'])->group(function() {
     Route::get('/completed', [Employee::class, 'completed']);
     Route::get('/active', [Employee::class, 'active']);
     Route::get('/priority', [Employee::class, 'priority']);
-    Route::get('/attendance', [Employee::class, 'attendance']);
+    Route::get('/attendance', [Employee::class, 'attendance'])->name('employee.attendance');
     Route::get('/profile', [Employee::class, 'profile'])->name('employee.profile');
     Route::get('/task/{id}', [Employee::class, 'task'])->name('employee.task');
     Route::get('/list/employees', [Employee::class, 'employee_list'])->name('head_employees');
@@ -60,8 +61,8 @@ Route::controller(Employee::class)->middleware(['employee'])->group(function() {
     Route::get('/view/employee/{id}',[Employee::class, 'employee'])->name('employee.view');
     Route::get('/task/assigned/{id}',[Employee::class, 'task']);
     Route::get('/view/task/{id}', [Employee::class, 'view_task']);
-    Route::get('/admin', [Employee::class, 'employee_list_admin']);
-    Route::get('/admin/employees', [Employee::class, 'employee_list_admin']);
+    Route::get('/admin/{id}', [Employee::class, 'employee_list_admin']);
+    Route::get('/admin/employees/{id}', [Employee::class, 'employee_list_admin'])->name('admin.employees');
     Route::get('/admin/divisions', [Employee::class, 'division_list_admin']);
     Route::post('/admin/delete/division/{id}', [Employee::class, 'deactivate_division']);
     Route::post('/admin/delete/employee/{id}', [Employee::class, 'deactivate_employee']);
@@ -130,6 +131,7 @@ Route::post('employee/profile/changeEmployeeDetails', [EmployeeChangeDetails::cl
 
 Route::post('/evaluate', [Evaluation::class, 'store']);
 
+Route::post('/leave', [Leave::class, 'store']);
 Route::post('/something', function() {
     return inertia('Welcome');
 })->middleware('sample');

@@ -7,6 +7,7 @@ use App\Http\Requests\Employee\ChangePasswordRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 class Password extends Controller
 {
     //
@@ -19,5 +20,7 @@ class Password extends Controller
 
         $model->password = Hash::make($validator['password']);
         $model->save();
+
+        return Redirect::route('employee.profile');
     }
 }

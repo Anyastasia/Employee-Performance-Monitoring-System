@@ -41,6 +41,8 @@ class RegisterEmployee extends Controller
             'avatar_path' => $request->avatar_path,
             'password' => bcrypt($request->password),
        ]);
+
+       return Redirect::route('admin.employees');
        
     }
 }
