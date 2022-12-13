@@ -99,11 +99,23 @@
             ]); 
         }
 
-        public function employee_list_admin() {
-            return Inertia('Admin/AdminEmployee', [
-                'employees' => Model::where('status', 'active')->get(), 'divisions' => Division::where('status', 'active')->get(),
-                'employee' => Auth::guard('employee')->user(),
-            ]);
+        public function employee_list_admin($id) {
+            if ($id == 0) {
+                return Inertia('Admin/AdminEmployee', [
+                    'employees' => Model::where('status', 'active')->get(), 
+                    'divisions' => Division::where('status', 'active')->get(),
+                    'employee' => Auth::guard('employee')->user(),
+                    "division_id" => $id,
+                ]);
+            } else {
+                return Inertia('Admin/AdminEmployee', [
+                    'employees' => Model::where('status', 'active')
+                    ->where('division_id', $id)->get(), 
+                    'divisions' => Division::where('status', 'active')->get(),
+                    'employee' => Auth::guard('employee')->user(),
+                    "division_id" => $id,
+                ]);
+            }
         }
 
         public function division_list_admin() {

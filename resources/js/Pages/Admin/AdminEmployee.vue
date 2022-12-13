@@ -98,8 +98,8 @@
                         <label for="search-employee">Search Employee</label>
                         <input type="search" name="search-employee" id="search-employee">
 
-                        <select name="employee-status" id="employee-status" v-model="addEmployeeForm.division_id">
-                            <option disabled value="0">All</option>
+                        <select name="employee-status" id="employee-status" v-model="selectDivision">
+                            <option value="0">All</option>
                             <option v-for="division in divisions" :key="division.id" :value="division.id">{{division.name}}</option>
                         </select>
                     </section>
@@ -167,7 +167,7 @@ export default {
         Inertia,
     },
 
-    props: ['employees', 'divisions', 'errors', 'employee'],
+    props: ['employees', 'divisions', 'errors', 'employee', 'division_id'],
 
     data() {
         return {
@@ -177,7 +177,7 @@ export default {
             showEditEmployeeForm: false,
             exitEditEmployeeForm: false,
             filterDivision: 0,
-            selectDivision: 0,
+            selectDivision: this.division_id,
             addEmployeeForm: {
                     first_name: '',
                     last_name: '',
@@ -228,7 +228,15 @@ export default {
         submitAddEmployee() {
 
             Inertia.post('/register/employee/store', this.addEmployeeForm)
-        }
+        },
+
+    },
+
+    watch: {
+        selectDivision(){
+            console.log(this.selectDivision)
+            Inertia.get(`/admin/employees/${this.selectDivision}`)
+        },
     }
 }
 </script>

@@ -26,7 +26,7 @@
             <SidebarItem icon="bi bi-journal" href="/">Tasks</SidebarItem>
             <SidebarItem v-if="employee.is_division_head" icon="bi bi-journal" href="/list/employees">Employees</SidebarItem>
             <SidebarItem v-if="employee.is_division_head" icon="bi bi-pie-chart" href="/dashboard">Dashboard</SidebarItem>
-            <SidebarItem v-if="employee.is_admin" icon="bi bi-person" href="/admin/employees">Employees</SidebarItem>
+            <SidebarItem v-if="employee.is_admin" icon="bi bi-person" href="/admin/employees/0">Employees</SidebarItem>
             <SidebarItem v-if="employee.is_admin" icon="bi bi-building" href="/admin/divisions">Divisions</SidebarItem>
         </template>
 

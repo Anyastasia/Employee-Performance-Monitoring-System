@@ -24,11 +24,11 @@ class EmployeeDetails extends Controller
             $model->position = "Division Head";
         else
             $model->position = $request->position;
-            
+
         $model->is_division_head = $request->is_division_head;
         
         $model->save();
 
-        return Redirect::route('admin.employees');
+        return Redirect::route('admin.employees', $model->division_id);
     }
 }
