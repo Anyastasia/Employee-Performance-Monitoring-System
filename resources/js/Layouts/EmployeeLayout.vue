@@ -23,7 +23,8 @@
         <template #sidebar>
             <SidebarItem icon="bi bi-bell" @click="openNotifications" :notLink="true">Notifications</SidebarItem>
             <SidebarItem icon="bi bi-person" href="/profile">Profile</SidebarItem>
-            <SidebarItem icon="bi bi-journal" href="/">Tasks</SidebarItem>
+
+            <SidebarItem v-if="renderTasks" icon="bi bi-journal" href="/">Tasks</SidebarItem>
             <SidebarItem v-if="employee.is_division_head" icon="bi bi-journal" href="/list/employees">Employees</SidebarItem>
             <SidebarItem v-if="employee.is_division_head" icon="bi bi-pie-chart" href="/dashboard">Dashboard</SidebarItem>
             <SidebarItem v-if="employee.is_admin" icon="bi bi-person" href="/admin/employees/0">Employees</SidebarItem>
@@ -63,6 +64,7 @@
         props: ['employee'],
         data() {
             return {
+                renderTasks: !(this.employee.is_division_head || this.employee.is_admin),
                 showNotifications: false
             }
         },

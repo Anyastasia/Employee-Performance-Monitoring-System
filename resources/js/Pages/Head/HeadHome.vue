@@ -84,11 +84,7 @@
                                                     <input v-model="taskForm.employee_id" type="checkbox" name="checkbox" ref="xitems" :value="employee.id">
                                                 </TableCell>
                                                 <TableCell>
-                                                    <span>{
-                        <select v-model="filterDivision" name="filter-division" id="filter-division">
-                            <option value="0">All</option>
-                            <option v-for="division in divisions" :key="division.id" :value="division.id">{{division.name}}</option>
-                        </select>{employee.first_name + ' ' + employee.last_name}}</span>
+                                                    <span>{{employee.first_name + ' ' + employee.last_name}}</span>
                                                 </TableCell>
                                             </TableRow>
 
