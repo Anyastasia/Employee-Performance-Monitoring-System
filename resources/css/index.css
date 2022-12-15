@@ -122,6 +122,25 @@ body {
     margin-block-end: 1rem;
 }
 
+.alert {
+    color: white;
+    padding-inline: 1rem;
+    padding-block: 1.2rem;
+    transition: opacity 0.6s;
+}
+
+.alert-error {
+    background-color: #ec7464;
+}
+
+.alert-info {
+    background-color: #2196F3;
+}
+.alert-success {
+    background-color: #53a653;
+}
+
+
 .name label {
     margin-block-end: .5rem;
 }

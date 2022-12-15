@@ -3,6 +3,8 @@
     <EmployeeLayout :employee="employee">
         <template #content>
             <main class="px-3">
+                <Alert class="my-1" v-show="showSuccessAlert" @click="showSuccessAlert = !showSuccessAlertAddEmployeeForm" message="Employee Added." type="alert-success"></Alert>
+                <Alert class="my-1" v-show="showAlertEditEmployeeForm" @click="showAlertEditEmployeeForm = !showAlertEditEmployeeForm" message="Info Edited." type="alert-info"></Alert>
                 <h1 class="h1">Employees</h1>
                 <div class="my-1 table-container px-2 py-1">
                     <div class="flex g-1 my-1">
@@ -145,6 +147,7 @@
 
 <script>
 import {Inertia} from '@inertiajs/inertia';
+import Alert from '@/Components/Alert/Alert.vue';
 import EmployeeLayout from '../../Layouts/EmployeeLayout.vue'
 import Table from '../../Components/Table/Table.vue';
 import TableRow from '../../Components/Table/TableRow.vue';
@@ -157,6 +160,7 @@ import { useForm } from '@inertiajs/inertia-vue3';
 export default {
     components: {
         EmployeeLayout,
+        Alert,
         Table, 
         TableRow,   
         TableCell,
@@ -178,7 +182,10 @@ export default {
             exitEditEmployeeForm: false,
             filterDivision: 0,
             selectDivision: this.division_id,
-            addEmployeeForm: {
+            showSuccessAlertAddEmployeeForm: false,
+            showAlertEditEmployeeForm: false,
+            showErrorAlert: false,
+            addEmployeeForm: useForm({
                     first_name: '',
                     last_name: '',
                     email: '',
@@ -186,7 +193,7 @@ export default {
                     division_id: 0,
                     position: '',
                     password: 'aaa',
-                },
+                }),
             editEmployeeForm: useForm({
                 id: '',
                 first_name: '',
@@ -220,14 +227,18 @@ export default {
             this.exitEditEmployeeForm.reset()
         },
 
-
         submitEditEmployeeForm() {
-            Inertia.post("/employee/profile/changeEmployeeDetails", this.editEmployeeForm)
+            this.editEmployeeForm.post("/employee/profile/changeEmployeeDetails", {
+                onSuccess: ()=> {this.showAlertEditEmployeeForm = true}
+            })
         },
 
         submitAddEmployee() {
 
-            Inertia.post('/register/employee/store', this.addEmployeeForm)
+            // Inertia.post('/register/employee/store', this.addEmployeeForm)
+            this.addEmployeeForm.post('/register/employee/store', {
+                onSuccess: () => {this.showSuccessAlert = true}
+            })
         },
 
     },

@@ -84,7 +84,11 @@
                                                     <input v-model="taskForm.employee_id" type="checkbox" name="checkbox" ref="xitems" :value="employee.id">
                                                 </TableCell>
                                                 <TableCell>
-                                                    <span>{{employee.first_name + ' ' + employee.last_name}}</span>
+                                                    <span>{
+                        <select v-model="filterDivision" name="filter-division" id="filter-division">
+                            <option value="0">All</option>
+                            <option v-for="division in divisions" :key="division.id" :value="division.id">{{division.name}}</option>
+                        </select>{employee.first_name + ' ' + employee.last_name}}</span>
                                                 </TableCell>
                                             </TableRow>
 
@@ -105,11 +109,6 @@
                     <section class="py-1">
                         <label for="search-employee">Search Employee</label>
                         <input type="search" name="search-employee" id="search-employee">
-
-                        <select v-model="filterDivision" name="filter-division" id="filter-division">
-                            <option value="0">All</option>
-                            <option v-for="division in divisions" :key="division.id" :value="division.id">{{division.name}}</option>
-                        </select>
                     </section>
 
                     <section>

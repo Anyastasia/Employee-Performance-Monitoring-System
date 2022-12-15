@@ -8,14 +8,11 @@
                 <section class="pb-1">
                     <div> 
                         <TextButton>
-                            <Link method="get" href="/" as="span">All</Link>  
+                            <Link method="get" href="/" as="span">Active</Link>  
                         </TextButton> 
                         <TextButton >
                             <Link method="get" href="/priority" as="span">Priority</Link>
                         </TextButton>
-                        <TextButton>
-                            <Link method="get" href="/active" as="span">Active</Link>  
-                        </TextButton> 
                         <TextButton>
                             <Link method="get" href="/completed" as="span">Completed</Link>  
                         </TextButton>
@@ -30,6 +27,10 @@
                         <TaskItem title="Task 1" dueDate="September 17, 2021"/> -->
                     </Task>
                 </section>
+
+                <Alert message="message" type="alert-success">
+
+                </Alert>
             </main>
         </template>
     </EmployeeLayout>
@@ -39,6 +40,7 @@
 <script>
     import EmployeeLayout from '@/Layouts/EmployeeLayout.vue';
     import TextButton from '@/Components/Button/TextButton.vue';
+    import Alert from '@/Components/Alert/Alert.vue'
     import Task from '@/Components/Task/Task.vue';
     import TaskItem from '@/Components/Task/TaskItem.vue';
     import {Link} from '@inertiajs/inertia-vue3';
@@ -51,6 +53,7 @@
             TaskItem,
             LinkButton,
             Link,
+            Alert,
         },
 
         // props: {

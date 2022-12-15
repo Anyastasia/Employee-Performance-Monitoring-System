@@ -48,8 +48,8 @@ use App\Http\Controllers\TimeOut;
 Route::get('/', [LoginEmployee::class, 'create']);
 
 Route::controller(Employee::class)->middleware(['employee'])->group(function() {
-    Route::get('/', [Employee::class, 'home']);
-    Route::get('/home', [Employee::class, 'home']);
+    Route::get('/', [Employee::class, 'active']);
+    Route::get('/home', [Employee::class, 'active']);
     Route::get('/completed', [Employee::class, 'completed']);
     Route::get('/active', [Employee::class, 'active']);
     Route::get('/priority', [Employee::class, 'priority']);

@@ -187,6 +187,18 @@
             ]);
         }
 
+        public function deactivate_division($id) {
+            $model = Division::where('id', $id)->get()->first();
+            $model->status = 'inactive';
+            $model->save();
+        }
+
+        public function deactivate_employee($id) {
+            $model = Model::where('id', $id)->get()->first();
+            $model->status = 'inactive';
+            $model->save();
+        }
+
         public function x() {
 
             $id = Auth::guard('employee')->id();
