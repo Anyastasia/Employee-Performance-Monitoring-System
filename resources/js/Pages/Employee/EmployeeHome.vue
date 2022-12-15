@@ -28,9 +28,6 @@
                     </Task>
                 </section>
 
-                <Alert message="message" type="alert-success">
-
-                </Alert>
             </main>
         </template>
     </EmployeeLayout>

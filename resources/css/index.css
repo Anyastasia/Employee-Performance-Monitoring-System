@@ -127,6 +127,7 @@ body {
     padding-inline: 1rem;
     padding-block: 1.2rem;
     transition: opacity 0.6s;
+    z-index: 9999;
 }
 
 .alert-error {

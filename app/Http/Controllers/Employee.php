@@ -106,6 +106,7 @@
                     'divisions' => Division::where('status', 'active')->get(),
                     'employee' => Auth::guard('employee')->user(),
                     "division_id" => $id,
+                    "showAlertDeleteEmployee" => Inertia::lazy(fn () => true),
                 ]);
             } else {
                 return Inertia('Admin/AdminEmployee', [
@@ -114,6 +115,7 @@
                     'divisions' => Division::where('status', 'active')->get(),
                     'employee' => Auth::guard('employee')->user(),
                     "division_id" => $id,
+                    "showAlertDeleteEmployee" => Inertia::lazy(fn () => true)
                 ]);
             }
         }
@@ -193,10 +195,11 @@
             $model->save();
         }
 
-        public function deactivate_employee($id) {
+        public function deactivate_employee(Request $request, $id) {
             $model = Model::where('id', $id)->get()->first();
             $model->status = 'inactive';
             $model->save();
+
         }
 
         public function x() {

@@ -3,8 +3,9 @@
     <EmployeeLayout :employee="employee">
         <template #content>
             <main class="px-3">
-                <Alert class="my-1" v-show="showSuccessAlert" @click="showSuccessAlert = !showSuccessAlertAddEmployeeForm" message="Employee Added." type="alert-success"></Alert>
+                <Alert class="my-1" v-show="showSuccessAlertAddEmployeeForm" @click="showSuccessAlertAddEmployeeForm = !showSuccessAlertAddEmployeeForm" message="Employee Added." type="alert-success"></Alert>
                 <Alert class="my-1" v-show="showAlertEditEmployeeForm" @click="showAlertEditEmployeeForm = !showAlertEditEmployeeForm" message="Info Edited." type="alert-info"></Alert>
+                <Alert class="my-1" v-show="showAlertDeleteEmployee" @click="showAlertDeleteEmployee = !showAlertDeleteEmployee" message="Employee Removed." type="alert-error"></Alert>
                 <h1 class="h1">Employees</h1>
                 <div class="my-1 table-container px-2 py-1">
                     <div class="flex g-1 my-1">
@@ -132,7 +133,7 @@
                                     <TableCell>
                                         <div class="flex justify-content-center">
                                             <TextButton @click="openEditEmployeeForm(employee)">Edit</TextButton>
-                                            <LinkButton method='post' :href="`/admin/delete/employee/${employee.id}`">Delete</LinkButton>
+                                            <LinkButton method='post' :href="`/admin/delete/employee/${employee.id}`" :only="['showAlertDeleteEmployee', 'employees']" :data="deleteEmployeeForm">Delete</LinkButton>
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -184,6 +185,7 @@ export default {
             selectDivision: this.division_id,
             showSuccessAlertAddEmployeeForm: false,
             showAlertEditEmployeeForm: false,
+            showAlertDeleteEmployee: false,
             showErrorAlert: false,
             addEmployeeForm: useForm({
                     first_name: '',
@@ -201,6 +203,9 @@ export default {
                 position: '',
                 division_id: '',
                 is_division_head: false,
+            }),
+            deleteEmployeeForm: useForm({
+                division_id: this.division_id,
             }),
         }
     },
@@ -237,7 +242,7 @@ export default {
 
             // Inertia.post('/register/employee/store', this.addEmployeeForm)
             this.addEmployeeForm.post('/register/employee/store', {
-                onSuccess: () => {this.showSuccessAlert = true}
+                onSuccess: () => {this.showSuccessAlertAddEmployeeForm = true}
             })
         },
 
@@ -248,6 +253,13 @@ export default {
             console.log(this.selectDivision)
             Inertia.get(`/admin/employees/${this.selectDivision}`)
         },
+        showAlertDeleteEmployee() {
+            
+        }
+    },
+
+    mounted() {
+        console.log(this.showAlertDeleteEmployee)
     }
 }
 </script>
