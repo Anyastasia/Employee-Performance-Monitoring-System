@@ -159,11 +159,14 @@
 
         public function active() {
             $id = Auth::guard('employee')->id();
-            $submitted_task = AssignedTask::join('submitted_tasks', 'assigned_tasks.id', '=', 'submitted_tasks.task_id')
-            ->where('employee_id',$id)
-            ->where('assigned_tasks.status', 'active')
-            ->get();
+            $submitted_task = AssignedTask::
+            // join('submitted_tasks', 'assigned_tasks.id', '=', 'submitted_tasks.task_id')
+            where('employee_id',$id)->
+            where('status', 'active')->orWhere('status', 'revise')->
+            // ->where('assigned_tasks.status', 'active')
+            get();
 
+   
             return Inertia('Employee/EmployeeHome', [
                 "items" => $submitted_task,
                 "employee" => Auth::guard('employee')->user()

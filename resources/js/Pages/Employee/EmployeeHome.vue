@@ -60,7 +60,10 @@
         props: ['items', 'employee'],
 
         mounted() {
+            console.log(this.items)
         }
+
+        
     }
     
 </script>
