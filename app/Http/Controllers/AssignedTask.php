@@ -50,12 +50,12 @@ class AssignedTask extends Controller
                 'task_title' => $request->input('task_title'),
                 'task_description' => $request->input('task_description'),
                 'attachments' => $file_name,
-                'submission_start_date' => $request->input('submission_start_date'),
-                'submission_due_date' => $request->input('submission_due_date'),
+                'submission_start_date' => Carbon::parse($request->input('submission_start_date'))->tz('UTC'),
+                'submission_due_date' => Carbon::parse($request->input('submission_due_date'))->tz('UTC'),
                 "comment" => "",
         ]);
     }
-
+    
     return Redirect::route('head_employees');
     // $model->saveMany($request->input('employee_id'));
     // $length = count($request->input('employee_id'));

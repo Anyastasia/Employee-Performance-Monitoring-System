@@ -230,8 +230,8 @@
             submitAssignedTask() {
 
 
-                // this.taskForm.submission_start_date = new Date(this.taskForm.submission_start_date).toISOString()
-                // this.taskForm.submission_due_date = new Date(this.taskForm.submission_due_date).toISOString()
+                this.taskForm.submission_start_date = new Date(this.taskForm.submission_start_date).toISOString()
+                this.taskForm.submission_due_date = new Date(this.taskForm.submission_due_date).toISOString()
 
                 if (this.assignTo === 'all') {
                     this.employees.forEach((employee) => {

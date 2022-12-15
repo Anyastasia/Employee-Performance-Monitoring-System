@@ -143,7 +143,7 @@ export default {
 
         formatDate(date) {
             const xdate = new Date(date)
-            return `${xdate.toLocaleDateString()} ${xdate.toLocaleTimeString()}`
+            return `${xdate.toLocaleString()}`
        },
 
         submitEvaluationForm() {
