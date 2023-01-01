@@ -17,9 +17,9 @@ class AuthenticatedAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::guard('admin')->check())
+        if (Auth::guard('employee')->check())
             return $next($request);
         
-        return Redirect::route('login_admin');
+        return Redirect::route('employee.login');
     }
 }

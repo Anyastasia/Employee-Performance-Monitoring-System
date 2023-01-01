@@ -36,10 +36,10 @@
                                     <div class="flex g--75 justify-content-center">
                                         <PrimaryButton :disabled="checkStatus(task.status)" @click="openDialog(task.id)">Evaluate</PrimaryButton>
                                         <span v-if="task.status == 'active'">
-                                            <LinkButton :href="`/task/${task.id}`">View</LinkButton>
+                                            <LinkButton :href="`/head/task/${task.id}`">View</LinkButton>
                                         </span>
                                         <span v-else>
-                                            <LinkButton :href="`/view/task/${task.id}`">View</LinkButton>
+                                            <LinkButton :href="`/head/view/task/${task.id}`">View</LinkButton>
                                         </span>
                                     </div> 
                                 </TableCell>
@@ -137,6 +137,7 @@ export default {
             this.dialogClose = !this.dialogClose
             this.evaluationForm.reset()
         },
+        
         checkStatus(status) {
             return (status === 'complete') ? false : true
         },
@@ -151,11 +152,5 @@ export default {
             this.dialogClose = true
         },
     },
-
-    mounted() {
-        console.log(this.employee)
-    },
-
-
 }
 </script>

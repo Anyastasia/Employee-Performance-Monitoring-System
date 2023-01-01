@@ -72,7 +72,7 @@ class SubmittedTask extends Controller
         
         $model->save();
         $assigned_task->save();
-        return Redirect::route('employee.task', ["id" => $model->id]);
+        return Redirect::back();
     }
 
 }

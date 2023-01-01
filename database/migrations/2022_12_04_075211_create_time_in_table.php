@@ -18,6 +18,7 @@ return new class extends Migration
             $table->bigInteger('employee_id');
             $table->date('shift_date');
             $table->time('time_in');
+            $table->boolean('isLate')->default(false);
         });
     }
 

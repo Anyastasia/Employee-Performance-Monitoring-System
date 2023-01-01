@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 
 use App\Models\Division;
+use Illuminate\Support\Facades\Redirect;
 
 class RegisterDivision extends Controller {
 
@@ -17,6 +18,8 @@ class RegisterDivision extends Controller {
 
         $division->name = $request->name;
         $division->save();
+
+        return Redirect::route('admin.divisions')->with('success', 'Division added.');
     }
 
 }

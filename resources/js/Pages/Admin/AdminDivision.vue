@@ -3,6 +3,7 @@
     <EmployeeLayout :employee="employee">
         <template #content>
             <main class="px-3">
+                <Alert class="my-1" type="alert-success" v-show="showAlertSuccess" :message="$page.props.flash.success" @click="showAlertSuccess = false"></Alert>
                 <h1 class="h1">Divisions</h1>
                 <div class="my-1 table-container px-2 py-1">
                     <div class="flex g-1 my-1">
@@ -14,7 +15,7 @@
 
                     <Dialog :show="show" :exit="close" class="my-3">
                         <section>
-                            <form @submit.prevent="addDivisionForm.post('/register/division/store')" class="add-staff">
+                            <form @submit.prevent="submitAddDivision" class="add-staff">
                                 <h1 class="my-1 h1">Add Division</h1>
                                 <h6 class="my-1 h6">
                                     <em>All fields required</em>
@@ -89,7 +90,7 @@ import PrimaryButton from '../../Components/Button/PrimaryButton.vue';
 import LinkButton from '../../Components/Button/LinkButton.vue';
 import TextButton from '../../Components/Button/TextButton.vue';
 import Dialog from '../../Components/Dialog/CustomDialog.vue';
-
+import Alert from '@/Components/Alert/Alert.vue'
 export default {
     components: {
         EmployeeLayout,
@@ -100,6 +101,7 @@ export default {
         LinkButton,
         TextButton,
         Dialog,
+        Alert,
     },
 
     props: ['divisions', 'employee'],
@@ -110,6 +112,7 @@ export default {
             show: false,
             close: false,
             filterDivision: 0,
+            showAlertSuccess: false,
             addDivisionForm: useForm({
                     name: '',
             }),
@@ -127,7 +130,18 @@ export default {
         },
 
         submitAddDivision() {
-            Inertia.post('/register/division/store', this.addDivisionForm)
+            this.addDivisionForm.post('/register/division/store', {
+                onSuccess: () => {this.showAlertSuccess = true; this.close = true}
+            })
+        },
+    },
+
+    watch: {
+        showAlertSuccess(){
+            console.log(this.showAlertSuccess)
+            setTimeout(() => {
+                this.showAlertSuccess = false
+            }, 3000);
         }
     }
 }

@@ -8,7 +8,7 @@
                 <section class="pb-1">
                     <div> 
                         <TextButton>
-                            <Link method="get" href="/" as="span">Active</Link>  
+                            <Link method="get" href="/home" as="span">Active</Link>  
                         </TextButton> 
                         <TextButton >
                             <Link method="get" href="/priority" as="span">Priority</Link>
@@ -21,7 +21,7 @@
 
                 <section>
                     <Task>
-                        <TaskItem v-for="(item, index) in items" :href="`/task/${item.id}`" :key="item.id" :title="item.task_title" :dueDate="item.submission_due_date" :isPriority="item.is_priority"/>
+                        <TaskItem v-for="(item, index) in items" :href="`/task/${item.id}`" :key="item.id" :title="item.task_title" :dueDate="item.submission_due_date" :isPriority="item.is_priority" :isApproved="item.status === 'complete'" :isRejected="item.status === 'revise'"/>
                         <!-- <TaskItem href="/task/id" title="Task 1" dueDate="September 17, 2021"/>
                         <TaskItem title="Task 1" dueDate="September 17, 2021"/>
                         <TaskItem title="Task 1" dueDate="September 17, 2021"/> -->
@@ -57,13 +57,7 @@
         //     id: Number,
         //     items: Object,
         // },
-        props: ['items', 'employee'],
-
-        mounted() {
-            console.log(this.items)
-        }
-
-        
+        props: ['items', 'employee'],        
     }
     
 </script>

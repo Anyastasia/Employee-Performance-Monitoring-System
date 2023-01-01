@@ -19,6 +19,7 @@ class TimeOut extends Controller
 
         $model = Model::create([
             "employee_id" => $user,
+            "time_in_id" => $request->input('time_in_id'),
             "shift_date" => $shift_date->toDateString(),
             "time_out" => $time->toTimeString(),
         ]);

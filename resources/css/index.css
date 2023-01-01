@@ -9,6 +9,7 @@
     --hover: hsl(240 7.69% 84.71% / .3);
     --white: #fff;
     --black: #000;
+    --success: #53a653;
     --box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.2);
     --sidebar-font-size: 0.75rem;
     --font-size-base: 16px;
@@ -175,6 +176,11 @@ body {
     border: 0;
 }
 
+.button-primary:disabled {
+    opacity: 40%;
+}
+
+
 .button-text {
     border: 0;
     background-color: inherit;
@@ -212,6 +218,30 @@ body {
     background-color: white;
     border-radius: var(--corner-radius);
     display: inline-block;
+}
+
+.custom-select {
+    display: inline-block;
+    position: relative;
+}
+
+
+.options {
+    cursor: pointer;
+    position: absolute;
+    z-index: 1;
+    border-radius: var(--corner-radius);
+    background-color: white;
+    box-shadow:  var(--box-shadow);
+}
+
+.option {
+    text-decoration: none;
+    color: var(--black);
+}
+
+.option:hover {
+    background-color: var(--hover);
 }
 
 .dropdown {
@@ -810,6 +840,10 @@ h1 {
     margin-block-start: 3em;
 }
 
+.dashboard-options {
+    max-width: 10rem;
+}
+
 .xcard {
     display: block;
     color: black;
@@ -918,6 +952,10 @@ h1 {
     border-radius: var(--sidebar-hover-corners);
 }
 
+.sidebar-item-active {
+    font-weight: bolder;
+    /* text-decoration: underline; */
+}
 /* .sidebar-item::before {
     content: "";
     border: solid 2px black;
@@ -945,8 +983,22 @@ h1 {
     width: 1px;
   }
 
+.bg-success {
+    background-color: var(--success);
+}
+
+.bg-error {
+    background-color: #ec7464;
+}
+
+.bg-info {
+    background-color: #2196F3;
+}
 
 
+.success {
+    color: #53a653;
+}
 .table {
     width: 100%;
 }
@@ -1015,6 +1067,9 @@ h1 {
     margin-top: .75rem;
 }
 
+.white {
+    color: white;
+}
 
 .sidebar ul {
     padding-inline: .5rem;

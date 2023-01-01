@@ -3,9 +3,9 @@
     <EmployeeLayout :employee="employee">
         <template #content>
             <main class="px-3">
-                <Alert class="my-1" v-show="showSuccessAlertAddEmployeeForm" @click="showSuccessAlertAddEmployeeForm = !showSuccessAlertAddEmployeeForm" message="Employee Added." type="alert-success"></Alert>
-                <Alert class="my-1" v-show="showAlertEditEmployeeForm" @click="showAlertEditEmployeeForm = !showAlertEditEmployeeForm" message="Info Edited." type="alert-info"></Alert>
-                <Alert class="my-1" v-show="showAlertDeleteEmployee" @click="showAlertDeleteEmployee = !showAlertDeleteEmployee" message="Employee Removed." type="alert-error"></Alert>
+                <Alert class="my-1" v-show="showSuccessAlertAddEmployeeForm" @click="showSuccessAlertAddEmployeeForm = !showSuccessAlertAddEmployeeForm" :message="$page.props.flash.success" type="alert-success"></Alert>
+                <Alert class="my-1" v-show="showAlertEditEmployeeForm" @click="showAlertEditEmployeeForm = !showAlertEditEmployeeForm" :message="$page.props.flash.info" type="alert-info"></Alert>
+                <Alert class="my-1" v-show="showAlertDeleteEmployee" @click="showAlertDeleteEmployee = !showAlertDeleteEmployee" :message="$page.props.flash.info" type="alert-info"></Alert>
                 <h1 class="h1">Employees</h1>
                 <div class="my-1 table-container px-2 py-1">
                     <div class="flex g-1 my-1">
@@ -133,7 +133,7 @@
                                     <TableCell>
                                         <div class="flex justify-content-center">
                                             <TextButton @click="openEditEmployeeForm(employee)">Edit</TextButton>
-                                            <LinkButton method='post' :href="`/admin/delete/employee/${employee.id}`" :only="['showAlertDeleteEmployee', 'employees']" :data="deleteEmployeeForm">Delete</LinkButton>
+                                            <LinkButton  @click="deleteEmployee(employee.id)" :only="['employees']">Delete</LinkButton>
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -205,7 +205,7 @@ export default {
                 is_division_head: false,
             }),
             deleteEmployeeForm: useForm({
-                division_id: this.division_id,
+                employee_id: '',
             }),
         }
     },
@@ -234,10 +234,16 @@ export default {
 
         submitEditEmployeeForm() {
             this.editEmployeeForm.post("/employee/profile/changeEmployeeDetails", {
-                onSuccess: ()=> {this.showAlertEditEmployeeForm = true}
+                onSuccess: ()=> {this.showAlertEditEmployeeForm = true; this.exitEditEmployeeForm = !this.exitEditEmployeeForm
+                }
             })
         },
-
+        deleteEmployee(id) {
+            this.deleteEmployeeForm.id = id
+            this.deleteEmployeeForm.post(`/admin/delete/employee/${id}`, {
+                onSuccess: () => {this.showAlertDeleteEmployee = true}
+            })
+        },
         submitAddEmployee() {
 
             // Inertia.post('/register/employee/store', this.addEmployeeForm)
@@ -253,13 +259,25 @@ export default {
             console.log(this.selectDivision)
             Inertia.get(`/admin/employees/${this.selectDivision}`)
         },
+        showSuccessAlertAddEmployeeForm() {
+            setTimeout(() => {
+                this.showSuccessAlertAddEmployeeForm = false
+            }, 3000);
+        },
+
         showAlertDeleteEmployee() {
-            
+            setTimeout(() => {
+                this.showAlertDeleteEmployee = false
+            }, 3000);
+        },
+
+        showAlertEditEmployeeForm() {
+            setTimeout(() => {
+                this.showAlertEditEmployeeForm = false
+            }, 3000);
         }
     },
 
-    mounted() {
-        console.log(this.showAlertDeleteEmployee)
-    }
+
 }
 </script>

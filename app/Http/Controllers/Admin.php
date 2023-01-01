@@ -11,56 +11,53 @@
     use Illuminate\Support\Facades\Redirect;
     use Illuminate\Support\Facades\Auth;
 
+    use Inertia\Inertia;
+
     class Admin extends Controller {
 
-        public function login() {
-            return view('layout.admin.login');
+
+        public function division_list_admin() {
+            return Inertia('Admin/AdminDivision', [
+                'divisions' => Division::where('status', 'active')->get(),
+                // 'employee' => Employee::where('id', Auth::guard('employee')->id())->get()->first(),
+            ]);
         }
 
-        public function dashboard() {
-            return view('layout.admin.dashboard');
-        }
-
-        public function divisions() {
-            return Inertia('Admin/AdminDivision', ['divisions' => Division::where('status', 'active')->get()]);
-        }
-
-        public function heads() {
-            return Inertia('Admin/AdminHead', ['heads' => Head::where('status', 'active')->get(), 'divisions' => Division::where('status', 'active')->get()]);
-        }
-
-        public function employees() {
-            return Inertia('Admin/AdminEmployee', ['employees' => Employee::where('status', 'active')->get(), 'divisions' => Division::where('status', 'active')->get()]);
+        public function employee_list_admin($id) {
+            if ($id == 0) {
+                return Inertia('Admin/AdminEmployee', [
+                    'employees' => Employee::where('status', 'active')->get(), 
+                    'divisions' => Division::where('status', 'active')->get(),
+                    // 'employee' => Employee::where('id', Auth::guard('employee')->id())->get()->first(),
+                    "division_id" => $id,
+                ]);
+            } else {
+                return Inertia('Admin/AdminEmployee', [
+                    'employees' => Employee::where('status', 'active')
+                    ->where('division_id', $id)->get(), 
+                    'divisions' => Division::where('status', 'active')->get(),
+                    // 'employee' => Employee::where('id', Auth::guard('employee')->id())->get()->first(),
+                    "division_id" => $id,
+                ]);
+            }
         }
 
         public function deactivate_division($id) {
             $model = Division::where('id', $id)->get()->first();
             $model->status = 'inactive';
             $model->save();
+
+            return Redirect::route('admin.divisions')->with('info', 'Division deleted');
         }
 
-        public function deactivate_employee($id) {
-            $model = Employee::where('id', $id)->get()->first();
+        public function deactivate_employee(Request $request) {
+            $model = Employee::where('id', $request->id)->get()->first();
             $model->status = 'inactive';
             $model->save();
+
+            return Redirect::route('admin.employees', 0)->with('info', 'Employee removed.');
         }
 
-        public function deactivate_head($id) {
-            $model = Head::where('id', $id)->get()->first();
-            $model->status = 'inactive';
-            $model->save();
-        }
-
-        public function logout(Request $request) {
-
-            Auth::logout();
-
-            $request->session()->invalidate();
-
-            $request->session()->regenerateToken();
-
-            return Redirect::route('login_admin');
-        }
     }
 
 ?>

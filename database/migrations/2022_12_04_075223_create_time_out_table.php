@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('time_outs', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('employee_id');
+            $table->bigInteger('time_in_id');
             $table->date('shift_date');
             $table->time('time_out');
         });

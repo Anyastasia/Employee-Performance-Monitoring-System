@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Middleware\Auth;
+namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 
-class AuthenticatedHead
+class CheckAdmin
 {
     /**
      * Handle an incoming request.
@@ -18,10 +19,16 @@ class AuthenticatedHead
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::guard('employee')->check())
-            return $next($request);
-            
-        return Redirect::route('login_head');
 
+        
+        if (Auth::guard('employee')->check()){
+            $user = Auth::guard('employee')->user();
+            if (!$user->is_admin) {
+                return Redirect::route('employee.profile');
+            }
+        } else {
+            return Redirect::route('employee.login');
+        }
+        return $next($request);
     }
 }

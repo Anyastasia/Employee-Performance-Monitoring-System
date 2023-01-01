@@ -23,6 +23,10 @@ class TimeIn extends Controller
             "time_in" => $time->toTimeString() ,
         ]);
 
+        if ($time->greaterThan('08:00:00')) {
+            $model->isLate = true;
+        }
+
         $model->save();
         // dd($model);
     }

@@ -48,7 +48,7 @@ return [
 
         'head' => [
             'driver' => 'session',
-            'provider' => 'heads',
+            'provider' => 'employees',
         ],
 
         'admin' => [
@@ -84,7 +84,7 @@ return [
 
         'heads' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Head::class,
+            'model' => App\Models\Employee::class,
         ],
 
         'admins' => [

@@ -28,7 +28,7 @@
 
 
                 <section v-if="task.status === 'submitted'" class="mb-2">
-                    <form @submit.prevent="approveTask(task.id)">
+                    <form @submit.prevent="approveTask(task.task_id)">
                         <div class="mb-1">
                             <label for="comment" class="display-block mb-1">Comment</label>
                             <textarea  v-model="form.comment" name="comment" id="comment" cols="50" rows="5"></textarea>

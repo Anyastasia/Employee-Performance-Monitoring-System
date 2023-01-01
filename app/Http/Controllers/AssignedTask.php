@@ -56,7 +56,7 @@ class AssignedTask extends Controller
         ]);
     }
     
-    return Redirect::route('head_employees');
+    return Redirect::route('head_employees')->with('info', 'Task assigned.');
     // $model->saveMany($request->input('employee_id'));
     // $length = count($request->input('employee_id'));
 
@@ -89,12 +89,25 @@ class AssignedTask extends Controller
 
     }
 
+    public function update(Request $request) {
+        $model = Model::find($request->id);
 
+        $model->task_title = $request->task_title;
+        $model->task_description = $request->task_description;
+        $model->attachments = $request->attachments;
+        $model->submission_start_date = Carbon::parse($request->submission_start_date)->tz('UTC');
+        $model->submission_due_date = Carbon::parse($request->submission_due_date)->tz('UTC');
+
+        $model->save();
+
+        return Redirect::route('head.tasks')->with('success', 'Task Details changed');
+    }
     
     public function update_status(Request $request, $id) {
         $model = Model::find($id);
         $model->status = $request->input('status');
         $model->comment = $request->input('comment');
         $model->save();
+        return Redirect::back();
     }
 }

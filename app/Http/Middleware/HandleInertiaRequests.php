@@ -3,9 +3,12 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
+use Carbon\Carbon;
 use Tightenco\Ziggy\Ziggy;
 
+use App\Models\Employee;
 class HandleInertiaRequests extends Middleware
 {
     /**
@@ -33,7 +36,8 @@ class HandleInertiaRequests extends Middleware
      * @return array
      */
     public function share(Request $request)
-    {
+    {   
+        $now = Carbon::now('utc');
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $request->user(),
@@ -43,8 +47,13 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
-            'flash' => [
-                'message' => fn () => $request->session()->get('message')
+            'employee' => fn () => Employee::where('id', Auth::guard('employee')->id())->get(['id','first_name', 'last_name', 'email', 'position', 'is_admin', 'is_division_head'])->first(),
+            'currentMonth' => fn () => $now->month,
+            'currentYear' => fn () => $now->year,
+            'flash' => fn () => [
+                'success' => fn () => $request->session()->get('success'),
+                'error' => fn () => $request->session()->get('error'),
+                'info' => fn () => $request->session()->get('info'),
             ],
         ]);
     }

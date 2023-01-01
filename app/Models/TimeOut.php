@@ -14,6 +14,7 @@ class TimeOut extends Model
 
     protected $fillable = [
         "employee_id",
+        "time_in_id",
         "shift_date",
         "time_out",
     ];

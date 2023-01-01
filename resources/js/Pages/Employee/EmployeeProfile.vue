@@ -2,6 +2,7 @@
     <EmployeeLayout :employee="employee">
         <template #content>
             <main class="px-3"> 
+                <Alert class="my-1" v-show="showSuccess" type="alert-success" :message="$page.props.flash.success" @click="showSuccess = false"></Alert>
                 <h1 class="my-2">Profile</h1>
                 <section class="profile-container">
                     <div class="profile-img-container">
@@ -28,7 +29,6 @@
                                 <label for="profile-picture">Select image</label>
                                 <input @change="changeProfilePictureForm.path" type="file" name="profile-picture">
                             </div>
-
 
                             <div class="flex flex-row g--75 mt-1">
                                 <TextButton type="button" @click="closeChangeProfilePicture">Exit</TextButton>
@@ -84,7 +84,7 @@ import Dialog from '@/Components/Dialog/CustomDialog.vue'
 import PrimaryButton from '@/Components/Button/PrimaryButton.vue';
 import TextButton from '@/Components/Button/TextButton.vue';
 import Error from '@/Components/Error.vue';
-
+import Alert from '@/Components/Alert/Alert.vue'
 import { useForm } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 
@@ -95,6 +95,7 @@ export default {
         PrimaryButton,
         TextButton,
         Error,
+        Alert,
     },
 
     data() {
@@ -103,7 +104,7 @@ export default {
             showChangePassword: false,
             exitChangeProfilePicture: false,
             exitChangePassword: false,
-
+            showSuccess: false,
             changeProfilePictureForm: useForm({
                 path: '',
             }),
@@ -144,8 +145,18 @@ export default {
         },
 
         submitChangePassword(){
-            Inertia.post('/employee/profile/changePassword', this.changePasswordForm)
+            this.changePasswordForm.post('/employee/profile/changePassword', {
+                onSuccess: () => {this.showSuccess = true; this.closeChangePassword()}
+            })
         }
     },
+
+    watch: {
+        showSuccess() {
+            setTimeout(() => {
+                this.showSuccess = false
+            }, 3000);
+        }
+    }
 }
 </script>

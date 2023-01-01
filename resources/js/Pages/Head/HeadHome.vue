@@ -2,6 +2,7 @@
     <EmployeeLayout :employee="employee">
         <template #content>
             <main>
+                <Alert class="my-1 mx-3" type="alert-info" :message="$page.props.flash.info" v-show="showAssignedTaskSuccess" @click="showAssignedTaskSuccess = false"></Alert>
                 <h1 class="mx-3 my-1">Employee List</h1>
                 <div class="mx-3 my-1 table-container px-2 py-1">
                     <div class="flex g-1 my-1">
@@ -9,6 +10,9 @@
                             <i class="bi bi-plus mr--5"></i>
                             Assign Task
                         </PrimaryButton>
+                        <LinkButton href="/head/tasks">
+                            View Tasks
+                        </LinkButton>
 
                         <!-- <TextButton >
                             aaa
@@ -133,7 +137,7 @@
                                     <TableCell>{{xemployee.position}}</TableCell>
                                     <TableCell>
                                         <div class="flex justify-content-center">
-                                            <LinkButton :href="`/view/employee/${xemployee.id}`">View</LinkButton>
+                                            <LinkButton :href="`/head/employee/${xemployee.id}`">View</LinkButton>
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -149,6 +153,8 @@
 <script>
     import EmployeeLayout from '@/Layouts/EmployeeLayout.vue';
     import PrimaryButton from '@/Components/Button/PrimaryButton.vue';
+    import OutlineButton from '@/Components/Button/OutlineButton.vue'
+    import Link from '@inertiajs/inertia-vue3'
     import LinkButton from '@/Components/Button/LinkButton.vue';
     import TextButton from '@/Components/Button/TextButton.vue';
     import Table from '@/Components/Table/Table.vue';
@@ -158,18 +164,21 @@
     import Error from '@/Components/Error.vue';
     import {Inertia} from '@inertiajs/inertia';
     import { useForm } from '@inertiajs/inertia-vue3';
-    
+    import Alert from '@/Components/Alert/Alert.vue'
     export default {
         components: {
             EmployeeLayout,
             Table,
+            Link,
             TableRow,
             TableCell,
             TextButton,
             LinkButton,
             PrimaryButton,
+            OutlineButton,
             Dialog,
-            Error
+            Error,
+            Alert,
         },
 
         props: {
@@ -188,7 +197,8 @@
                 assignTo: 'all',
                 all: false,
                 filterDivision: 0,
-
+                showAssignedTaskSuccess: false,
+                showEditAssignedTaskSuccess: false,
                 taskForm: useForm({
                     'employee_id': [],
                     'head_id': this.employee.id,
@@ -222,14 +232,8 @@
                 }
             },
 
-            submitAddEmployee() {
-                // console.log(this.addEmployeeForm)
-                Inertia.post('/register/employee/store', this.addEmployeeForm)
-            },
 
             submitAssignedTask() {
-
-
                 this.taskForm.submission_start_date = new Date(this.taskForm.submission_start_date).toISOString()
                 this.taskForm.submission_due_date = new Date(this.taskForm.submission_due_date).toISOString()
 
@@ -241,8 +245,10 @@
 
                 Inertia.post('/assign/task/store', this.taskForm, {
                     onSuccess: ()=> {
+                        
                         this.taskForm.reset()
                         this.toggleAssignTasks('close')
+                        this.showAssignedTaskSuccess = true
                     } 
                 })
             },
@@ -263,11 +269,15 @@
             //     }
             // },
 
-            
+            showAssignedTaskSuccess() {
+                setTimeout(() => {
+                    this.showAssignedTaskSuccess = false
+                }, 3000);
+            }
         },  
         
         mounted() {
-            console.log(this.employees)
+            // console.log(this.employees)
         }
     }
 </script>

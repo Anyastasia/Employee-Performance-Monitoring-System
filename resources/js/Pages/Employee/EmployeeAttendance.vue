@@ -55,8 +55,12 @@
                             </select>
                         </div>
 
+                        <div v-if="attendanceForm.mode === modes[1]" class="mb-1">
+                            <Error v-if="lastTimeInIsToday === false || time_ins == null" message="Make sure you've timed in first."></Error>
+                            <p>Last Time in: {{`${formatDate(time_ins.shift_date , time_ins.time_in)}`}}</p>
+                        </div>
                         <TextButton type="button" @click="closeAttendanceForm">Cancel</TextButton>
-                        <PrimaryButton type="submit">Submit</PrimaryButton>
+                        <PrimaryButton type="submit" :disabled="attendanceForm.processing">Submit</PrimaryButton>
                     </form>
                 </Dialog>
 
@@ -87,7 +91,7 @@
 
                         <div class="flex g--75">
                             <TextButton class="ml-auto" type="button" @click="closeLeaveForm">Close</TextButton>
-                            <PrimaryButton type="submit">File</PrimaryButton>
+                            <PrimaryButton type="submit" :disabled="leaveForm.processing">File</PrimaryButton>
                         </div>
 
                     </form>
@@ -108,6 +112,7 @@ import Table from '@/Components/Table/Table.vue';
 import TableRow from '@/Components/Table/TableRow.vue';
 import TableCell from '@/Components/Table/TableCell.vue';
 import { useForm } from '@inertiajs/inertia-vue3';
+import Error from '@/Components/Error.vue';
 import { Inertia } from '@inertiajs/inertia';
 export default {
     components: {
@@ -119,12 +124,14 @@ export default {
         Table,
         TableRow,
         TableCell,
+        Error,
     }, 
-    props: ['attendance', 'employee', 'employees'],
+    props: ['attendance', 'employee', 'employees', 'time_ins'],
     data() {
         return {
             attendanceForm: useForm({
                 shift_date: '',
+                time_in_id: '', // for time-out only
                 mode: '',
                 type: 'TYPE_EMPLOYEE'
             }),
@@ -137,10 +144,12 @@ export default {
             exitLeaveForm: false,
             leaveForm: useForm({
                 employee_id: '',
+             
                 leave_date_start: '',
                 leave_date_due: '',
                 reason: '',
-            })
+            }),
+            lastTimeInIsToday: true,
         }
     },
 
@@ -163,8 +172,14 @@ export default {
             this.attendanceForm.shift_date = this.dateToday.toISOString()                  
             // this.attendanceForm.shift_date = this.attendanceForm.shift_date.getUTCDate
             // this.attendanceForm.time = Date(this.timeToday.getTime())
-            if (this.attendanceForm.mode === this.modes[1])
-                this.attendanceForm.post(`/time-out/store/${this.employee['id']}`, {onSuccess: ()=> this.attendanceForm.reset()})
+            if (this.attendanceForm.mode === this.modes[1]) {
+                this.attendanceForm.time_in_id = this.time_ins.id
+                console.log(this.attendanceForm.time_in_id)
+                console.log(this.time_ins.id)
+                console.log(this.attendanceForm)
+                this.attendanceForm.post(`/time-out/store/${this.employee['id']}`, {
+                    onSuccess: ()=> {this.attendanceForm.reset(); this.closeAttendanceForm()}})
+            }
                 // Inertia.post(`/time-out/store/${this.employee['id']}`, this.attendanceForm)
             else
                 this.attendanceForm.post(`/time-in/store/${this.employee['id']}`, {onSuccess: () => this.attendanceForm.reset()})
@@ -179,11 +194,28 @@ export default {
             this.leaveForm.post('/leave', {
                 onSuccess: ()=> this.leaveForm.reset()
             })
+        },
+
+        formatDate(date, time) {
+            const xdate = new Date(`${date}T${time}Z`)
+            const now = new Date()
+            if (xdate.toDateString() !== now.toDateString()) {
+                this.lastTimeInIsToday = false
+            } else
+                this.lastTimeInIsToday = true 
+            return `${xdate.toLocaleString()}`
+        },
+
+        evaluateTimeIn() {
+            if (this.time_ins === null)
+                return false
+            else
+                return true
         }
     },
 
     mounted() {
-        
+        console.log(this.time_ins.id)
     }
 }
 </script>

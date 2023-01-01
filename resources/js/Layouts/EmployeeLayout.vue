@@ -21,14 +21,14 @@
         </template>
 
         <template #sidebar>
-            <SidebarItem icon="bi bi-bell" @click="openNotifications" :notLink="true">Notifications</SidebarItem>
-            <SidebarItem icon="bi bi-person" href="/profile">Profile</SidebarItem>
+            <SidebarItem  icon="bi bi-bell" @click="openNotifications" :notLink="true">Notifications</SidebarItem>
+            <SidebarItem :class="{'sidebar-item-active': $page.component === 'Employee/EmployeeProfile'}" icon="bi bi-person" href="/profile">Profile</SidebarItem>
 
-            <SidebarItem v-if="renderTasks" icon="bi bi-journal" href="/">Tasks</SidebarItem>
-            <SidebarItem v-if="employee.is_division_head" icon="bi bi-journal" href="/list/employees">Employees</SidebarItem>
-            <SidebarItem v-if="employee.is_division_head" icon="bi bi-pie-chart" href="/dashboard">Dashboard</SidebarItem>
-            <SidebarItem v-if="employee.is_admin" icon="bi bi-person" href="/admin/employees/0">Employees</SidebarItem>
-            <SidebarItem v-if="employee.is_admin" icon="bi bi-building" href="/admin/divisions">Divisions</SidebarItem>
+            <SidebarItem :class="{'sidebar-item-active': $page.component === 'Employee/EmployeeHome'}" v-if="renderTasks" icon="bi bi-journal" href="/home">Tasks</SidebarItem>
+            <SidebarItem :class="{'sidebar-item-active': $page.component === 'Head/HeadHome'}" v-if="employee.is_division_head" icon="bi bi-journal" href="/head/employees">Employees</SidebarItem>
+            <SidebarItem :class="{'sidebar-item-active': $page.component === 'Head/HeadDashboard'}" v-if="employee.is_division_head" icon="bi bi-pie-chart" href="/head/dashboard">Dashboard</SidebarItem>
+            <SidebarItem :class="{'sidebar-item-active': $page.component === 'Admin/AdminEmployee'}" v-if="employee.is_admin" icon="bi bi-person" href="/admin/employees/0">Employees</SidebarItem>
+            <SidebarItem :class="{'sidebar-item-active': $page.component === 'Admin/AdminDivision'}" v-if="employee.is_admin" icon="bi bi-building" href="/admin/divisions">Divisions</SidebarItem>
         </template>
 
         <template #main>

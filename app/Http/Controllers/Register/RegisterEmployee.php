@@ -42,7 +42,7 @@ class RegisterEmployee extends Controller
             'password' => bcrypt($request->password),
        ]);
 
-       return Redirect::route('admin.employees', 0);
+       return Redirect::route('admin.employees', 0)->with('success', 'Employeed added.');
        
     }
 }

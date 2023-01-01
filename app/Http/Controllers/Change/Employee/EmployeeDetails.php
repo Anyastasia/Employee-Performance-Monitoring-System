@@ -20,15 +20,24 @@ class EmployeeDetails extends Controller
         $model->last_name = $request->last_name;
         
         
-        if ($request->is_division_head == true)
+        if ($request->is_division_head == true) {
+            $division_heads = Employee::where('is_division_head', true)->where('status', 'active')->get();
+            foreach($division_heads as $head) {
+                $head->is_division_head = false;
+                $head->position = 'Agent';
+                $head->save();
+            }
+            
             $model->position = "Division Head";
-        else
-            $model->position = $request->position;
 
-        $model->is_division_head = $request->is_division_head;
+            $model->is_division_head = $request->is_division_head;
         
+            $model->save();
+        }
+        else {
+            $model->position = $request->position;
+        }
         $model->save();
-
-        return Redirect::route('admin.employees', $model->division_id);
+        return Redirect::route('admin.employees', $model->division_id)->with('info', 'Employee details updated.');
     }
 }

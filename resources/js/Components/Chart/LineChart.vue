@@ -6,49 +6,57 @@
     import Chart from 'chart.js/auto';
     export default {
 
-        data() {
-            return {
-                ctx: this.$refs.lineChart,
-                myChart: Chart
+        props: ['config', 'data', 'id'],
+        computed: {
+            evaluateData() {
+                const xdata = []
+                this.data.forEach(categories => {
+                    if (categories === null)
+                        xdata.push(0)
+                    else
+                        xdata.push(categories)
+                })  
+                return xdata
             }
         },
         mounted() {
-            this.myChart = new Chart(this.$refs.lineChart, {
-                type: 'bar',
+            const ctx = this.$refs.pieChart
+            const xchart = this.myChart  = new Chart(this.$refs.lineChart, {
+                type: this.config.type,
                 data: {
-                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                    labels: this.config.data.labels,
                     datasets: [{
-                        label: '# of Votes',
-                        data: [12, 19, 3, 5, 2, 3],
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(255, 159, 64, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(255, 159, 64, 1)'
-                        ],
-                        borderWidth: 1
+                        label: this.config.data.datasets[0].label,
+                        data: this.evaluateData,
+                        backgroundColor: this.config.data.datasets[0].backgroundColor,
+                        borderColor: this.config.data.datasets[0].borderColor,
+                        borderWidth: this.config.data.datasets[0].borderWidth,
                     }]
                 },
                 options: {
                     scales: {
                         y: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            min: 0,
+                            max: 5,
                         }
                     },
                     responsive: true,
                     maintainAspectRatio: false,
                 }
             });
+        },
+
+        watch: {
+            id: {
+                    handler(){
+                        // this.myChart.data.datasets[0].data.complete = this.complete
+                        // this.myChart.data.datasets[0].data.active = this.active
+                        // this.myChart.data.datasets[0].data.priority = this.priority
+                        this.myChart.data.datasets[0].data = this.data
+                        this.myChart.update()
+                    },
+                },
         }
     }
 </script>

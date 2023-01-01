@@ -14,6 +14,7 @@
     use Illuminate\Support\Facades\Redirect;
 
     use Inertia\inertia;
+    use Carbon\Carbon;
     class Employee extends Controller {
         
         public function __construct()
@@ -26,7 +27,7 @@
             $employee = Auth::guard('employee')->user();
             // dd($employee);
             return Inertia('Employee/EmployeeHome', [
-                "employee" => $employee,
+                // "employee" => $employee,
                 "items" => AssignedTask::where('employee_id', $employee['id'])->get(),
             ]);
         }
@@ -35,19 +36,19 @@
         public function profile() {
             $id = Auth::guard('employee')->id();
             return Inertia('Employee/EmployeeProfile', [
-                "employee" => Model::where('id', $id)->get(['first_name', 'last_name', 'email', 'position', 'is_admin', 'is_division_head'])->first(),
+                // "employee" => Model::where('id', $id)->get(['first_name', 'last_name', 'email', 'position', 'is_admin', 'is_division_head'])->first(),
             ]);
         }
 
         public function task($task_id) {
 
-            $user = Auth::guard('employee')->user();
+            $user = Model::where('id', Auth::guard('employee')->id())->get(['first_name', 'last_name', 'email', 'position', 'is_admin', 'is_division_head'])->first();
             $submitted_task = SubmittedTask::where('task_id', $task_id)->get(['id', 'task_id', 'submitted_attachments', 'notes', 'submission_status']);
             if (count($submitted_task) == 0) {
                 $task = AssignedTask::where('id', $task_id)->get()->first();
                 $task['submission_status'] = 'active';
                 // dd($task);
-                return Inertia('Employee/EmployeeTask', ["task" => $task, 'employee' => $user]);
+                return Inertia('Employee/EmployeeTask', ["task" => $task]);
             }
             else {
                 return Inertia('Employee/EmployeeTask', [
@@ -56,7 +57,7 @@
                     ->where('assigned_tasks.id', $task_id)
                     ->get()->first(), 
 
-                    "employee" => $user
+                    // "employee" => $user
                 ]);
             }
 
@@ -67,19 +68,19 @@
             // ]);
         }
 
-        public function view_task($id) {
-            return Inertia::render('Head/HeadViewTask', [
-                "task" => AssignedTask::join('submitted_tasks', 'assigned_tasks.id', '=', 'submitted_tasks.task_id')
-                ->where('task_id', $id)
-                ->get()->first(),
-                "employee" => Auth::guard('employee')->user()
-            ]);
-        }
+        // public function view_task($id) {
+        //     return Inertia::render('Head/HeadViewTask', [
+        //         "task" => AssignedTask::join('submitted_tasks', 'assigned_tasks.id', '=', 'submitted_tasks.task_id')
+        //         ->where('task_id', $id)
+        //         ->get()->first(),
+        //         "employee" => Auth::guard('employee')->user()
+        //     ]);
+        // }
 
 
         public function employee_list() {
 
-            $user = Auth::guard('employee')->user();
+            $user = Model::where('id', Auth::guard('employee')->id())->get(['first_name', 'last_name', 'email', 'position', 'is_admin', 'is_division_head'])->first();
             $division_id = $user['division_id'];
 
             return Inertia::render('Head/HeadHome', [
@@ -89,13 +90,13 @@
                 ->where('is_division_head', false)
                 ->get(['id', 'first_name', 'last_name', 'email', 'division_id', 'position']),
                 'divisions' => Division::where('id', $division_id)->get(['id', 'name'])->first(),
-                'employee' => $user,
+                // 'employee' => $user,
             ]);
         }
 
         public function get_employee_by_division($id) {
             return Inertia::render('Admin/AdminEmployee', [
-                'employees' => Model::where('division_id', $id)->get()
+                // 'employees' => Model::where('division_id', $id)->get()
             ]); 
         }
 
@@ -104,7 +105,7 @@
                 return Inertia('Admin/AdminEmployee', [
                     'employees' => Model::where('status', 'active')->get(), 
                     'divisions' => Division::where('status', 'active')->get(),
-                    'employee' => Auth::guard('employee')->user(),
+                    // 'employee' => Model::where('id', Auth::guard('employee')->id())->get(['first_name', 'last_name', 'email', 'position', 'is_admin', 'is_division_head'])->first(),
                     "division_id" => $id,
                     "showAlertDeleteEmployee" => Inertia::lazy(fn () => true),
                 ]);
@@ -113,7 +114,7 @@
                     'employees' => Model::where('status', 'active')
                     ->where('division_id', $id)->get(), 
                     'divisions' => Division::where('status', 'active')->get(),
-                    'employee' => Auth::guard('employee')->user(),
+                    // 'employee' => Model::where('id', Auth::guard('employee')->id())->get(['first_name', 'last_name', 'email', 'position', 'is_admin', 'is_division_head'])->first(),
                     "division_id" => $id,
                     "showAlertDeleteEmployee" => Inertia::lazy(fn () => true)
                 ]);
@@ -123,41 +124,42 @@
         public function division_list_admin() {
             return Inertia('Admin/AdminDivision', [
                 'divisions' => Division::where('status', 'active')->get(),
-                'employee' => Auth::guard('employee')->user(),
+                // 'employee' => Model::where('id', Auth::guard('employee')->id())->get(['first_name', 'last_name', 'email', 'position', 'is_admin', 'is_division_head'])->first(),
             ]);
         }
 
-        public function dashboard() {
-            $head = Model::find(Auth::guard('employee')->id());
-            return Inertia::render('Head/HeadDashboard', [
-                "employee" => $head,
-                "employees" => Model::where('division_id', $head->division_id)->where('status', 'active')->get(),
-                "division" => Division::find($head->division_id)->get('name')->first(),
-            ]);
-        }
+        // public function dashboard() {
+        //     $head = Model::find(Auth::guard('employee')->id());
+        //     return Inertia::render('Head/HeadDashboard', [
+        //         "employee" => $head,
+        //         "employees" => Model::where('division_id', $head->division_id)->where('status', 'active')->get(),
+        //         "division" => Division::find($head->division_id)->get('name')->first(),
+        //     ]);
+        // }
 
-        public function employee($id){
-            return Inertia::render('Head/HeadEmployeeProfile', [
-                "user" => Auth::guard('employee')->user(),
-                'employee' => Model::where('id', $id)->get()->first(),
-                "assigned_tasks" => AssignedTask::where('employee_id', $id)->get(),
-            ]);
-        }
+        // public function employee($id){
+        //     return Inertia::render('Head/HeadEmployeeProfile', [
+        //         "user" => Auth::guard('employee')->user(),
+        //         'employee' => Model::where('id', $id)->get()->first(),
+        //         "assigned_tasks" => AssignedTask::where('employee_id', $id)->get(),
+        //     ]);
+        // }
         // )->where('is_admin', false)->where('is_division_head', false)->
         public function completed() {
             $id = Auth::guard('employee')->id();
             $submitted_task = AssignedTask::join('submitted_tasks', 'assigned_tasks.id', '=', 'submitted_tasks.task_id')
             ->where('employee_id',$id)
             ->where('status', 'complete')
+            ->orWhere('status', 'evaluated')
             ->get();
 
             return Inertia('Employee/EmployeeHome', [
                 "items" => $submitted_task,
-                "employee" => Auth::guard('employee')->user(),
             ]);
         }
 
         public function active() {
+            $current_date = Carbon::now('UTC');
             $id = Auth::guard('employee')->id();
             $submitted_task = AssignedTask::
             // join('submitted_tasks', 'assigned_tasks.id', '=', 'submitted_tasks.task_id')
@@ -166,29 +168,39 @@
             // ->where('assigned_tasks.status', 'active')
             get();
 
-   
+            foreach($submitted_task as $task) {
+                $task_date = Carbon::parse($task->submission_due_date, 'UTC');
+                $model = AssignedTask::find($task->id);
+                if ($current_date->greaterThan($task_date)) {
+                    $model->is_priority = true;
+                    $task->is_priority = true;
+                    $model->save();
+                } else {
+                    $model->is_priority = false;
+                    $task->is_priority = false;
+                    $model->save();
+                }
+            }
+
             return Inertia('Employee/EmployeeHome', [
                 "items" => $submitted_task,
-                "employee" => Auth::guard('employee')->user()
             ]);
         }
 
         public function priority() {
 
-            $user = Auth::guard('employee')->user();
             return Inertia('Employee/EmployeeHome', [
-                "items" => AssignedTask::where('employee_id', $user['id'])
+                "items" => AssignedTask::where('employee_id', Auth::guard('employee')->id())
                 ->where('is_priority', true)->get(),
-                "employee" => $user
             ]);
         }
 
         public function attendance() {
-            $user = Auth::guard('employee')->user();
+            $user = Auth::guard('employee')->id();
             return Inertia('Employee/EmployeeAttendance', [
-                "employee" => $user,
-                "attendance" => TimeIn::join('time_outs', 'time_ins.shift_date', '=', 'time_outs.shift_date')->where('time_ins.employee_id', $user->id)->get(),
-                "employees" => Model::where('division_id', $user->division_id)->get(),
+                "attendance" => TimeIn::join('time_outs', 'time_ins.id', '=', 'time_outs.time_in_id')->where('time_ins.employee_id', $user)->get(),
+                "time_ins" => TimeIn::where('employee_id', $user)->get()->last(),
+                // "employees" => Model::where('division_id', $user->division_id)->get(),
             ]);
         }
 
