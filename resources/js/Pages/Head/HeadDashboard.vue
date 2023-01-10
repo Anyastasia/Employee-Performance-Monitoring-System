@@ -75,6 +75,11 @@
                         <p>Priority Task</p>    
                     </div>
 
+                    <div class="card-base px-1 py-1 propspy-1 my-2 bg-leave white">
+                        <h2 class="h2 mb-1">{{leaves.totalLeaves}}</h2>
+                        <p>Leave</p>    
+                    </div>
+
                     <div class="card-base progress-bar-container my-2 white flex-2" :style="{backgroundColor: '#8a2be2'}">
                         <div ref="progressBar" class="progession-bar" :style="{backgroundColor: '#6f1abd', width: `${attendanceMonthly}%`}">
                                 <div class="px-1 py-1">

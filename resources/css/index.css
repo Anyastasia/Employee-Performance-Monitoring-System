@@ -1040,6 +1040,10 @@ h1 {
     background-color: blueviolet;
 }
 
+.bg-leave {
+    background-color: #ad2a1a;
+}
+
 .success {
     color: #53a653;
 }
