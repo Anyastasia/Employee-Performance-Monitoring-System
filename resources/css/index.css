@@ -10,6 +10,7 @@
     --white: #fff;
     --black: #000;
     --success: #53a653;
+    --error: #ec7464;
     --box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.2);
     --sidebar-font-size: 0.75rem;
     --font-size-base: 16px;
@@ -168,6 +169,17 @@ body {
     padding-block: .5em;
     border: 0;
     border-radius: var(--corner-radius);
+    position: relative;
+}
+
+.button-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 50%;
+    width: .5rem;
+    height: .5rem;
+    background-color: var(--error);
 }
 
 .button-primary {
@@ -306,6 +318,10 @@ body {
 
 .flex {
     display: flex;
+}
+
+.flex-2 {
+    flex: 2;
 }
 
 .flex-inline {
@@ -571,11 +587,14 @@ body {
 }
 
 
-
 .mis-10 {
     margin-inline-start: 10rem;
 }
 
+
+.position-absolute {
+    position: absolute;
+}
 
 .primary {
     color: var(--primary);
@@ -603,6 +622,27 @@ body {
     font-size: var(--h3);
 }
 
+.progress-bar-container {
+    width: 100%;
+    
+    /*border-radius: var(--corner-radius); */
+    overflow: hidden;
+    /* background-color: blue;
+    height: 5vh; */
+}
+
+.progession-bar {
+    /* background: blueviolet;
+    /* width: 50%; */ 
+    
+    height: 100%;
+    transition: width 1s;
+}
+
+
+.red-dot {
+    
+}
 
 h1 {
     font-size: var(--h1);
@@ -995,6 +1035,9 @@ h1 {
     background-color: #2196F3;
 }
 
+.bg-yellow {
+    background-color: blueviolet;
+}
 
 .success {
     color: #53a653;

@@ -2,9 +2,11 @@
 
     namespace App\Http\Controllers;
 
-    use App\Http\Controllers\Controller;
+use App\Http\Controllers\Attendance as ControllersAttendance;
+use App\Http\Controllers\Controller;
     use App\Models\AssignedTask;
 use App\Models\Attendance;
+
 use Inertia\Inertia;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Redirect;
@@ -15,6 +17,7 @@ use Inertia\Inertia;
 use App\Models\Employee;
 use App\Models\Evaluation;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\SendMail;
     use App\Models\Head as HeadModel;
 use App\Models\Leave;
 use App\Models\SubmittedTask;
@@ -24,11 +27,11 @@ use Illuminate\Support\Facades\Auth;
     class Head extends Controller {
 
 
-        public function __construct()
-        {
-            // $this->middleware('head');
-            $this->evaluateAssignedTask();
-        }
+        // public function __construct()
+        // {
+        //     // $this->middleware('head');
+        //     $this->evaluateAssignedTask();
+        // }
 
 
         public function employees() {
@@ -55,11 +58,11 @@ use Illuminate\Support\Facades\Auth;
             ]);
         }
 
-        public function view_task($id) {
+        public function view_task($id, Request $request) {
             return Inertia::render('Head/HeadViewTask', [
                 "task" => AssignedTask::join('submitted_tasks', 'assigned_tasks.id', '=', 'submitted_tasks.task_id')
                 ->where('task_id', $id)
-                ->get()->first(),
+                ->get()->first(),  
                 // "employee" => Model::where('id', Auth::guard('employee')->id())->get(['first_name', 'last_name', 'email', 'position', 'is_admin', 'is_division_head'])->first(),
             ]);
         }
@@ -77,9 +80,9 @@ use Illuminate\Support\Facades\Auth;
             ]);
         }
 
-        private function evaluateAssignedTask() {
+        private function evaluateAssignedTask($employee) {
             $current_date = Carbon::now('UTC');
-            $id = Auth::guard('employee')->id();
+            $id = $employee;
             $submitted_task = AssignedTask::
             // join('submitted_tasks', 'assigned_tasks.id', '=', 'submitted_tasks.task_id')
             where('employee_id',$id)->
@@ -93,7 +96,7 @@ use Illuminate\Support\Facades\Auth;
                 if ($current_date->greaterThan($task_date)) {
                     $model->is_priority = true;
                     $task->is_priority = true;
-                    $model->save();
+                    $model->save();                
                 } else {
                     $model->is_priority = false;
                     $task->is_priority = false;
@@ -109,11 +112,14 @@ use Illuminate\Support\Facades\Auth;
             $id = null;
             $employee = null;
 
+
+            
             $employees = Model::where('division_id', $head->division_id)->where('status', 'active')
             ->where('is_division_head', false)
             ->where('is_admin', false)
             ->get(['id', 'first_name', 'last_name']);
 
+            
 
             if (!$request->has(['id'])) {
                 $id = Model::where('division_id', $head->division_id)->where('status', 'active')
@@ -124,6 +130,8 @@ use Illuminate\Support\Facades\Auth;
             } else {
                 $employee = $request->id;
             }
+
+            $this->evaluateAssignedTask($employee);
 
             if (!$request->has(['year'])) {
                 $request->year = Carbon::now('utc')->year;
@@ -180,7 +188,7 @@ use Illuminate\Support\Facades\Auth;
             
             // attendanmce 
 
-            $attendance = [
+            //$attendance = [
                 // "present" => TimeIn::where('employee_id', $employee)->get(['id', 'employee_id', 'shift_date'])->map(function ($attendance) {
                 //     return [
                 //         "total_hours" => TimeIn::join('time_outs', 'time_ins.shift_date, time_ins.employee_id', '=', 'time_outs.shift_date, time_outs.employee_id')->
@@ -194,14 +202,15 @@ use Illuminate\Support\Facades\Auth;
                 //     "total_hours" => DB::raw('select time_ins.employee_id, time_ins.shift_date, timediff(time_ins.time_in, time_outs.time_out), time_ins.time_in, time_outs.time_out from time_ins inner join time_outs
                 //     on time_ins.employee_id = time_outs.employee_id and time_ins.shift_date = time_outs.shift_date where time.ins_employee_id = 3')
                 // ]
-                "present" => TimeIn::join('time_outs as A', 'time_ins.id', '=', 'A.time_in_id')->
+                // "present" => TimeIn::join('time_outs as A', 'time_ins.id', '=', 'A.time_in_id')->
                 // join('time_outs as B', 'time_ins.employee_id', '=', 'B.employee_id')->
-                where('time_ins.employee_id', $employee)->
-                selectRaw('time_ins.id, time_ins.time_in, time_ins.shift_date, timediff(time_in, A.time_out)')->
-                get(),
+                //where('time_ins.employee_id', $employee)->
+                //selectRaw('time_ins.id, time_ins.time_in, A.time_out, time_ins.shift_date, abs(timediff(time_in, A.time_out)) as working_hours')->
+                //get(),
                 // "leave" => Leave::where('employee_id', $employee)->get('shift_date'),
-            ];
-
+           // ];
+            
+           $attendance = ControllersAttendance::getAttendanceReportMonthly($employee);
             // $employees = Model::where('division_id', $head->division_id)->where('status', 'active')
             // ->where('is_division_head', false)g
             // ->where('is_admin', false)
@@ -246,7 +255,23 @@ use Illuminate\Support\Facades\Auth;
             //     //     ]]);
             // }
 
-  
+            $completed_task = AssignedTask::where('employee_id', $employee)
+            ->where(function ($query){
+                $query->where('status', 'complete')->orWhere('status', 'evaluated');
+            })->count();
+            
+
+            $active_task =  AssignedTask::where('employee_id', $employee)
+            ->where('status', 'active')->count();
+            
+            $priority_task =  AssignedTask::where('employee_id', $employee)
+            ->where('status', 'active')->where('is_priority', true)->count();
+            
+            $tasks = [
+                "completed" => $completed_task,
+                "active" => $active_task,
+                "priority" => $priority_task,
+            ];
 
             return Inertia::render('Head/HeadDashboard', [
                 "employees" => $employees,
@@ -267,6 +292,7 @@ use Illuminate\Support\Facades\Auth;
                     
                     $priority_task =  AssignedTask::where('employee_id', $employee->id)
                     ->where('status', 'active')->where('is_priority', true)->count();
+                    
                     return [
                         "id" => $employee->id,    
                         "first_name" =>$employee->first_name, 
@@ -299,6 +325,7 @@ use Illuminate\Support\Facades\Auth;
                     ];
                 })->first(),
                 "division" => Division::find($head->division_id)->get('name')->first(),
+                "tasks" => fn () => $tasks,
                 "performance" => fn () => $performance,
                 "options" => fn () => [
                     "index" => $employee,
@@ -306,7 +333,10 @@ use Illuminate\Support\Facades\Auth;
                     "year" => $request->year,
                     "month" => $request->month,
                 ],
-                "attendance" => $attendance,
+                "attendance" => fn () => $attendance,
+                "attendanceMonthly" => fn() => ControllersAttendance::getAttendanceReportMonthly($employee),
+                "attendanceWeekly" => ControllersAttendance::getAttendanceReportWeekly($employee),
+                "leaves" => ControllersAttendance::getLeave($employee),
                 // "data" => Inertia::lazy(fn () => $data),
                 // "tasks" => AssignedTask::where('head_id', $head->id)->get(),
             ]);

@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\AssignedTask as Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
-
+use Exception;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Mail as XMail;
 use App\Http\Requests\Head\AssignTaskRequest;
-
+use App\Models\Employee;
 use Carbon\Carbon;
 
 class AssignedTask extends Controller
@@ -54,8 +56,24 @@ class AssignedTask extends Controller
                 'submission_due_date' => Carbon::parse($request->input('submission_due_date'))->tz('UTC'),
                 "comment" => "",
         ]);
+
+        $employee_model = Employee::where('id', $request->input('employee_id')[$index])->get(['id','email', 'first_name', 'new_task_given'])->first();
+        $employee_model->new_task_given = true;
+        $employee_model->save();
     }
     
+    $due_date = Carbon::create($model->submission_due_date)->setTimezone('Asia/Hong_Kong');
+    $email = [
+        "subject" => "New Task Assigned",
+        "body" => "A new task has been assigned to you. Please finish the task in time.",
+        "first_name" => $employee_model->first_name,
+        "task_title" => $model->task_title,
+        "task_description" => $model->task_description,
+        "due_date" => $due_date->toDayDateTimeString(),
+    ];
+
+    Mail::to($employee_model->email)->send(new XMail($email));
+
     return Redirect::route('head_employees')->with('info', 'Task assigned.');
     // $model->saveMany($request->input('employee_id'));
     // $length = count($request->input('employee_id'));

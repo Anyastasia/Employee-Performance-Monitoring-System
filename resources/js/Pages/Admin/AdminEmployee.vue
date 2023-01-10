@@ -86,7 +86,13 @@
                                 <div class="mb-1">
                                     <label for="" >Promote to Division Head</label>
                                     <input v-model="editEmployeeForm.is_division_head" type="checkbox" name="promote_checkbox">
-                                </div>                                                                                                  
+                                </div>                                                                  
+                                
+                                <div v-if="editEmployeeForm.is_division_head === true" class="mb-1">
+                                    <label for="new_position" class="display-block mb--5">Previous Division Head Position</label>
+                                    <input class="px--75 py--5" v-model="editEmployeeForm.previous_head_position" type="text">
+                                </div>
+                                
                             </section>
 
                             <section>
@@ -98,8 +104,8 @@
 
 
                     <section class="py-1">
-                        <label for="search-employee">Search Employee</label>
-                        <input type="search" name="search-employee" id="search-employee">
+                        <!-- <label for="search-employee">Search Employee</label>
+                        <input type="search" name="search-employee" id="search-employee"> -->
 
                         <select name="employee-status" id="employee-status" v-model="selectDivision">
                             <option value="0">All</option>
@@ -203,6 +209,7 @@ export default {
                 position: '',
                 division_id: '',
                 is_division_head: false,
+                previous_head_position: '',
             }),
             deleteEmployeeForm: useForm({
                 employee_id: '',

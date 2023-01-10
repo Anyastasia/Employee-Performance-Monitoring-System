@@ -49,5 +49,49 @@ class DatabaseSeeder extends Seeder
             'division_id' => 1,
             'password' => Hash::make('aaa'),
         ]);
+
+        \App\Models\TimeIn::factory()->create([
+            "employee_id" => 3,
+            "shift_date" => "2023-01-01",
+            "time_in" => "00:00:00",
+            "isLate" => true,
+        ]);
+
+        \App\Models\TimeIn::factory()->create([
+            "employee_id" => 3,
+            "shift_date" => "2023-01-04",
+            "time_in" => "00:00:00",
+            "isLate" => true,
+        ]);
+
+        \App\Models\TimeIn::factory()->create([
+            "employee_id" => 3,
+            "shift_date" => "2023-01-09",
+            "time_in" => "00:00:00",
+            "isLate" => true,
+        ]);
+
+        \App\Models\TimeOut::factory()->create([
+            "employee_id" => 3,
+            "time_in_id" => 1,
+            "shift_date" => "2023-01-01",
+            "time_out" => "00:00:00",
+        
+        ]);
+
+        \App\Models\TimeOut::factory()->create([
+            "employee_id" => 3,
+            "time_in_id" => 2,
+            "shift_date" => "2023-01-04",
+            "time_out" => "04:00:00",
+            
+        ]);
+
+        \App\Models\TimeOut::factory()->create([
+            "employee_id" => 3,
+            "time_in_id" => 3,
+            "shift_date" => "2023-01-09",
+            "time_out" => "09:00:00",
+        ]);
     }
 }

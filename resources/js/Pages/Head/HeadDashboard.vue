@@ -45,7 +45,7 @@
                         </div>
                     </section>
 
-                    <section class="px-1">
+                    <section class="">
                     
 
                     <div class="flex g-1">
@@ -61,32 +61,60 @@
                     </div> -->
 
                     <div class="card-base px-1 py-1 my-2 bg-success white">
-                        <h2 class="h2 mb-1">{{xemployee.completed_task}}</h2>
+                        <h2 class="h2 mb-1">{{tasks.completed}}</h2>
                         <p>Completed Task</p>    
                     </div>
 
                     <div class="card-base px-1 py-1 my-2 bg-info white">
-                        <h2 class="h2 mb-1">{{xemployee.active_task}}</h2>
+                        <h2 class="h2 mb-1">{{tasks.active}}</h2>
                         <p>Ongoing Task</p>    
                     </div>
 
-                    <div class="card-base px-1 py-1 my-2 bg-error white">
-                        <h2 class="h2 mb-1">{{xemployee.priority_task}}</h2>
+                    <div class="card-base px-1 py-1 propspy-1 my-2 bg-error white">
+                        <h2 class="h2 mb-1">{{tasks.priority}}</h2>
                         <p>Priority Task</p>    
                     </div>
 
+                    <div class="card-base progress-bar-container my-2 white flex-2" :style="{backgroundColor: '#8a2be2'}">
+                        <div ref="progressBar" class="progession-bar" :style="{backgroundColor: '#6f1abd', width: `${attendanceMonthly}%`}">
+                                <div class="px-1 py-1">
+                                    <h2 class="h2 mb-1">{{`${attendanceMonthly}%`}}</h2>
+                                    <p class="">Attendance</p> 
+                                </div>
+                        </div>
                     </div>
-                        <h2 class="mx-3 mb-2 h2 ">Performance Report</h2>
-                        <div>
-                        <div class="chart-holder px-1 py-1 mx-3 mb-2">
-                            <LineChart :id="selected" :config="performanceConfig" :data="[performance['efficiency'],performance['quality'], performance['timeliness']]"></LineChart>
-                        </div>
 
-                        <div class="chart-holder px-1 py-1 mx-3 mb-2">
-                            <PieChart :id="selected" :data="[xemployee.priority_task, xemployee.active_task, xemployee.completed_task]"></PieChart>
-                        </div>
-                        </div>
-                        
+                    <!-- <ProgressBar height="5vh" borderRadius="10px" :progress="`${attendanceMonthly}%`" :colors="['#8a2be2', '#6f1abd', 'white']" :content="`${attendanceMonthly}%`">
+
+                    </ProgressBar> -->
+                    </div>
+
+                    <div class="flex">
+                        <section class="">
+                            <h2 class="mb-2 h2 ">Performance Report</h2>
+                            <div class="flex flex-row g-2">
+                            <div class="chart-holder px-1 py-1 mb-2">
+                                <LineChart :id="selected" :config="performanceConfig" :data="[performance['efficiency'],performance['quality'], performance['timeliness']]"></LineChart>
+                            </div>
+
+                            <div class="chart-holder px-1 py-1 mb-2">
+                                <PieChart :id="selected" :data="[tasks.priority, tasks.active, tasks.completed]"></PieChart>
+                            </div>
+                            </div>
+                        </section>
+
+                        <!-- <section>
+                            <h2 class="mx-3 mb-2 h2">Attendance Report</h2>
+                            <div class="chart-holder px-1 py-1 mx-3 mb-2">
+                                <LineChart :id="selected" :config="thisWeekAttendanceChartConfig" :data="[attendanceWeekly, attendanceMonthly]"></LineChart>
+                                <LineChart :id="selected" :config="thisMonthAttendanceChartConfig" :data="[attendanceMonthly]"></LineChart>
+                            </div>
+
+
+                            <div></div>
+                        </section> -->
+
+                    </div>
 
                         <!-- <h2 class="mx-3 mb-2 h2 ">Attendance Report</h2>
                          <div class="chart-holder px-1 py-1 mx-3 mb-2">
@@ -99,6 +127,7 @@
     </EmployeeLayout>
 </template>
 
+
 <script>
     // import EmployeeLayout from '@/Layouts/EmployeeLayout.vue';
     import EmployeeLayout from '@/Layouts/EmployeeLayout.vue';
@@ -110,6 +139,7 @@
     import Dropdown from '@/Components/Dropdown/DropdownContainer.vue'
     import DropdownItem from '@/Components/Dropdown/DropdownItem.vue'
     import {Inertia} from '@inertiajs/inertia'
+    import ProgressBar from '@/Components/ProgressBar/ProgressBar.vue'
     import { useForm } from '@inertiajs/inertia-vue3';
     export default {
         components: {
@@ -121,6 +151,7 @@
             CustomSelectOption,
             Dropdown,
             DropdownItem,
+            ProgressBar,
         },
         computed: {
             returnData() {
@@ -159,21 +190,106 @@
                 performanceConfig: {
                     type: 'bar',
                     data: {
-                    labels: ['Efficiency', 'Quality', 'Timeliness'],
-                    datasets: [{
-                        label: 'Performance',
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                        ],
-                        borderWidth: 1
-                        }]
+                        labels: ['Efficiency', 'Quality', 'Timeliness'],
+                        datasets: [{
+                            label: 'Performance',
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                            ],
+                            borderWidth: 1
+                            }]
+                    },
+                    options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            min: 0,
+                            max: 5,
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    }
+                },
+                thisWeekAttendanceChartConfig: {
+                    type: 'bar',
+                    data: {
+                        labels: ['This Week'],
+                        datasets: [{
+                            axis: 'y',
+                            label: 'This Week',
+                            backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+                            borderColor: ['rgba(255, 99, 132, 1)'],
+                            borderWidth: 1,
+                            borderSkipped: false,
+                            borderRadius: 5,
+                            barPercentage: 0.1,
+                            categoryPercentage: 0.8,
+
+                        }],
+                    },
+                    options: {
+                            indexAxis: 'y',
+                            plugins: {
+                                legend: {
+                                    display: false,
+                                }
+                            },
+                            scales: {
+                            x: {
+                                grid: {
+                                    display: false,
+                                    drawBorder: false,
+
+                                },
+                                ticks: {
+                                    display: false
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                min: 0,
+                                max: 2400,
+                                grid: {
+                                    display: false,
+                                    drawBorder: false,
+
+                                },
+                                ticks: {
+                                    display: false
+                                }
+                            }
+                        },
+                            responsive: true,
+                            maintainAspectRatio: false,
+                    }
+                },
+                thisMonthAttendanceChartConfig: {
+                    type: 'bar',
+                    data: {
+                        labels: ['This Month'],
+                        datasets: [{
+                            axis: 'y',
+                            label: 'This Month',
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1                          
+                        }],
+                    },
+                    options: {
+                            indexAxis: 'y',
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            grid: {
+                                display: false,
+                            }
                     }
                 },
                 show: false,
@@ -200,7 +316,7 @@
 
             }
         },
-        props: ['employee', 'xemployee', 'employees', 'division', 'data', 'performance', 'options', 'currentYear', 'attendance'],
+        props: ['employee', 'xemployee', 'employees', 'division', 'data', 'performance', 'options', 'currentYear', 'attendance', 'attendanceWeekly', 'attendanceMonthly', 'leaves', 'tasks'],
         created() {
             // this.selected = Number(this.options.index)
         },
@@ -209,7 +325,7 @@
                 this.form.id = this.employees[index].id
                
                 this.form.get('/head/dashboard',{
-                    only: ['xemployee', 'performance', 'options'],
+                    only: ['xemployee', 'performance', 'options', 'attendanceMonthly', 'tasks'],
                 })
             },
             getPerformance() {
@@ -254,6 +370,7 @@
             this.$watch(f => [this.form.mode, this.form.year, this.form.month], val => {
                 this.getPerformance()
             })
+            // this.$refs['progressBar'].style = '50%'
         }
 
     }

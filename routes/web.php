@@ -19,8 +19,10 @@ use App\Http\Controllers\Login\LoginAdmin;
 use App\Http\Controllers\Change\Employee\EmployeeDetails as EmployeeChangeDetails;
 use App\Http\Controllers\Change\Employee\Password as EmployeeChangePassword;
 use App\Http\Controllers\Change\Head\Password as HeadChangePassword;
+use App\Http\Controllers\Download;
 use App\Http\Controllers\Evaluation;
 use App\Http\Controllers\Leave;
+use App\Http\Controllers\SendMail;
 use App\Http\Controllers\SubmittedTask;
 use App\Http\Controllers\TimeIn;
 use App\Http\Controllers\TimeOut;
@@ -58,6 +60,7 @@ Route::controller(Employee::class)->middleware(['employee'])->group(function() {
     Route::get('/priority', [Employee::class, 'priority']);
     Route::get('/attendance', [Employee::class, 'attendance'])->name('employee.attendance');
     Route::get('/profile', [Employee::class, 'profile'])->name('employee.profile');
+    Route::get('/download/uploads/{file}', [Download::class, 'getFile']);
     // Route::get('/task/{id}', [Employee::class, 'task'])->name('employee.task');
     // Route::get('/list/employees', [Employee::class, 'employee_list'])->name('head_employees');
     // Route::get('/dashboard', [Employee::class, 'dashboard']);
@@ -106,6 +109,7 @@ Route::middleware([CheckHead::class])->group(function() {
     Route::post('/assign/task/store', [AssignedTask::class, 'store']);
     Route::post('/head/task/approve/{id}', [AssignedTask::class, 'update_status']);
     Route::post('/head/task/revise/{id}', [AssignedTask::class, 'revise']);
+    Route::get('/email/send', [SendMail::class, 'index']);
     // Route::post('/assign/task/store', [AssignedTask::class, 'store']);
     // Route::post('/head/task/approve/{id}', [AssignedTask::class, 'update_status']);
     // Route::post('/head/task/revise/{id}', [AssignedTask::class, 'revise']);
@@ -146,7 +150,7 @@ Route::post('/login/employee/auth', [LoginEmployee::class, 'store']);
 // Route::get('/login/admin', [LoginAdmin::class, 'create'])->name('login_admin');
 // Route::post('/login/admin/auth', [LoginAdmin::class, 'store']);
 
-
+Route::get('/download/uploads/{file}', [Download::class, 'getFile']);
 
 Route::post('/task/submit/store', [SubmittedTask::class, 'store']);
 Route::post('/task/submit/update', [SubmittedTask::class, 'update']);

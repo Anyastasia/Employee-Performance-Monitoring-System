@@ -7,11 +7,11 @@
                 <h1 class="my-2">Tasks</h1>
                 <section class="pb-1">
                     <div> 
-                        <TextButton>
-                            <Link method="get" href="/home" as="span">Active</Link>  
+                        <TextButton :showBadge="employee.new_task_given" @click="active()">
+                            Active 
                         </TextButton> 
-                        <TextButton >
-                            <Link method="get" href="/priority" as="span">Priority</Link>
+                        <TextButton :showBadge="employee.priority_task_given" @click="priority()">
+                            Priority
                         </TextButton>
                         <TextButton>
                             <Link method="get" href="/completed" as="span">Completed</Link>  
@@ -42,6 +42,7 @@
     import TaskItem from '@/Components/Task/TaskItem.vue';
     import {Link} from '@inertiajs/inertia-vue3';
     import LinkButton from '@/Components/Button/LinkButton.vue'
+    import { useForm } from '@inertiajs/inertia-vue3';
     export default {
         components: {
             EmployeeLayout,
@@ -52,12 +53,33 @@
             Link,
             Alert,
         },
-
+        data() {
+            return {
+                form: useForm({
+                    new_task_given: this.employee.new_task_given,
+                    priority_task_given: this.employee.priority_task_given,
+                })    
+            }
+        },
+        methods: {
+            active(){
+                this.form.new_task_given = false
+                this.form.get('/active')
+            },
+            priority(){
+                this.form.priority_task_given = false
+                this.form.get('/priority')
+            },
+            
+        },
         // props: {
         //     id: Number,
         //     items: Object,
         // },
-        props: ['items', 'employee'],        
+        props: ['items', 'employee'],
+        mounted(){
+            console.log(this.form)
+        }        
     }
     
 </script>

@@ -33,17 +33,7 @@
                         borderWidth: this.config.data.datasets[0].borderWidth,
                     }]
                 },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            min: 0,
-                            max: 5,
-                        }
-                    },
-                    responsive: true,
-                    maintainAspectRatio: false,
-                }
+                options: this.config.options
             });
         },
 

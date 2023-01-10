@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('status')->default('active');
             $table->boolean('is_admin')->default(false);
             $table->boolean('is_division_head')->default(false);
+            $table->boolean('new_task_given')->default(false);
+            $table->boolean('priority_task_given')->default(false);
             $table->timestamps();
         });
     }

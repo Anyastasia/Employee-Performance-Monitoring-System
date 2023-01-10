@@ -47,7 +47,7 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
-            'employee' => fn () => Employee::where('id', Auth::guard('employee')->id())->get(['id','first_name', 'last_name', 'email', 'position', 'is_admin', 'is_division_head'])->first(),
+            'employee' => fn () => Employee::where('id', Auth::guard('employee')->id())->get(['id','first_name', 'last_name', 'email', 'position', 'is_admin', 'is_division_head', 'new_task_given', 'priority_task_given'])->first(),
             'currentMonth' => fn () => $now->month,
             'currentYear' => fn () => $now->year,
             'flash' => fn () => [

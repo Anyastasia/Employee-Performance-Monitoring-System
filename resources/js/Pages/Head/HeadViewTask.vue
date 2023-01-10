@@ -11,8 +11,8 @@
 
                 
                 <section class="mb-2">
-                    <h2 class="h2">Attachments</h2>
-                    <a download :href="task.attachments">{{task.attachments}}</a>
+                    <h2 class="h2 mb--5">Attachments</h2>
+                    <a :href="`/download/${task.submitted_attachments}`">Download</a>
                 </section>
 
                 <section class="mb-2">

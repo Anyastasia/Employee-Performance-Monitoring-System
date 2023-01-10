@@ -6,7 +6,7 @@
                 <div clas="table-container">
                     <div class="flex g-1">
                         <PrimaryButton @click="openAttendanceForm">Add New</PrimaryButton>
-                        <OutlineButton @click="openLeaveForm">File Leave</OutlineButton>
+                        <OutlineButton v-if="employee.is_division_head" @click="openLeaveForm">File Leave</OutlineButton>
                     </div>
                     <section class="mt-1">
                         <Table>
@@ -28,8 +28,8 @@
                             <template #table-body>
                                 <TableRow v-for="(item, index) in attendance" :key="index">
                                     <TableCell>{{item.shift_date}}</TableCell>
-                                    <TableCell>{{item.time_in}}</TableCell>
-                                    <TableCell>{{item.time_out}}</TableCell>
+                                    <TableCell>{{formatShiftTime(item.shift_date, item.time_in)}}</TableCell>
+                                    <TableCell>{{formatShiftTime(item.shift_date, item.time_out)}}</TableCell>
                                 </TableRow>
                             </template>
                         </Table>
@@ -56,7 +56,7 @@
                         </div>
 
                         <div v-if="attendanceForm.mode === modes[1]" class="mb-1">
-                            <Error v-if="lastTimeInIsToday === false || time_ins == null" message="Make sure you've timed in first."></Error>
+                            <Error v-if="lastTimeInIsToday === false || time_ins === null" message="Make sure you've timed in first."></Error>
                             <p>Last Time in: {{`${formatDate(time_ins.shift_date , time_ins.time_in)}`}}</p>
                         </div>
                         <TextButton type="button" @click="closeAttendanceForm">Cancel</TextButton>
@@ -75,6 +75,7 @@
                         <div class="mb-1">
                             <label for="leave_due_date" class="required display-block">Until</label>
                             <input v-model="leaveForm.leave_date_due" type="date" name="leave_start_date">
+
                         </div>
 
                         <div class="mb-1">
@@ -126,7 +127,7 @@ export default {
         TableCell,
         Error,
     }, 
-    props: ['attendance', 'employee', 'employees', 'time_ins'],
+    props: {attendance: Object, employee: Object, employees: Object, time_ins: {type: Object, defaullt: null, required: false}},
     data() {
         return {
             attendanceForm: useForm({
@@ -144,7 +145,6 @@ export default {
             exitLeaveForm: false,
             leaveForm: useForm({
                 employee_id: '',
-             
                 leave_date_start: '',
                 leave_date_due: '',
                 reason: '',
@@ -196,6 +196,11 @@ export default {
             })
         },
 
+
+        formatShiftTime(date, time) {
+            const xdate = new Date(`${date}T${time}Z`)
+            return `${xdate.toLocaleTimeString()}`
+        },
         formatDate(date, time) {
             const xdate = new Date(`${date}T${time}Z`)
             const now = new Date()
@@ -215,7 +220,7 @@ export default {
     },
 
     mounted() {
-        console.log(this.time_ins.id)
+        console.log(this.employees)
     }
 }
 </script>

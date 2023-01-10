@@ -8,7 +8,7 @@
                     </template>
                     
                     <template #dropdown-content>
-                        <DropdownItem>Settings</DropdownItem>
+                        <!-- <DropdownItem>Settings</DropdownItem> -->
                         <DropdownItem>
                             <Link href="/attendance" as="span" >Attendance</Link>
                         </DropdownItem>
@@ -21,7 +21,7 @@
         </template>
 
         <template #sidebar>
-            <SidebarItem  icon="bi bi-bell" @click="openNotifications" :notLink="true">Notifications</SidebarItem>
+            <!-- <SidebarItem  icon="bi bi-bell" @click="openNotifications" :notLink="true">Notifications</SidebarItem> -->
             <SidebarItem :class="{'sidebar-item-active': $page.component === 'Employee/EmployeeProfile'}" icon="bi bi-person" href="/profile">Profile</SidebarItem>
 
             <SidebarItem :class="{'sidebar-item-active': $page.component === 'Employee/EmployeeHome'}" v-if="renderTasks" icon="bi bi-journal" href="/home">Tasks</SidebarItem>
@@ -32,9 +32,9 @@
         </template>
 
         <template #main>
-            <Notification :show="showNotifications">
+            <!-- <Notification :show="showNotifications">
                 <NotificationItem description="lorem dolor wahahah" time="2 mins ago"/>
-            </Notification>
+            </Notification> -->
 
             <slot name="content"></slot>
         </template>

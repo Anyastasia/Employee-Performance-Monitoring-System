@@ -2,16 +2,21 @@
 
     namespace App\Http\Controllers;
 
+
+    
     use Illuminate\Support\Facades\Auth;
     use App\Http\Controllers\Controller;
     use App\Models\Employee as Model;
     use App\Models\Division;
     use App\Models\AssignedTask;
-    use App\Models\SubmittedTask;
+use App\Models\Employee as ModelsEmployee;
+use App\Models\SubmittedTask;
     use App\Models\TimeIn;
     use App\Models\TimeOut;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Redirect;
+
+    use App\Http\Controllers\SendMail;
 
     use Inertia\inertia;
     use Carbon\Carbon;
@@ -47,7 +52,7 @@
             if (count($submitted_task) == 0) {
                 $task = AssignedTask::where('id', $task_id)->get()->first();
                 $task['submission_status'] = 'active';
-                // dd($task);
+                
                 return Inertia('Employee/EmployeeTask', ["task" => $task]);
             }
             else {
@@ -158,36 +163,51 @@
             ]);
         }
 
-        public function active() {
+        public function active(Request $request) {
+
             $current_date = Carbon::now('UTC');
             $id = Auth::guard('employee')->id();
+            $employee = Model::where('id', $id)->get(['id','first_name','priority_task_given', 'new_task_given'])->first();
             $submitted_task = AssignedTask::
             // join('submitted_tasks', 'assigned_tasks.id', '=', 'submitted_tasks.task_id')
             where('employee_id',$id)->
             where('status', 'active')->orWhere('status', 'revise')->
             // ->where('assigned_tasks.status', 'active')
             get();
-
+            // dd($employee);
             foreach($submitted_task as $task) {
+                
                 $task_date = Carbon::parse($task->submission_due_date, 'UTC');
                 $model = AssignedTask::find($task->id);
                 if ($current_date->greaterThan($task_date)) {
                     $model->is_priority = true;
                     $task->is_priority = true;
+                    $employee->priority_task_given = true;
                     $model->save();
                 } else {
                     $model->is_priority = false;
                     $task->is_priority = false;
+                    $employee->priority_task_given = false;
                     $model->save();
                 }
+                
             }
 
+            if ($request->has('new_task_given')) {
+                $employee->new_task_given = $request->new_task_given;
+            }
+
+            $employee->save();
+            // dd($request->new_task_given);
             return Inertia('Employee/EmployeeHome', [
                 "items" => $submitted_task,
             ]);
         }
 
-        public function priority() {
+        public function priority(Request $request) {
+            $employee = Model::find(Auth::guard('employee')->id())->get('id','priority_task_given')->first();
+            $employee->priority_task_given = $request->input('priority_task_given');
+            $employee->save();
 
             return Inertia('Employee/EmployeeHome', [
                 "items" => AssignedTask::where('employee_id', Auth::guard('employee')->id())
@@ -197,10 +217,12 @@
 
         public function attendance() {
             $user = Auth::guard('employee')->id();
+
             return Inertia('Employee/EmployeeAttendance', [
                 "attendance" => TimeIn::join('time_outs', 'time_ins.id', '=', 'time_outs.time_in_id')->where('time_ins.employee_id', $user)->get(),
                 "time_ins" => TimeIn::where('employee_id', $user)->get()->last(),
-                // "employees" => Model::where('division_id', $user->division_id)->get(),
+                "employees" => Model::where('division_id', $user)->where('is_admin', true)->orWhere('is_admin', false)
+                ->get(['id', 'first_name', 'last_name']),
             ]);
         }
 
