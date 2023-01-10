@@ -3,7 +3,10 @@
         <template #content>
             <main class="px-2 py-2">
                 <section>
-                    <h1 class="my-2 h1">{{task.task_title}}</h1>
+                    <Link :href="`/head/employee/${task.employee_id}`" as="span">
+                        <i class="bi bi-chevron-left h2"></i>
+                    </Link> 
+                    <h1 class="my-2 h1 display-inline-block">{{task.task_title}}</h1>
                     <p v-if="task.submission_status === 'submitted'" class="italic">{{`Submitted at ${formatDate(task.updated_at)}`}}</p>
                     <p v-if="task.status === 'completed'" class="italic">{{`Approved at ${task.updated_at}`}}</p>
                     <h3 class="my-1 h3">{{task.task_description}}</h3>
@@ -68,13 +71,14 @@ import EmployeeLayout from '@/Layouts/EmployeeLayout.vue'
 import PrimaryButton from '@/Components/Button/PrimaryButton.vue';
 import OutlineButton from '@/Components/Button/OutlineButton.vue'
 import { Inertia } from '@inertiajs/inertia';
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm, Link } from '@inertiajs/inertia-vue3';
 
 export default {
     components: {
         EmployeeLayout,
         PrimaryButton,
         OutlineButton,
+        Link,
     },
 
     props: ['task', 'employee'],

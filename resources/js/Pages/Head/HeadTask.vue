@@ -2,8 +2,11 @@
     <EmployeeLayout :employee="employee">
         <template #content>
             <main class="px-3">
-                <h1 class="h1 mb-1">Tasks</h1>
-
+                <Link href="/head/employees" as="span">
+                    <i class="bi bi-chevron-left h2"></i>
+                </Link> 
+                <h1 class="h1 mb-1 display-inline-block">Tasks</h1>
+                
                 <section class="table-container px-2 py-1">
                     <Table>
                         <template #table-header>
@@ -85,7 +88,7 @@ import Dialog from '@/Components/Dialog/CustomDialog.vue';
 import TableCell from '@/Components/Table/TableCell.vue';
 import TableRow from '@/Components/Table/TableRow.vue';
 import LinkButton from '@/Components/Button/LinkButton.vue';
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm, Link } from '@inertiajs/inertia-vue3';
 export default {
     components: {
         EmployeeLayout,
@@ -97,6 +100,7 @@ export default {
         TextButton,
         Error,
         Dialog,
+        Link
     },
     props: [
         "employee",

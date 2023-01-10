@@ -174,15 +174,15 @@ export default {
             // this.attendanceForm.time = Date(this.timeToday.getTime())
             if (this.attendanceForm.mode === this.modes[1]) {
                 this.attendanceForm.time_in_id = this.time_ins.id
-                console.log(this.attendanceForm.time_in_id)
-                console.log(this.time_ins.id)
-                console.log(this.attendanceForm)
                 this.attendanceForm.post(`/time-out/store/${this.employee['id']}`, {
-                    onSuccess: ()=> {this.attendanceForm.reset(); this.closeAttendanceForm()}})
+                    onSuccess: ()=> {
+                        this.attendanceForm.reset() 
+                        this.exitAttendanceForm = !this.exitAttendanceForm
+                    }})
             }
                 // Inertia.post(`/time-out/store/${this.employee['id']}`, this.attendanceForm)
             else
-                this.attendanceForm.post(`/time-in/store/${this.employee['id']}`, {onSuccess: () => this.attendanceForm.reset()})
+                this.attendanceForm.post(`/time-in/store/${this.employee['id']}`, {onSuccess: () => this.exitAttendanceForm = !this.exitAttendanceForm})
         },
 
         submitLeaveForm: function() {
@@ -192,7 +192,10 @@ export default {
             //     this.leaveForm.reset()
 
             this.leaveForm.post('/leave', {
-                onSuccess: ()=> this.leaveForm.reset()
+                onSuccess: ()=> {
+                    this.leaveForm.reset()
+                    this.exitLeaveForm = !this.exitLeaveForm
+                }
             })
         },
 

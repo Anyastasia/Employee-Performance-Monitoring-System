@@ -3,6 +3,9 @@
         <template #content>
             <main>
                 <section class="mx-3">
+                    <Link href="/head/employees" as="span">
+                        <i class="bi bi-chevron-left h2"></i>
+                    </Link>
                     Employee name: {{employee.first_name + ' ' + employee.last_name}}
                 </section>
 
@@ -88,6 +91,7 @@
 import EmployeeLayout from '@/Layouts/EmployeeLayout.vue';
 import PrimaryButton from '@/Components/Button/PrimaryButton.vue';
 import TextButton from '@/Components/Button/TextButton.vue';
+import {Link} from '@inertiajs/inertia-vue3';
 import LinkButton from '@/Components/Button/LinkButton.vue'
 import Table from '@/Components/Table/Table.vue'
 import TableCell from '@/Components/Table/TableCell.vue';
@@ -105,6 +109,7 @@ export default {
         TableCell,
         TableRow,
         Dialog,
+        Link,
     },
 
     props: ['employee', 'assigned_tasks', 'xtask', 'user'],

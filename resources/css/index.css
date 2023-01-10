@@ -984,6 +984,7 @@ h1 {
 
 .sidebar .sidebar-item > div {
     padding-block: 1rem;
+    padding-inline: 0.5rem
 }
 
 .sidebar .sidebar-item:hover > div {

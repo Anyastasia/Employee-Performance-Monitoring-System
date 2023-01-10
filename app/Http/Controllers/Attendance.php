@@ -146,10 +146,16 @@ class Attendance extends Controller
             $actual_hours_monthly_total += 480;
             $working_hours_monthly_total += $data['working_hours'];
         }
-        // dd($hours_data);
-
-        $attendance_percentage = floor(100 - ($working_hours_monthly_total / $actual_hours_monthly_total) * 100);
-        return ($actual_hours_monthly_total == 0) ? 100 : $attendance_percentage;
+        
+        
+        if ($actual_hours_monthly_total === 0) {
+            $actual_hours_monthly_total = 100;
+        }
+        $attendance_percentage = floor(($working_hours_monthly_total / $actual_hours_monthly_total) * 100);
+        // dd($actual_hours_monthly_total, $working_hours_monthly_total);
+        // dd(($working_hours_monthly_total / $actual_hours_monthly_total) * 100);
+        // return ($actual_hours_monthly_total == 0) ? 100 : $attendance_percentage;
+        return floor(($working_hours_monthly_total / $actual_hours_monthly_total) * 100);
     }
 
     public static function getLeave($employee) {

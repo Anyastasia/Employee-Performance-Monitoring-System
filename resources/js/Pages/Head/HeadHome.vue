@@ -106,10 +106,10 @@
                         </section>
                     </form>
                     </Dialog>
-                    <section class="py-1">
+                    <!-- <section class="py-1">
                         <label for="search-employee">Search Employee</label>
                         <input type="search" name="search-employee" id="search-employee">
-                    </section>
+                    </section> -->
 
                     <section>
                         <Table>
