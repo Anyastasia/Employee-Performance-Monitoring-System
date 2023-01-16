@@ -99,7 +99,7 @@
                             <h2 class="mb-2 h2 ">Performance Report</h2>
                             <div class="flex flex-row g-2">
                             <div class="chart-holder px-1 py-1 mb-2">
-                                <LineChart :id="selected" :config="performanceConfig" :data="[performance['efficiency'],performance['quality'], performance['timeliness']]"></LineChart>
+                                <LineChart :id="selected" :config="performanceConfig" :data="[performance['rating']]"></LineChart>
                             </div>
 
                             <div class="chart-holder px-1 py-1 mb-2">
@@ -195,18 +195,18 @@
                 performanceConfig: {
                     type: 'bar',
                     data: {
-                        labels: ['Efficiency', 'Quality', 'Timeliness'],
+                        labels: ['Rating',],
                         datasets: [{
                             label: 'Performance',
                             backgroundColor: [
                                 'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
+                                // 'rgba(54, 162, 235, 0.2)',
+                                // 'rgba(255, 206, 86, 0.2)',
                             ],
                             borderColor: [
                                 'rgba(255, 99, 132, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
+                                // 'rgba(54, 162, 235, 1)',
+                                // 'rgba(255, 206, 86, 1)',
                             ],
                             borderWidth: 1
                             }]
@@ -340,6 +340,7 @@
                 })
                     
             },
+
             getMonth(index) {
                 this.form.month = index
             },
@@ -372,9 +373,6 @@
             }
         },
         mounted() {
-            this.$watch(f => [this.form.mode, this.form.year, this.form.month], val => {
-                this.getPerformance()
-            })
             // this.$refs['progressBar'].style = '50%'
         }
 

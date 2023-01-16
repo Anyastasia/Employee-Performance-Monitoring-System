@@ -22,6 +22,7 @@ class TimeOut extends Controller
             "time_in_id" => $request->input('time_in_id'),
             "shift_date" => $shift_date->toDateString(),
             "time_out" => $time->toTimeString(),
+            "early_time_out_reason" => $request->early_time_out_reason,
         ]);
 
         $model->save();

@@ -21,6 +21,7 @@ use App\Http\Controllers\Change\Employee\Password as EmployeeChangePassword;
 use App\Http\Controllers\Change\Head\Password as HeadChangePassword;
 use App\Http\Controllers\Download;
 use App\Http\Controllers\Evaluation;
+use App\Http\Controllers\EvaluationForm;
 use App\Http\Controllers\Leave;
 use App\Http\Controllers\SendMail;
 use App\Http\Controllers\SubmittedTask;
@@ -54,9 +55,9 @@ use App\Http\Middleware\CheckHead;
 
 Route::controller(Employee::class)->middleware(['employee'])->group(function() {
     Route::get('/', [Employee::class, 'profile']);
-    Route::get('/home', [Employee::class, 'active']);
+    Route::get('/home', [Employee::class, 'active'])->name('employee.tasklist');
     Route::get('/completed', [Employee::class, 'completed']);
-    Route::get('/active', [Employee::class, 'active']);
+    Route::get('/active', [Employee::class, 'active'])->name('employee.tasklist');
     Route::get('/priority', [Employee::class, 'priority']);
     Route::get('/attendance', [Employee::class, 'attendance'])->name('employee.attendance');
     Route::get('/profile', [Employee::class, 'profile'])->name('employee.profile');
@@ -107,8 +108,11 @@ Route::middleware([CheckHead::class])->group(function() {
     Route::get('head/view/task/{id}', [Head::class, 'view_task']);
     Route::post('/assign/task/update', [AssignedTask::class, 'update']);
     Route::post('/assign/task/store', [AssignedTask::class, 'store']);
+    
     Route::post('/head/task/approve/{id}', [AssignedTask::class, 'update_status']);
     Route::post('/head/task/revise/{id}', [AssignedTask::class, 'revise']);
+    Route::post('/head/evaluationForm/store', [EvaluationForm::class, 'store']);
+    Route::post('/head/evaluationForm/store', [EvaluationForm::class, 'store']);
     Route::get('/email/send', [SendMail::class, 'index']);
     // Route::post('/assign/task/store', [AssignedTask::class, 'store']);
     // Route::post('/head/task/approve/{id}', [AssignedTask::class, 'update_status']);
@@ -168,6 +172,7 @@ Route::post('/head/profile/changePassword', [HeadChangePassword::class, 'update'
 Route::post('employee/profile/changeEmployeeDetails', [EmployeeChangeDetails::class, 'update']);
 
 Route::post('/evaluate', [Evaluation::class, 'store']);
+Route::post('/head/evaluate', [Evaluation::class, 'store']);
 Route::post('/leave', [Leave::class, 'store']);
 
 

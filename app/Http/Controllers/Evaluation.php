@@ -2,27 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Head\EvaluationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Evaluation as Model;
-use App\Models\AssignedTask;
+
 class Evaluation extends Controller
 {
     //
-    public function store(Request $request) {
-        $model = Model::create([
+    public function store(EvaluationRequest $request) {
+        // dd($request);
+
+        if ($request->adjectivalRating == null) {
+            return Redirect::back()->withErrors(["rating_required" => "Required."]);
+        }
+
+        Model::create([
             "employee_id" => $request->employee_id,
-            "task_id" => $request->task_id,
-            "efficiency" => $request->efficiency,
-            "quality" => $request->quality,
-            "timeliness" => $request->timeliness,
+            "start_date" => $request->start_date,
+            "end_date" => $request->end_date,
+            "rating" => $request->finalAverageRating,
+            "adjectival_rating" => $request->adjectivalRating,
         ]);
 
-        $assigned_task = AssignedTask::find($request->task_id);
-        $assigned_task->status = "evaluated";
-        
-        $assigned_task->save();
-        $model->save();
-        return Redirect::route('employee.view', $request->employee_id);
+        // $model->save();
+        return Redirect::route('head_employees', $request->employee_id)->with('success', 'Employee evaluated');
     }
 }

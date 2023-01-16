@@ -11,9 +11,9 @@ class Evaluation extends Model
 
     protected $fillable = [
         "employee_id",
-        "task_id",
-        "efficiency",
-        "quality",
-        "timeliness",
+        "start_date",
+        "end_date",
+        "rating",
+        "adjectival_rating",
     ];
 }

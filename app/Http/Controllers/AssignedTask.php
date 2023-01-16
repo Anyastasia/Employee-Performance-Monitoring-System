@@ -21,7 +21,7 @@ class AssignedTask extends Controller
 
     // dd($request);
     // $path = $request->file('attachments')[0]->store('public/images');
-    $length = count($request->input('employee_id'));
+    // $length = count($request->input('employee_id'));
     // $employee = array();
     // for ($index = 0; $index < $length; $index++) {  
     //     array_push($employee, ["employee_id" => $request->input('employee_id')[$index]]);
@@ -45,11 +45,12 @@ class AssignedTask extends Controller
         $file_name = Storage::putFile('uploads', $request->attachments[0]);
     }
     // $model->employees()->createMany($employee);
-    for ($index = 0; $index < $length; $index++) {
+    // for ($index = 0; $index < $length; $index++) {
         $model = Model::create([
                 'head_id' => $request->input('head_id'),
-                'employee_id' => $request->input('employee_id')[$index],
+                'employee_id' => $request->input('employee_id'),
                 'task_title' => $request->input('task_title'),
+                // 'output' => $request->input('title'),
                 'task_description' => $request->input('task_description'),
                 'attachments' => $file_name,
                 'submission_start_date' => Carbon::parse($request->input('submission_start_date'))->tz('UTC'),
@@ -57,10 +58,10 @@ class AssignedTask extends Controller
                 "comment" => "",
         ]);
 
-        $employee_model = Employee::where('id', $request->input('employee_id')[$index])->get(['id','email', 'first_name', 'new_task_given'])->first();
+        $employee_model = Employee::where('id', $request->input('employee_id'))->get(['id','email', 'first_name', 'new_task_given'])->first();
         $employee_model->new_task_given = true;
         $employee_model->save();
-    }
+    // }
     
     $due_date = Carbon::create($model->submission_due_date)->setTimezone('Asia/Hong_Kong');
     $email = [

@@ -5,19 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
-class TimeOut extends Model
+class EvaluationForm extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
         "employee_id",
-        "time_in_id",
-        "shift_date",
-        "time_out",
-        "early_time_out_reason",
+        "division_id",
+        "output",
+        "success_indicators",
+        "quality_indicators",
+        "efficiency_indicators",
+        "timeliness_indicators",
+        "status",
     ];
 
     public $timestamps = false;

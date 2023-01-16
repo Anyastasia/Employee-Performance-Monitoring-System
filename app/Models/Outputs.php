@@ -4,19 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class TimeIn extends Model
+class Outputs extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
         "employee_id",
-        "shift_date",
-        "time_in",
-        "isLate",
+        "output",
+        "success_indicators"
     ];
-
-    public $timestamps = false;
+    protected $casts = [
+        "rating" => "array",
+    ];
 }

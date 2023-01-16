@@ -13,7 +13,7 @@
                     <h3 class="my-1">{{task.task_description}}</h3>
                 </section>
                 
-                <a :href="`/download/${task.attachments}`">{{task.attachments}}</a>
+                <a :href="`/download/${task.attachments}`">Download</a>
 
                 <form v-if="task.submission_status === 'submitted'" @submit.prevent="update">
                     <section class="task-submission-container">
@@ -23,8 +23,8 @@
                         </div>
 
                         <div>
-                            <label for="notes">Notes (Optional)</label>
-                            <textarea disabled v-model="submissionForm.notes" name="notes" id="notes" cols="50" rows="5"></textarea>
+                            <label for="notes">Accomplishment Report</label>
+                            <textarea disabled v-model="submissionForm.notes" name="notes" id="notes" cols="50" rows="5" required></textarea>
                         </div>
                     </section>
                     <PrimaryButton type="submit" v-if="task.submission_status === 'submitted'">Re-submit</PrimaryButton>
@@ -38,8 +38,9 @@
                         </div>
 
                         <div>
-                            <label for="notes">Notes (Optional)</label>
-                            <textarea v-model="submissionForm.notes" name="notes" id="notes" cols="50" rows="5"></textarea>
+                            <Error v-if="errors.notes_required" :message="errors.notes_required"></Error>
+                            <label for="notes" class="required">Accomplishment Report</label>
+                            <textarea v-model="submissionForm.notes" name="notes" id="notes" cols="50" rows="5" required></textarea>
                         </div>
                     </section>
                     <PrimaryButton type="submit" v-if="task.submission_status === 'resubmit'">Submit Again</PrimaryButton>
@@ -54,8 +55,9 @@
                         </div>
 
                         <div>
-                            <label for="notes">Notes (Optional)</label>
-                            <textarea v-model="submissionForm.notes" name="notes" id="notes" cols="50" rows="5"></textarea>
+                            <Error v-if="errors.notes_required" :message="errors.notes_required"></Error>
+                            <label for="notes" class="required">Accomplishment Report</label>
+                            <textarea v-model="submissionForm.notes" name="notes" id="notes" cols="50" rows="5" required></textarea>
                         </div>
                     </section>
                     <PrimaryButton type="submit">Submit</PrimaryButton>
@@ -84,6 +86,7 @@ import PrimaryButton from '@/Components/Button/PrimaryButton.vue';
 import EmployeeLayout from '@/Layouts/EmployeeLayout.vue';
 import TextButton from '@/Components/Button/TextButton.vue';
 import Dialog from '@/Components/Dialog/CustomDialog.vue'
+import Error from '@/Components/Error.vue'
 import { Inertia } from '@inertiajs/inertia';
 import { useForm } from '@inertiajs/inertia-vue3';
 export default {
@@ -92,6 +95,7 @@ export default {
         PrimaryButton,
         TextButton,
         Dialog,
+        Error,
     },
     data() {
         return {
@@ -108,6 +112,7 @@ export default {
     props: {
         task: Object,
         employee: Object,
+        errors: Object,
         // submitted_task: Object,
     },
 

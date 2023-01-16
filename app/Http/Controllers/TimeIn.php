@@ -14,7 +14,6 @@ class TimeIn extends Controller
 
     public function store(Request $request, $id) {
         // $user = ($request->input('type') === 'TYPE_EMPLOYEE') ? Auth::guard('employee')->id() : Auth::guard('head')->id();         
-        // dd($id);
         $shift_date = new Carbon($request->input('date'));
         $time = new Carbon($request->input('date'));
         $model = Model::create([
@@ -23,7 +22,7 @@ class TimeIn extends Controller
             "time_in" => $time->toTimeString() ,
         ]);
 
-        if ($time->greaterThan('08:00:00')) {
+        if ($time->lessThan('12:00:00')) {
             $model->isLate = true;
         }
 

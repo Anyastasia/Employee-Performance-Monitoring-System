@@ -15,7 +15,7 @@
                 
                 <section class="mb-2">
                     <h2 class="h2 mb--5">Attachments</h2>
-                    <a :href="`/download/${task.submitted_attachments}`">Download</a>
+                    <a v-if="!(task.attachments === '')" :href="`/download/${task.attachments}`">Download</a>
                 </section>
 
                 <section class="mb-2">
@@ -103,7 +103,7 @@ export default {
 
     mounted(){
         const t = new Date(this.task.submission_start_date)
-        console.log(t.toDateString())
+        console.log(this.task)
     }
 }
 </script>

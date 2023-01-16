@@ -35,6 +35,10 @@
                         </section>
                     </Dialog>
 
+                    <Dialog :show="showEvaluationForm" :exit="exitEvaluationForm">
+                                                                                                
+                    </Dialog>
+
 
                     <section class="py-1">
                         <label for="search-Division">Search Division</label>
@@ -48,6 +52,7 @@
 
                     <section>
                         <Table>
+
                             <template #table-header> 
                                 <TableRow>
                                     <TableCell :isHeader="true">ID</TableCell>
@@ -57,8 +62,6 @@
 
                             </template>
                             
-
-
                             <template #table-body> 
                                 <TableRow v-for="division in divisions" :key="division.id">
                                     <TableCell>{{division.id}}</TableCell>
@@ -71,6 +74,7 @@
                                     </TableCell>
                                 </TableRow>
                             </template>
+                           
                         </Table>
                     </section>
                 </div>
@@ -87,6 +91,7 @@ import Table from '../../Components/Table/Table.vue';
 import TableRow from '../../Components/Table/TableRow.vue';
 import TableCell from '../../Components/Table/TableCell.vue';
 import PrimaryButton from '../../Components/Button/PrimaryButton.vue';
+import OutlineButton from '@/Components/Button/OutlineButton.vue';
 import LinkButton from '../../Components/Button/LinkButton.vue';
 import TextButton from '../../Components/Button/TextButton.vue';
 import Dialog from '../../Components/Dialog/CustomDialog.vue';
@@ -98,6 +103,7 @@ export default {
         TableRow,   
         TableCell,
         PrimaryButton,
+        OutlineButton,
         LinkButton,
         TextButton,
         Dialog,
@@ -116,6 +122,30 @@ export default {
             addDivisionForm: useForm({
                     name: '',
             }),
+            showEvaluationForm: false,
+            exitEvaluationForm: false,
+            evaluationForm: [
+                {
+                    output: '',
+                    success_indicators: '',
+                    quality: Number,
+                    quality_indicators: '', 
+                    efficiency: Number,
+                    efficiency_indicators: '', 
+                    timeliness: Number,
+                    timeliness_indicators: '', 
+                }
+            ],
+
+            adjRating: [
+                "Outstanding",
+                "Very Satisfactory",
+                "Satisfactory",
+                "Unsatisfactory",
+                "Poor"
+            ],
+
+            scores: [5,4,3,2,1],
         }
     },
 
@@ -128,12 +158,44 @@ export default {
             this.close = !this.close
             this.addDivisionForm.cancel();
         },
-
+        openEvaluationForm() {
+            this.showEvaluationForm = !this.showEvaluationForm
+        },
+        closeEvaluationForm() {
+            this.exitEvaluationForm = !this.exitEvaluationForm
+        },
         submitAddDivision() {
             this.addDivisionForm.post('/register/division/store', {
                 onSuccess: () => {this.showAlertSuccess = true; this.close = true}
             })
         },
+        addRow() {
+            console.log('wew')
+            this.evaluationForm.push(
+                {
+                    output: '',
+                    success_indicators: '',
+                    quality: Number,
+                    quality_indicators: '', 
+                    efficiency: Number,
+                    efficiency_indicators: '', 
+                    timeliness: Number,
+                    timeliness_indicators: '', 
+                    average: Number,
+                }
+            )
+        },
+        deleteRow(index) {
+            this.evaluationForm.splice(index, 1)
+        },
+
+        average(){
+
+        },
+
+        total(){
+
+        }
     },
 
     watch: {

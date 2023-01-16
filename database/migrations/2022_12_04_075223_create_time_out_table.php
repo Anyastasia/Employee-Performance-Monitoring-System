@@ -18,6 +18,7 @@ return new class extends Migration
             $table->bigInteger('employee_id');
             $table->bigInteger('time_in_id');
             $table->date('shift_date');
+            $table->string('early_time_out_reason');
             $table->time('time_out');
         });
     }

@@ -21,7 +21,7 @@ class EmployeeDetails extends Controller
         
         
         if ($request->is_division_head == true) {
-            $division_heads = Employee::where('is_division_head', true)->where('status', 'active')->get();
+            $division_heads = Employee::where('division_id', $model->division_id)->where('is_division_head', true)->where('status', 'active')->get();
             foreach($division_heads as $head) {
                 $head->is_division_head = false;
                 $head->position = ($request->previous_head_position === '') ? 'Agent' : $request->previous_head_position;

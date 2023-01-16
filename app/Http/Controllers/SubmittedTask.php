@@ -21,11 +21,15 @@ class SubmittedTask extends Controller
         $request->validate([
             "task_id" => ['required'],
             "submitted_attachments" => ['nullable'],
-            "notes" => ['nullable'],
+            "notes" => ['required'],
         ]);
 
         if ($request->hasFile('attachments')) {
             $file_name = $request->file('attachments')->store('uploads');
+        }
+
+        if($request->notes == null) {
+            return Redirect::back()->withErrors(["notes_requuired" => "Required."]);
         }
 
         $model = Model::create([
@@ -38,7 +42,8 @@ class SubmittedTask extends Controller
         $assigned_task = AssignedTask::find($model->task_id);
         $assigned_task->status = 'submitted';
         $assigned_task->save();
-        return Redirect::route('employee.task', ["id" => $model->id]);
+        // return Redirect::route('employee.task', ["id" => $model->id]);
+        return redirect('/active');
     }
 
     public function update(Request $request){

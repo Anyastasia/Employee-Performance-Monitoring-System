@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('evaluations', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('employee_id');
-            $table->bigInteger('task_id');
-            $table->integer('efficiency');
-            $table->integer('quality');
-            $table->integer('timeliness');
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->float('rating')->default(0);
+            $table->string('adjectival_rating');
             $table->timestamps();
         });
     }

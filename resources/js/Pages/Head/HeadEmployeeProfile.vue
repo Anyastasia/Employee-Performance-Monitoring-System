@@ -37,7 +37,7 @@
             
                                 <TableCell>
                                     <div class="flex g--75 justify-content-center">
-                                        <PrimaryButton :disabled="checkStatus(task.status)" @click="openDialog(task.id)">Evaluate</PrimaryButton>
+                                        <!-- <PrimaryButton :disabled="checkStatus(task.status)" @click="openDialog(task.id)">Evaluate</PrimaryButton> -->
                                         <span v-if="task.status == 'active'">
                                             <LinkButton :href="`/head/task/${task.id}`">View</LinkButton>
                                         </span>

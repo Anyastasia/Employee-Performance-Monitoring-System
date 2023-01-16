@@ -18,7 +18,8 @@ use App\Models\Employee;
 use App\Models\Evaluation;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\SendMail;
-    use App\Models\Head as HeadModel;
+use App\Models\EvaluationForm;
+use App\Models\Head as HeadModel;
 use App\Models\Leave;
 use App\Models\SubmittedTask;
 use App\Models\TimeIn;
@@ -34,18 +35,21 @@ use Illuminate\Support\Facades\Auth;
         // }
 
 
-        public function employees() {
+        public function employees(Request $request) {
 
             $user = Model::where('id', Auth::guard('employee')->id())->get(['division_id'])->first();
             $division_id = $user['division_id'];
 
+            $employees = Model::where('division_id', $division_id)
+            ->where('status', 'active')
+            ->where('is_admin', false)
+            ->where('is_division_head', false)
+            ->get(['id', 'first_name', 'last_name', 'email', 'division_id', 'position']);
+            
             return Inertia::render('Head/HeadHome', [
-                'employees' => Model::where('division_id', $division_id)
-                ->where('status', 'active')
-                ->where('is_admin', false)
-                ->where('is_division_head', false)
-                ->get(['id', 'first_name', 'last_name', 'email', 'division_id', 'position']),
+                'employees' => $employees,
                 'divisions' => Division::where('id', $division_id)->get(['id', 'name'])->first(),
+                "xevaluationForm" => EvaluationForm::where('status', 'active')->get(),
             ]);
         }
 
@@ -112,8 +116,6 @@ use Illuminate\Support\Facades\Auth;
             $id = null;
             $employee = null;
 
-
-            
             $employees = Model::where('division_id', $head->division_id)->where('status', 'active')
             ->where('is_division_head', false)
             ->where('is_admin', false)
@@ -138,53 +140,56 @@ use Illuminate\Support\Facades\Auth;
             }
 
          
-            $performance = [];
+            $performance = Evaluation::where('employee_id', $employee)->get(['rating', 'adjectival_rating']);
             $attendance = [];
-            $request->month = $request->month + 1;
-            if ($request->mode == 1) {
-                // $performance = [
-                //     // "efficiency" =>  Evaluation::where('employee_id', $employee->id)->groupBy(DB::raw('MONTH(created_at)', 'YEAR(created_at)'))->avg('efficiency'),
-                //     "efficiency" => Evaluation::select(DB::raw('avg(efficiency) as average, month(created_at) as month, year(created_at) as year'))->groupBy(DB::raw('MONTH(created_at), YEAR(created_at)'))->get(),
-                //      "quality" => Evaluation::select(DB::raw('avg(quality) as average, month(created_at) as month, year(created_at) as year'))->groupBy(DB::raw('MONTH(created_at), YEAR(created_at)'))->get(),
-                //      "timeliness" => Evaluation::select(DB::raw('avg(timeliness) as average, month(created_at) as month, year(created_at) as year'))->groupBy(DB::raw('MONTH(created_at), YEAR(created_at)'))->get(),                        
-                // ];
+            // $request->month = $request->month + 1;
+            // if ($request->mode == 1) {
+            //     // $performance = [
+            //     //     // "efficiency" =>  Evaluation::where('employee_id', $employee->id)->groupBy(DB::raw('MONTH(created_at)', 'YEAR(created_at)'))->avg('efficiency'),
+            //     //     "efficiency" => Evaluation::select(DB::raw('avg(efficiency) as average, month(created_at) as month, year(created_at) as year'))->groupBy(DB::raw('MONTH(created_at), YEAR(created_at)'))->get(),
+            //     //      "quality" => Evaluation::select(DB::raw('avg(quality) as average, month(created_at) as month, year(created_at) as year'))->groupBy(DB::raw('MONTH(created_at), YEAR(created_at)'))->get(),
+            //     //      "timeliness" => Evaluation::select(DB::raw('avg(timeliness) as average, month(created_at) as month, year(created_at) as year'))->groupBy(DB::raw('MONTH(created_at), YEAR(created_at)'))->get(),                        
+            //     // ];
 
-                $performance = [
-                    // "efficiency" =>  Evaluation::where('employee_id', $employee->id)->groupBy(DB::raw('MONTH(created_at)', 'YEAR(created_at)'))->avg('efficiency'),
-                    "efficiency" => Evaluation::where('employee_id', $employee)->whereMonth('created_at', '=', $request->month)->whereYear('created_at', '=', $request->year)->avg('efficiency'),
-                     "quality" => Evaluation::where('employee_id', $employee)->whereMonth('created_at', '=', $request->month)->whereYear('created_at', '=', $request->year)->avg('quality'),
-                     "timeliness" => Evaluation::where('employee_id', $employee)->whereMonth('created_at', '=', $request->month)->whereYear('created_at', '=', $request->year)->avg('timeliness'),                        
-                ];
-            } else if ($request->mode == 2) {
-                $performance = [
-                    // "efficiency" =>  Evaluation::where('employee_id', $employee->id)->groupBy(DB::raw('MONTH(created_at)', 'YEAR(created_at)'))->avg('efficiency'),
-                    "efficiency" => Evaluation::where('employee_id', $employee)->whereYear('created_at', '=', $request->year)->avg('efficiency'),
-                     "quality" => Evaluation::where('employee_id', $employee)->whereYear('created_at', '=', $request->year)->avg('quality'),
-                     "timeliness" => Evaluation::where('employee_id', $employee)->whereYear('created_at', '=', $request->year)->avg('timeliness'),                        
-                ];
-            }
-            else if ($request->mode == 3) {
-                $performance = [
-                    // "efficiency" =>  Evaluation::where('employee_id', $employee->id)->groupBy(DB::raw('MONTH(created_at)', 'YEAR(created_at)'))->avg('efficiency'),
-                    "efficiency" => Evaluation::where('employee_id', $employee)->whereYear('created_at', '=', $request->year)->whereBetween(DB::raw('month(created_at)'), [1,6])->avg('efficiency'),
-                    // "efficiency" => Evaluation::where('employee_id', $employee)->selectRaw('avg(efficiency as efficiency')->whereRaw('month(created_at) between 1 and 6')->get(),
-                    "quality" => Evaluation::where('employee_id', $employee)->whereYear('created_at', '=', $request->year)->whereBetween(DB::raw('month(created_at)'), [1,6])->avg('quality'),
-                     "timeliness" => Evaluation::where('employee_id', $employee)->whereYear('created_at', '=', $request->year)->whereBetween(DB::raw('month(created_at)'), [1,6])->avg('timeliness'),                        
-                ];
-            }
-            else if ($request->mode == 4) {
-                $performance = [
-                    "efficiency" => Evaluation::where('employee_id', $employee)->whereYear('created_at', $request->year)->whereBetween(DB::raw('month(created_at)'), [7,12])->avg('efficiency'),
-                    "quality" => Evaluation::where('employee_id', $employee)->whereYear('created_at', $request->year)->whereBetween(DB::raw('month(created_at)'), [7,12])->avg('quality'),
-                     "timeliness" => Evaluation::where('employee_id', $employee)->whereYear('created_at', $request->year)->whereBetween(DB::raw('month(created_at)'), [7,12])->avg('timeliness'),                        
-                ];
-            } else if ($request->mode == 0) {
-                $performance = [
-                    "efficiency" =>  Evaluation::where('employee_id', $employee)->avg('efficiency'),
-                    "quality" =>  Evaluation::where('employee_id', $employee)->avg('quality'),
-                    "timeliness" =>  Evaluation::where('employee_id', $employee)->avg('timeliness'),
-                ];
-            }
+            //     $performance = [
+            //         // "efficiency" =>  Evaluation::where('employee_id', $employee->id)->groupBy(DB::raw('MONTH(created_at)', 'YEAR(created_at)'))->avg('efficiency'),
+            //         // "efficiency" => Evaluation::where('employee_id', $employee)->whereMonth('created_at', '=', $request->month)->whereYear('created_at', '=', $request->year)->avg('efficiency'),
+            //         //  "quality" => Evaluation::where('employee_id', $employee)->whereMonth('created_at', '=', $request->month)->whereYear('created_at', '=', $request->year)->avg('quality'),
+            //         //  "timeliness" => Evaluation::where('employee_id', $employee)->whereMonth('created_at', '=', $request->month)->whereYear('created_at', '=', $request->year)->avg('timeliness'),                        
+            //         "efficiency" => 4,
+            //         "quality" => 5,
+            //         "timeliness" => 5,
+            //     ];
+            // } else if ($request->mode == 2) {
+            //     $performance = [
+            //         // "efficiency" =>  Evaluation::where('employee_id', $employee->id)->groupBy(DB::raw('MONTH(created_at)', 'YEAR(created_at)'))->avg('efficiency'),
+            //         "efficiency" => Evaluation::where('employee_id', $employee)->whereYear('created_at', '=', $request->year)->avg('efficiency'),
+            //          "quality" => Evaluation::where('employee_id', $employee)->whereYear('created_at', '=', $request->year)->avg('quality'),
+            //          "timeliness" => Evaluation::where('employee_id', $employee)->whereYear('created_at', '=', $request->year)->avg('timeliness'),                        
+            //     ];
+            // }
+            // else if ($request->mode == 3) {
+            //     $performance = [
+            //         // "efficiency" =>  Evaluation::where('employee_id', $employee->id)->groupBy(DB::raw('MONTH(created_at)', 'YEAR(created_at)'))->avg('efficiency'),
+            //         "efficiency" => Evaluation::where('employee_id', $employee)->whereYear('created_at', '=', $request->year)->whereBetween(DB::raw('month(created_at)'), [1,6])->avg('efficiency'),
+            //         // "efficiency" => Evaluation::where('employee_id', $employee)->selectRaw('avg(efficiency as efficiency')->whereRaw('month(created_at) between 1 and 6')->get(),
+            //         "quality" => Evaluation::where('employee_id', $employee)->whereYear('created_at', '=', $request->year)->whereBetween(DB::raw('month(created_at)'), [1,6])->avg('quality'),
+            //          "timeliness" => Evaluation::where('employee_id', $employee)->whereYear('created_at', '=', $request->year)->whereBetween(DB::raw('month(created_at)'), [1,6])->avg('timeliness'),                        
+            //     ];
+            // }
+            // else if ($request->mode == 4) {
+            //     $performance = [
+            //         "efficiency" => Evaluation::where('employee_id', $employee)->whereYear('created_at', $request->year)->whereBetween(DB::raw('month(created_at)'), [7,12])->avg('efficiency'),
+            //         "quality" => Evaluation::where('employee_id', $employee)->whereYear('created_at', $request->year)->whereBetween(DB::raw('month(created_at)'), [7,12])->avg('quality'),
+            //          "timeliness" => Evaluation::where('employee_id', $employee)->whereYear('created_at', $request->year)->whereBetween(DB::raw('month(created_at)'), [7,12])->avg('timeliness'),                        
+            //     ];
+            // } else if ($request->mode == 0) {
+            //     $performance = [
+            //         "efficiency" =>  Evaluation::where('employee_id', $employee)->avg('efficiency'),
+            //         "quality" =>  Evaluation::where('employee_id', $employee)->avg('quality'),
+            //         "timeliness" =>  Evaluation::where('employee_id', $employee)->avg('timeliness'),
+            //     ];
+            // }
             
             // attendanmce 
 

@@ -22,6 +22,9 @@
                                     <TableCell :isHeader="true">
                                         Time Out
                                     </TableCell>
+                                    <TableCell :isHeader="true">
+                                        Status
+                                    </TableCell>
                                 </TableRow>
                             </template>
 
@@ -30,6 +33,9 @@
                                     <TableCell>{{item.shift_date}}</TableCell>
                                     <TableCell>{{formatShiftTime(item.shift_date, item.time_in)}}</TableCell>
                                     <TableCell>{{formatShiftTime(item.shift_date, item.time_out)}}</TableCell>
+                                    <TableCell>
+                                        <p v-if="item.isLate">Late</p>
+                                    </TableCell>
                                 </TableRow>
                             </template>
                         </Table>
@@ -59,8 +65,15 @@
                             <Error v-if="lastTimeInIsToday === false || time_ins === null" message="Make sure you've timed in first."></Error>
                             <p>Last Time in: {{`${formatDate(time_ins.shift_date , time_ins.time_in)}`}}</p>
                         </div>
+
+                        <div class="my-1" v-if="checkTime() && attendanceForm.mode === modes[1]">
+                            <label for="early-time-out" class="required display-block mb--5">Reason for Early Time out</label>
+                            <input v-model="attendanceForm.early_time_out_reason" name="early-time-out" required>
+                            <PrimaryButton class="ml-1" type="submit" :disabled="attendanceForm.processing">Time-out Early</PrimaryButton>
+                        </div>
+
                         <TextButton type="button" @click="closeAttendanceForm">Cancel</TextButton>
-                        <PrimaryButton type="submit" :disabled="attendanceForm.processing">Submit</PrimaryButton>
+                        <PrimaryButton type="submit" :disabled="attendanceForm.processing || (checkTime() && attendanceForm.mode === modes[1])">Submit</PrimaryButton>
                     </form>
                 </Dialog>
 
@@ -134,7 +147,8 @@ export default {
                 shift_date: '',
                 time_in_id: '', // for time-out only
                 mode: '',
-                type: 'TYPE_EMPLOYEE'
+                type: 'TYPE_EMPLOYEE',
+                early_time_out_reason: '',
             }),
             remarks: ['Time In', 'Time out'],
             dateToday: new Date(),
@@ -154,6 +168,12 @@ export default {
     },
 
     methods: {
+        checkTime: function(){
+            const date = new Date()
+            let currentTime = date.getHours() * 100 + date.getMinutes();
+            console.log(currentTime)
+            return (currentTime < 1730)
+        },  
         openAttendanceForm: function(){
             this.showAttendanceForm = !this.showAttendanceForm
         },
@@ -223,7 +243,6 @@ export default {
     },
 
     mounted() {
-        console.log(this.employees)
     }
 }
 </script>
