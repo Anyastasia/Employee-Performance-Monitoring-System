@@ -412,6 +412,10 @@ body {
     background-color: var(--hover);
 }
 
+textarea:disabled {
+    background-color: #fff;
+}
+
 .italic {
     font-style: italic;
 }

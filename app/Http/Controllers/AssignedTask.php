@@ -40,7 +40,6 @@ class AssignedTask extends Controller
     //     'submission_due_time' => $request->input('submission_due_time'),
     // ]);
     $file_name = '';
-
     if ($request->hasFile('attachments')) {
         $file_name = Storage::putFile('uploads', $request->attachments[0]);
     }

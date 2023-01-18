@@ -14,6 +14,7 @@ class Evaluation extends Model
         "start_date",
         "end_date",
         "rating",
+        'self',
         "adjectival_rating",
     ];
 }

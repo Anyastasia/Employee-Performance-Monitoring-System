@@ -19,6 +19,7 @@ return new class extends Migration
             $table->bigInteger('division_id');
             $table->string('output');
             $table->string('success_indicators');
+            $table->string('actual_accomplishments')->nullable();
             $table->string('quality_indicators')->nullable();
             $table->string('efficiency_indicators')->nullable();
             $table->string('timeliness_indicators')->nullable();

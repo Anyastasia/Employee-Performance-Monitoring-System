@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->float('rating')->default(0);
+            $table->boolean('self')->default(false);
             $table->string('adjectival_rating');
             $table->timestamps();
         });

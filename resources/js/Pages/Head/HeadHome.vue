@@ -159,6 +159,9 @@
                                             Success Indicators
                                         </TableCell>
                                         <TableCell :isHeader="true">
+                                            Actual Accomplishments
+                                        </TableCell>
+                                        <TableCell :isHeader="true">
                                             Rating
                                         </TableCell>
                                     </TableRow>
@@ -173,6 +176,11 @@
                                         <TableCell>
                                             <div class="flex">
                                                 <textarea rows="5"  disabled v-model="ev.success_indicators"></textarea>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>
+                                            <div class="flex">
+                                                <textarea rows="5"  disabled v-model="ev.actual_accomplishments"></textarea>
                                             </div>
                                         </TableCell>
                                         <TableCell>
@@ -293,8 +301,8 @@
                         </div>
                         </section>
 
-                            <!-- 
-                             <section class="mb-1">
+                            
+                             <!-- <section class="mb-1">
                                 <label for="assignTo" class="mr-1 required">Assign to</label>
                                 <select name="assignTo" id="assignTo" v-model="assignTo">
                                     <option value="all">All</option>
@@ -311,8 +319,8 @@
                                             <TableRow>
                                                   <TableCell :isHeader="true">
                                                     <input type="checkbox" v-model="all" name="" id="" @click="triggerAll">
-                                                    Allfal
-                                                </TableCelcontainer>  
+                                                    All
+                                                </TableCell>  
                                                 <TableCell :isHeader="true"> </TableCell>
                                                 <TableCell :isHeader="true">Employee</TableCell>
                                             </TableRow>
@@ -335,8 +343,7 @@
                                 </div>
                             </section>
                                 </div>
-                            </div> 
-                        
+                            </div>  
                         </section> -->
                         <section class="flex mt-2">
                             <TextButton type='button' class="ml-auto" @click="toggleAssignTasks('close')">Cancel</TextButton>
@@ -462,6 +469,7 @@
                         id: '',
                         output: '',
                         success_indicators: '',
+                        actual_accomplishments: '',
                         quality_indicators: '', 
                         efficiency_indicators: '', 
                         timeliness_indicators: '',
@@ -473,6 +481,7 @@
                     employee_id: '',
                     start_date: '',
                     end_date: '',
+                    self: false,
                     totalAverageRating: 0,
                     finalAverageRating: 0,
                     adjectivalRating: '',
@@ -524,6 +533,7 @@
                             employee_id: ev.employee_id,
                             output: ev.output,
                             success_indicators: ev.success_indicators,
+                            actual_accomplishments: ev.actual_accomplishments,
                             quality_indicators: ev.quality_indicators,
                             efficiency_indicators: ev.efficiency_indicators,
                             timeliness_indicators: ev.timeliness_indicators,
@@ -665,6 +675,7 @@
                 Inertia.post('/head/evaluationForm/store', {'evaluation_form': this.evaluationForm, 'employee_id':this.evaluateFormAssignTo, 'division_id':this.divisions.id, 'mode': this.evaluateFormAssignToMode, 'employees': this.evaluateFormAssignToAll}, {
                     onSuccess: () => {
                         this.exitOutputForm = !this.exitOutputForm
+                        this.evaluationForm.length = 0
                     }
                 })
             },

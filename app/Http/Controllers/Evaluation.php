@@ -23,9 +23,14 @@ class Evaluation extends Controller
             "end_date" => $request->end_date,
             "rating" => $request->finalAverageRating,
             "adjectival_rating" => $request->adjectivalRating,
+            "self" => $request->self                        ,
         ]);
 
         // $model->save();
+
+        if ($request->self == true) {
+            return Redirect::route('employee.evaluation')->with('success', 'Evaluation Successful');
+        }
         return Redirect::route('head_employees', $request->employee_id)->with('success', 'Employee evaluated');
     }
 }

@@ -35,7 +35,7 @@
                                 </div>
 
                                 <div>
-                                    <p v-if="errors.email">Invalid Email</p>
+                                    <Error v-if="errors.email" :message="errors.email">Invalid Email</Error>
                                     <label for="text" class="required">Email</label>
                                     <input type="text" name="email" v-model="addEmployeeForm.email" id="email" required>
                                 </div>
@@ -159,6 +159,7 @@ import EmployeeLayout from '../../Layouts/EmployeeLayout.vue'
 import Table from '../../Components/Table/Table.vue';
 import TableRow from '../../Components/Table/TableRow.vue';
 import TableCell from '../../Components/Table/TableCell.vue';
+import Error from '@/Components/Error.vue'
 import PrimaryButton from '../../Components/Button/PrimaryButton.vue';
 import LinkButton from '../../Components/Button/LinkButton.vue';
 import TextButton from '../../Components/Button/TextButton.vue';
@@ -174,6 +175,7 @@ export default {
         PrimaryButton,
         LinkButton,
         TextButton,
+        Error,
         Dialog,
         Inertia,
     },
@@ -255,7 +257,10 @@ export default {
 
             // Inertia.post('/register/employee/store', this.addEmployeeForm)
             this.addEmployeeForm.post('/register/employee/store', {
-                onSuccess: () => {this.showSuccessAlertAddEmployeeForm = true}
+                onSuccess: () => {
+                    this.showSuccessAlertAddEmployeeForm = true
+                    this.close = !this.close
+                }
             })
         },
 

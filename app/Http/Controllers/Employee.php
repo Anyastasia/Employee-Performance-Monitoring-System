@@ -17,8 +17,9 @@ use App\Models\SubmittedTask;
     use Illuminate\Support\Facades\Redirect;
 
     use App\Http\Controllers\SendMail;
-
-    use Inertia\inertia;
+use App\Models\Evaluation;
+use App\Models\EvaluationForm;
+use Inertia\inertia;
     use Carbon\Carbon;
     class Employee extends Controller {
         
@@ -212,6 +213,16 @@ use App\Models\SubmittedTask;
             return Inertia('Employee/EmployeeHome', [
                 "items" => AssignedTask::where('employee_id', Auth::guard('employee')->id())
                 ->where('is_priority', true)->get(),
+            ]);
+        }
+
+        public function evaluation() {
+            $evaluationForm = EvaluationForm::where('employee_id', Auth::guard('employee')->id())->where('status', 'active')->get();
+            $evaluations = Evaluation::where('employee_id', Auth::guard('employee')->id())->where('self', true)->get();
+            
+            return Inertia('Employee/EmployeeSelfEvaluation', [
+                'xevaluationForm' => $evaluationForm,
+                "evaluations" => $evaluations,
             ]);
         }
 

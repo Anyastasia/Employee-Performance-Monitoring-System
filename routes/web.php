@@ -62,6 +62,7 @@ Route::controller(Employee::class)->middleware(['employee'])->group(function() {
     Route::get('/attendance', [Employee::class, 'attendance'])->name('employee.attendance');
     Route::get('/profile', [Employee::class, 'profile'])->name('employee.profile');
     Route::get('/download/uploads/{file}', [Download::class, 'getFile']);
+    Route::get('/evaluation', [Employee::class, 'evaluation'])->name('employee.evaluation');
     // Route::get('/task/{id}', [Employee::class, 'task'])->name('employee.task');
     // Route::get('/list/employees', [Employee::class, 'employee_list'])->name('head_employees');
     // Route::get('/dashboard', [Employee::class, 'dashboard']);
@@ -86,6 +87,8 @@ Route::middleware([CheckEmployee::class])->group(function() {
     Route::post('/task/submit/store', [SubmittedTask::class, 'store']);
     Route::post('/task/submit/update', [SubmittedTask::class, 'update']);
     Route::post('/task/submit/resubmit', [SubmittedTask::class, 'resubmit']);
+
+    Route::get('/evaluation', [Employee::class, 'evaluation'])->name('employee.evaluation');
 });
 
 Route::middleware([CheckAdmin::class])->group(function() {
@@ -94,7 +97,6 @@ Route::middleware([CheckAdmin::class])->group(function() {
     Route::post('/admin/delete/division/{id}', [Admin::class, 'deactivate_division']);
     Route::post('/admin/delete/employee/{id}', [Admin::class, 'deactivate_employee']);
     Route::post('/admin/delete/head/{id}', [Admin::class, 'deactivate_division']);
-
     // Route::post('/register/employee/store', [RegisterEmployee::class, 'store']);
     // Route::post('/register/division/store', [RegisterDivision::class, 'store']);
 });

@@ -25,6 +25,7 @@
             <SidebarItem :class="{'sidebar-item-active': $page.component === 'Employee/EmployeeProfile'}" icon="bi bi-person" href="/profile">Profile</SidebarItem>
 
             <SidebarItem :class="{'sidebar-item-active': $page.component === 'Employee/EmployeeHome'}" v-if="renderTasks" icon="bi bi-journal" href="/home">Tasks</SidebarItem>
+            <SidebarItem :class="{'sidebar-item-active': $page.component === 'Employee/EmployeeSelfEvaluation'}" v-if="renderTasks" icon="bi bi-person-check-fill" href="/evaluation">Evaluation</SidebarItem>
             <SidebarItem :class="{'sidebar-item-active': $page.component === 'Head/HeadHome'}" v-if="employee.is_division_head" icon="bi bi-journal" href="/head/employees">Employees</SidebarItem>
             <SidebarItem :class="{'sidebar-item-active': $page.component === 'Head/HeadDashboard'}" v-if="employee.is_division_head" icon="bi bi-pie-chart" href="/head/dashboard">Dashboard</SidebarItem>
             <SidebarItem :class="{'sidebar-item-active': $page.component === 'Admin/AdminEmployee'}" v-if="employee.is_admin" icon="bi bi-person" href="/admin/employees/0">Employees</SidebarItem>
