@@ -66,7 +66,7 @@
                                             </TableCell>
                                             <TableCell>
                                                 <div class="flex">
-                                                    <textarea rows="5"  disabled v-model="ev.actual_accomplishments"></textarea>
+                                                    <textarea rows="5" v-model="ev.actual_accomplishments"></textarea>
                                                 </div>
                                             </TableCell>
                                             <TableCell>
