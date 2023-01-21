@@ -6,7 +6,7 @@
                 <h1 class="my-2">Profile</h1>
                 <section class="profile-container">
                     <div class="profile-img-container">
-                        <img src="../../../../public/images/profile-placeholder.png" alt=""/>
+                        <img src="../../../../public/images/profile-placeholder.png" alt="profile-picture"/>
                         <article class="display-inline-block">
                             <h2 class="h2">{{`${employee.first_name} ${employee.last_name}`}}</h2>
                             <p>{{`${employee.position} | ${employee.email}`}}</p>

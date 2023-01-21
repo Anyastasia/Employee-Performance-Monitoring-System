@@ -278,7 +278,7 @@
 
 
                                 <div class="flex mt-2">
-                                    <TextButton type="button" @click="closeEvaluateEmployee">Close</TextButton>
+                                    <TextButton type="button" class='ml-auto' @click="closeEvaluateEmployee">Close</TextButton>
                                     <PrimaryButton type="submit">Submit</PrimaryButton>
                                 </div>
                             </form>
@@ -708,15 +708,11 @@
 
                     return (isNaN(ave)) ? 0 : ave
                 },
-                total(){
-
-                },
                 getEvaluationForm() {
                     Inertia.visit('/head/employees', {
                         only: ['xxemployee', 'evaluation_form'],
                     })
                 },
-
             submitAssignedTask() {
                 this.taskForm.submission_start_date = new Date(this.taskForm.submission_start_date).toISOString()
                 this.taskForm.submission_due_date = new Date(this.taskForm.submission_due_date).toISOString()

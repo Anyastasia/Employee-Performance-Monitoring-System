@@ -1,7 +1,13 @@
 <template>
     <LoginLayout>
         <template #content>
-                <h1>Employee Login</h1>
+                <section class="flex justify-content-center align-items-center g-1 flex-column">
+                    <img class="display-block" src="../../../../public/images/seal-120.png">
+                    <h1 class="h1 display-block">CITY GOVERNMENT OF MUNTINLUPA</h1>
+                    <h3 class="h3 display-block">Business Permits and Licensing Office</h3>
+                    <h3 class="h3 display-block">Employee Performance Monitoring System</h3>
+                </section>
+                <!-- <h1>Employee Login</h1> -->
             <div class="login-form">
                 <form @submit.prevent="submitLogin">
                     <div>

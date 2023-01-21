@@ -11,9 +11,6 @@ export default {
     watch: {
         show() {
             this.$refs.dialog.showModal()
-            if (this.show === true)
-                console.log('wew')
-                
         },
         exit() {
             this.$refs.dialog.close()
