@@ -20,8 +20,30 @@
                             </template>
                         </CustomSelect> 
 
+
+
                         <div class="flex flex-col g-1">
-                            <CustomSelect v-model='form.mode' :default_message="modesArray[form.mode]" :selected="capitalize(modesArray[form.mode])">
+
+                            <div v-if="ratings.length > 0">
+                                <h3 class="h3 mb--5">Rating</h3>
+                                <CustomSelect :default_message="`${rating.start_date} - ${rating.end_date}`" v-model="optionsForm.evaluation_id" :selected="`${rating.start_date} - ${rating.end_date}`">
+                                    <template #options>
+                                        <CustomSelectOption v-for="(rating, index) in ratings" :key="index" :id="index" @click="optionsForm.evaluation_id = rating.id">{{`${rating.start_date} - ${rating.end_date}`}}</CustomSelectOption>
+                                    </template>
+                                </CustomSelect>
+                            </div>
+
+                            <div v-if="self_ratings.length > 0">
+                                <h3 class="h3 mb--5">Self Rating</h3>
+                                <CustomSelect :default_message="`${self_rating.start_date} - ${self_rating.end_date}`" v-model="optionsForm.self_evaluation_id" :selected="`${self_rating.start_date} - ${self_rating.end_date}`">
+                                    <template #options>
+                                        <CustomSelectOption v-for="(self_rating, index) in self_ratings" :key="index" :id="index" @click="optionsForm.self_evaluation_id = self_rating.id">{{`${self_rating.start_date} - ${self_rating.end_date}`}}</CustomSelectOption>
+                                    </template>
+                                </CustomSelect> 
+                            </div>
+
+
+                            <!-- <CustomSelect v-model='form.mode' :default_message="modesArray[form.mode]" :selected="capitalize(modesArray[form.mode])">
                                 <template #options>
                                     <CustomSelectOption v-for="(mode, index) in modesArray" :key="index" :id="index" @click="form.mode = index" >{{`${capitalize(mode)}`}}</CustomSelectOption>
                                 </template>
@@ -39,9 +61,15 @@
                                         <CustomSelectOption v-for="(xyear, index) in xemployee.years" :key="index" :id="index" @click="getYear(xyear)">{{xyear}}</CustomSelectOption>
                                     </template>
                                 </CustomSelect> 
-                            </div>
 
-                        </div> 
+                                <CustomSelect v-show="form.mode === 1 || form.mode === 2 || form.mode === 3 || form.mode === 4" :default_message="form.year" :selected="form.year">
+                                    <template #options>
+                                        <CustomSelectOption v-for="(xyear, index) in xemployee.years" :key="index" :id="index" @click="getYear(xyear)">{{xyear}}</CustomSelectOption>
+                                    </template>
+                                </CustomSelect> 
+                            </div> -->
+
+                            </div> 
                         </div>
                     </section>
 
@@ -99,7 +127,7 @@
                             <h2 class="mb-2 h2 ">Performance Report</h2>
                             <div class="flex flex-row g-2">
                             <div class="chart-holder px-1 py-1 mb-2">
-                                <LineChart :id="selected" :config="performanceConfig" :data="[performance['rating']]"></LineChart>
+                                <LineChart :id="selected" :config="performanceConfig" :data="[rating.rating, self_rating.rating]"></LineChart>
                             </div>
 
                             <div class="chart-holder px-1 py-1 mb-2">
@@ -180,6 +208,10 @@
                     year: Number(this.options.year),
                     month: Number(this.options.month) - 1,
                 }),
+                optionsForm: useForm({
+                    evaluation_id: this.evaluation_id,
+                    self_evaluation_id: this.self_evaluation_id  
+                }),
                 // selected: this.employees.findIndex((id) => id === this.options.index),
                 selected: this.employees.findIndex(e => e.id === this.xemployee.id),
                 // selected: 0,
@@ -195,17 +227,17 @@
                 performanceConfig: {
                     type: 'bar',
                     data: {
-                        labels: ['Rating',],
+                        labels: ['Rating', 'Self-Rating'],
                         datasets: [{
                             label: 'Performance',
                             backgroundColor: [
                                 'rgba(255, 99, 132, 0.2)',
-                                // 'rgba(54, 162, 235, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
                                 // 'rgba(255, 206, 86, 0.2)',
                             ],
                             borderColor: [
                                 'rgba(255, 99, 132, 1)',
-                                // 'rgba(54, 162, 235, 1)',
+                                'rgba(54, 162, 235, 1)',
                                 // 'rgba(255, 206, 86, 1)',
                             ],
                             borderWidth: 1
@@ -321,7 +353,7 @@
 
             }
         },
-        props: ['employee', 'xemployee', 'employees', 'division', 'data', 'performance', 'options', 'currentYear', 'attendance', 'attendanceWeekly', 'attendanceMonthly', 'leaves', 'tasks'],
+        props: ['employee', 'xemployee', 'employees', 'division', 'data', 'performance', 'options', 'currentYear', 'attendance', 'attendanceWeekly', 'attendanceMonthly', 'leaves', 'tasks', 'rating', 'self_rating', 'ratings', 'self_ratings'],
         created() {
             // this.selected = Number(this.options.index)
         },
@@ -330,7 +362,7 @@
                 this.form.id = this.employees[index].id
                
                 this.form.get('/head/dashboard',{
-                    only: ['xemployee', 'performance', 'options', 'attendanceMonthly', 'tasks'],
+                    only: ['xemployee', 'performance', 'options', 'attendanceMonthly', 'tasks', 'rating', 'self_rating', 'ratings', 'self_ratings'],
                 })
             },
             getPerformance() {
@@ -338,7 +370,6 @@
                     only: ['performance', 'options'],
                     preserveScroll: true,
                 })
-                    
             },
 
             getMonth(index) {
@@ -370,10 +401,26 @@
                 this.form.get('/head/dashboard',{
                     only: ['xemployee','performance'],
                 })
+            },
+
+            'optionsForm.evaluation_id'() {
+                console.log(this.optionsForm)
+                this.optionsForm.get('/head/dashboard',{
+                    only: ['rating', 'self_rating'],
+                    data: this.optionsForm,
+                })
+            },
+            'optionsForm.self_evaluation_id'() {
+                console.log(this.optionsForm)
+                this.optionsForm.get('/head/dashboard',{
+                    only: ['rating', 'self_rating'],
+                    data: this.optionsForm,
+                })
             }
         },
         mounted() {
             // this.$refs['progressBar'].style = '50%'
+            console.log(this.rating)
         }
 
     }

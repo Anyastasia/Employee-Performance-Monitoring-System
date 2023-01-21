@@ -14,11 +14,11 @@
                     </div>
                 </section>
                 <section class="flex flex-row g--75">
-                    <TextButton @click="toggleChangeProfilePicture">Change profile picture</TextButton>
+                    <!-- <TextButton @click="toggleChangeProfilePicture">Change profile picture</TextButton> -->
                     <TextButton @click="toggleChangePassword">Change password</TextButton>
                 </section>
 
-                <Dialog :show="showChangeProfilePicture" :exit="exitChangeProfilePicture">
+                <!-- <Dialog :show="showChangeProfilePicture" :exit="exitChangeProfilePicture">
                     <section>
                         <h2 class="h2">Change Profile Picture</h2>
                     </section>
@@ -37,7 +37,7 @@
 
                         </form>
                     </section>
-                </Dialog>
+                </Dialog> -->
 
                 <Dialog :show="showChangePassword" :exit="exitChangePassword">
                     <section>

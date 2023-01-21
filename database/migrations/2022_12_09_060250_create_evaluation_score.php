@@ -16,8 +16,10 @@ return new class extends Migration
         Schema::create('evaluations', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('employee_id');
+            $table->bigInteger('evaluated_by');
             $table->date('start_date');
             $table->date('end_date');
+            $table->float('total_average_rating')->default(0);
             $table->float('rating')->default(0);
             $table->boolean('self')->default(false);
             $table->string('adjectival_rating');

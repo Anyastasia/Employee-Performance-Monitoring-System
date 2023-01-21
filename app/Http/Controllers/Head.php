@@ -8,17 +8,18 @@ use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 
 use Inertia\Inertia;
-    use Illuminate\Http\Request;
-    use Illuminate\Support\Facades\Redirect;
-    use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Carbon\Carbon;
 
-    use App\Models\Employee as Model;
-    use App\Models\Division;
+use App\Models\Employee as Model;
+use App\Models\Division;
 use App\Models\Employee;
 use App\Models\Evaluation;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\SendMail;
 use App\Models\EvaluationForm;
+use App\Models\EvaluationScore;
 use App\Models\Head as HeadModel;
 use App\Models\Leave;
 use App\Models\SubmittedTask;
@@ -31,7 +32,7 @@ use Illuminate\Support\Facades\Auth;
         // public function __construct()
         // {
         //     // $this->middleware('head');
-        //     $this->evaluateAssignedTask();
+        //     $this->evaluateAssignedTask();evaluate e
         // }
 
 
@@ -49,9 +50,15 @@ use Illuminate\Support\Facades\Auth;
             return Inertia::render('Head/HeadHome', [
                 'employees' => $employees,
                 'divisions' => Division::where('id', $division_id)->get(['id', 'name'])->first(),
-                "xevaluationForm" => EvaluationForm::where('status', 'active')->get(),
+                "xevaluationForm" => Inertia::lazy(fn () => EvaluationForm::where('status', 'active')->where('employee_id', $request->employee_id)->get()),
+                "evaluations" => Inertia::lazy(fn () => Evaluation::where('evaluated_by', Auth::guard('employee')->id())->where('employee_id', $request->employee_id)->get()),
+                "evaluation_scores" => Inertia::lazy(fn () => EvaluationScore::where('evaluation_id', $request->evaluation_id)->get()),
+                "self_evaluations" => Inertia::lazy(fn () => Evaluation::where('evaluated_by', $request->employee_id)->where('employee_id', $request->employee_id)->where('self', true)->get(['id', 'start_date', 'end_date'])),
+                "self_evaluation" => Inertia::lazy(fn () => Evaluation::where('id', $request->evaluation_id)->get(['id', 'rating', 'adjectival_rating'])->first()),
+                // "evaluation_scores" => Inertia::lazy(fn () => EvaluationScore::join('evaluation_forms', 'evaluation_scores.evaluation_form_id', '=', 'evaluation_forms.id')->join('evaluations', 'evaluation_scores.evaluation_id', '=', 'evaluations.id')->where('evaluation_forms.division_id', $division_id)->get()),
+                // get(['evaluation_forms.id', 'evaluations.id','quality_average', 'efficiency_average', 'timeliness_average', 'start_date', 'end_date', 'total_average_rating', 'rating', 'adjectival_rating']
             ]);
-        }
+        }  
 
         public function employee($id){
             $user = Model::where('id', Auth::guard('employee')->id())->get(['first_name', 'last_name', 'email', 'position', 'is_admin', 'is_division_head'])->first();
@@ -139,8 +146,36 @@ use Illuminate\Support\Facades\Auth;
                 $request->year = Carbon::now('utc')->year;
             }
 
-         
-            $performance = Evaluation::where('employee_id', $employee)->get(['rating', 'adjectival_rating']);
+            
+            
+            $performance = Evaluation::where('employee_id', $employee)->get(['rating', 'adjectival_rating'])->last();
+            $rating = [];
+            $self_rating = [];
+            $ratings = Evaluation::where('employee_id', $employee)->where('self', false)->get();
+            $self_ratings = Evaluation::where('employee_id', $employee)->where('self', true)->get();
+
+            // dd($ratings, $self_ratings);
+            if (!$request->has('evaluation_id')) {
+                $rating = Evaluation::where('employee_id', $employee)->where('self', false)->latest('end_date')->first();
+            } else {
+                $rating = Evaluation::where('id', $request->evaluation_id)->where('self', false)->get(['rating', 'start_date', 'end_date'])->first();
+            }
+
+            if ($rating == null)
+                $rating = [];
+                
+            if (!$request->has(['self_evaluation_id'])) {
+                $self_rating = Evaluation::where('employee_id', $employee)->where('self', true)->latest('end_date')->first();
+            } else {
+                $self_rating = Evaluation::where('id', $request->self_evaluation_id)->where('self', true)->get(['rating', 'start_date', 'end_date'])->first();
+                // $self_rating = Evaluation::where('self_evaluation_id', $request->self_evaluation_id)->get(['rating', 'start_date', 'end_date'])->where('self', true)->get()->first();
+            }
+
+            if ($self_rating == null)
+                $self_rating = [];
+            
+           
+            // $xperformance = Evaluation::where('evaluation_id', $request->evaluation_id)->get()->first();
             $attendance = [];
             // $request->month = $request->month + 1;
             // if ($request->mode == 1) {
@@ -338,6 +373,12 @@ use Illuminate\Support\Facades\Auth;
                     "year" => $request->year,
                     "month" => $request->month,
                 ],
+                "rating" => fn () => $rating,
+                "self_rating" => fn () => $self_rating,
+                "ratings" => $ratings,
+                "self_ratings" => $self_ratings,
+                // "xperformance" => Inertia::lazy(fn () => Evaluation::where('employee_id', $employee)->get()),
+                "xperformance" => fn () => Evaluation::where('employee_id', $employee)->get(),
                 "attendance" => fn () => $attendance,
                 "attendanceMonthly" => fn() => ControllersAttendance::getAttendanceReportMonthly($employee),
                 "attendanceWeekly" => ControllersAttendance::getAttendanceReportWeekly($employee),

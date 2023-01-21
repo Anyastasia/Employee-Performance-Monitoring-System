@@ -37,6 +37,7 @@
 
                                 <span class="mx-1" v-show='evaluateFormAssignToMode === "selected"'> 
                                     <select v-model="evaluateFormAssignTo">
+                                        <option :value="0" disabled>Select Employee</option>
                                         <option v-for="xemployee in employees" :key="xemployee.id" :value="xemployee.id">
                                             {{ `${xemployee.first_name} ${xemployee.last_name}` }}
                                         </option>
@@ -123,7 +124,8 @@
                             <PrimaryButton type="button" class="my-1" @click="addRow">Add Row</PrimaryButton>
                             <div class="mt-1 flex g--75">
                                     <TextButton type="button" @click="closeOutputForm" class="m-inline-start-auto">Close</TextButton>
-                                    <PrimaryButton type="submit" class="mr-1" >Save Changes</PrimaryButton>
+                                    <PrimaryButton v-if="evaluateFormAssignTo === 0 && evaluateFormAssignToMode === 'selected'" disabled type="submit" class="mr-1" >Save Changes</PrimaryButton>
+                                    <PrimaryButton v-else type="submit" class="mr-1" >Save Changes</PrimaryButton>
                             </div>
                             </form>
                         </section>
@@ -136,15 +138,47 @@
                             <form @submit.prevent="submitEvaluationForm">
                                 
                             <article class="mt-3">
-                                <div class="mb-1">
-                                    <Error v-if="errors.start_date" :message="errors.start_date"></Error>
-                                    <label for="startDate" class="display-block mb-1 required">From</label>
-                                    <input v-model="evaluation.start_date" class="px--5 py--5" type="date" required>
-                                </div>
-                                <div class="mb-1">
-                                    <Error v-if="errors.end_date" :message="errors.start_date"></Error>
-                                    <label for="endDate" class="display-block mb-1 required" >To</label>
-                                    <input v-model="evaluation.end_date" class="px--5 py--5" type="date" required>
+                                <div class="flex">
+                                    <div class="left">
+                                        <div>
+                                            <div class="mb-1">
+                                                <Error v-if="errors.start_date" :message="errors.start_date"></Error>
+                                                <label for="startDate" class="display-block mb-1 required">From</label>
+                                                <input v-model="evaluation.start_date" class="px--5 py--5" type="date" required>
+                                            </div>
+                                            <div class="mb-1">
+                                                <Error v-if="errors.end_date" :message="errors.start_date"></Error>
+                                                <label for="endDate" class="display-block mb-1 required" >To</label>
+                                                <input v-model="evaluation.end_date" class="px--5 py--5" type="date" required>
+                                            </div>
+                                        </div>
+                                        
+                                        <div>
+                                            <label for="select-dates-from">
+                                                Previous Rating(s):
+                                            </label>
+
+                                            <select name="select-dates-from" v-model="previousRating">
+                                                <option :value="0">Select Date</option>
+                                                <option v-for="ev in evaluations"  :value="ev.id" :key="ev.index">{{ `${ev.start_date} - ${ev.end_date}` }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="right ml-2">
+                                        <div class="mb-1">
+                                            <span>Employee Self Rating(s): </span>
+                                            <select v-model="self_evaluation_id">
+                                                <option disabled :value="0">Select Date</option>
+                                                <option v-for="(self_ev, index) in self_evaluations" :key="index" :value="self_ev.id">{{ `${self_ev.start_date} - ${self_ev.end_date}` }}</option>
+                                            </select>
+                                        </div>
+
+                                        <div v-if="self_evaluation_id !== 0">
+                                            <p class="mb-1">Final Average Rating: {{ self_evaluation.rating }}</p>
+                                            <p class="mb-1">Adjectival Rating: {{ self_evaluation.adjectival_rating}}</p>
+                                        </div>
+                                    </div>
                                 </div>
 
                             </article>
@@ -180,7 +214,7 @@
                                         </TableCell>
                                         <TableCell>
                                             <div class="flex">
-                                                <textarea rows="5"  disabled v-model="ev.actual_accomplishments"></textarea>
+                                                <textarea rows="5" v-model="ev.actual_accomplishments"></textarea>
                                             </div>
                                         </TableCell>
                                         <TableCell>
@@ -266,9 +300,9 @@
                                 <!-- <input v-model="taskForm.task_title" type="text" name="taskTitle"> --> 
 
                                 <select v-model="taskForm.task_title">
-                                    <option v-for="ev in xevaluationForm" :key="ev.id" :value="ev.output">
-                                        {{ev.output}}
-                                    </option>
+                                    <option v-for="(output, index) in outputs" :key="index" :value="output">
+                                        {{ output }}
+                                    </option> 
                                 </select>
 
                             </section>
@@ -381,7 +415,7 @@
                                     </TableCell>
                                     <TableCell>{{xemployee.position}}</TableCell>
                                     <TableCell>
-                                        <div class="flex justify-content-center">
+                                        <div class="flex justify-content-center mr-auto">
                                             <PrimaryButton @click="toggleAssignTasks('open', xemployee.id)">
                                                 <i class="bi bi-plus mr--5"></i>
                                                 Assign Task
@@ -412,8 +446,8 @@
     import TableRow from '@/Components/Table/TableRow.vue';
     import Dialog from '@/Components/Dialog/CustomDialog.vue';
     import Error from '@/Components/Error.vue';
-    import {Inertia} from '@inertiajs/inertia';1
-    import { useForm } from '@inertiajs/inertia-vue3';
+    import {Inertia} from '@inertiajs/inertia';
+    import { useForm, router } from '@inertiajs/inertia-vue3';
     import Alert from '@/Components/Alert/Alert.vue'
     export default {
         components: {
@@ -437,6 +471,10 @@
             errors: Object,
             employee: Object,
             xevaluationForm: Object,
+            evaluations: Object,
+            evaluation_scores: Object,
+            self_evaluations: Object,
+            self_evaluation: Object,
         },
 
         data() {
@@ -453,7 +491,8 @@
                     output: '',
                     target: '',
                 }),
-                
+                self_evaluation_id: 0,
+                previousRating: 0,
                 quality: [1,2,3,4,5],
                 zero: 0,
                 efficiency: [1,2,3,4,5],
@@ -479,12 +518,14 @@
                 yevaluationForm: [],
                 evaluation: useForm({
                     employee_id: '',
+                    evaluated_by: this.employee.id,
                     start_date: '',
                     end_date: '',
                     self: false,
                     totalAverageRating: 0,
                     finalAverageRating: 0,
                     adjectivalRating: '',
+                    scores: [],
                 }),
                 // evaluationForm: [],
                 adjRating: [
@@ -513,6 +554,8 @@
                     'submission_start_date': '',
                     'submission_due_date': '',
                 }),
+                outputs: [],
+                employee_id: '',
             }
         },
 
@@ -525,28 +568,38 @@
                 this.close = !this.close
             },
             openEvaluateEmployee(id) {
-                this.yevaluationForm.length = 0
-                this.xevaluationForm.forEach(ev => {
-                    if (ev.employee_id === id) {
-                        this.yevaluationForm.push({
-                            id: ev.id,
-                            employee_id: ev.employee_id,
-                            output: ev.output,
-                            success_indicators: ev.success_indicators,
-                            actual_accomplishments: ev.actual_accomplishments,
-                            quality_indicators: ev.quality_indicators,
-                            efficiency_indicators: ev.efficiency_indicators,
-                            timeliness_indicators: ev.timeliness_indicators,
-                            status: ev.status,
-                            quality: 0,
-                            efficiency: 0,
-                            timeliness: 0,
-                            average: 0,
+                this.employee_id = id
+                this.evaluation.employee_id = id
+                Inertia.reload({
+                    only: ['xevaluationForm', 'evaluations', 'self_evaluations'],
+                    data: {
+                        employee_id: id
+                    },
+                    onSuccess: () => {
+                        console.log(this.self_evaluations)
+                        this.showEvaluateEmployee = !this.showEvaluateEmployee
+                        this.yevaluationForm.length = 0
+                        this.xevaluationForm.forEach(ev => {
+                            if (ev.employee_id === id) {
+                                this.yevaluationForm.push({
+                                    id: ev.id,
+                                    employee_id: ev.employee_id,
+                                    output: ev.output,
+                                    success_indicators: ev.success_indicators,
+                                    actual_accomplishments: ev.actual_accomplishments,
+                                    quality_indicators: ev.quality_indicators,
+                                    efficiency_indicators: ev.efficiency_indicators,
+                                    timeliness_indicators: ev.timeliness_indicators,
+                                    status: ev.status,
+                                    quality: Number(0),
+                                    efficiency: Number(0),
+                                    timeliness: Number(0),
+                                    average: Number(0),
+                                })
+                            }
                         })
                     }
                 })
-                this.evaluation.employee_id = id
-                this.showEvaluateEmployee = !this.showEvaluateEmployee
             },
             closeEvaluateEmployee(){
                 this.exitEvaluateEmployee = !this.exitEvaluateEmployee
@@ -579,8 +632,23 @@
             },
             toggleAssignTasks(flag, id) {
                 this.assignTo = id
-                if (flag == 'open')
-                    this.showAssignTasks = !this.showAssignTasks
+                if (flag == 'open') {
+                    Inertia.reload({
+                        only: ['xevaluationForm'],
+                        data: {
+                            employee_id: id
+                        },
+                        onSuccess: ()=> {
+                            this.showAssignTasks = !this.showAssignTasks
+                            this.outputs.length = 0
+                            this.xevaluationForm.forEach(ev => {
+                                this.outputs.push(ev.output)
+                            })
+                        }
+                    })
+
+
+                }
                 else {
                     this.closeAssignTasks = !this.closeAssignTasks
                 }
@@ -610,9 +678,10 @@
                     let a = 0
                     let l = 0
                     let ave = 0
+                    
                     params.forEach(p => {
                         if (p > 0) {
-                            a += p
+                            a = a + p
                             l += 1
                         } 
                     })
@@ -681,13 +750,32 @@
             },
 
             submitEvaluationForm() {
+                this.yevaluationForm.forEach(ev => {
+                    this.evaluation.scores.push({
+                        evaluation_form_id: ev.id,
+                        quality_average: ev.quality,
+                        efficiency_average: ev.efficiency,
+                        timeliness_average: ev.timeliness,
+                        
+                    })
+                })
                 this.evaluation.post('/head/evaluate', {
                     onSuccess: () => {
-                        console.log('x')
                         this.exitEvaluateEmployee = !this.exitEvaluateEmployee
                         this.showEvaluateEmployeeSuccess = true
                     }
                 })
+
+                // Inertia.post('/head/evaluate',{
+                //     evaluation: this.evaluation,
+                //     evaluation_scores: this.yevaluationForm
+                // }, {
+                //     onSuccess: () => {
+                //         console.log('x')
+                //         this.exitEvaluateEmployee = !this.exitEvaluateEmployee
+                //         this.showEvaluateEmployeeSuccess = true
+                //     }
+                // })
             }
 
         },
@@ -706,6 +794,61 @@
             //     }
             // },
 
+            self_evaluation_id() {
+                Inertia.reload({
+                    only: ['self_evaluation'],
+                    data: {
+                        evaluation_id: this.self_evaluation_id
+                    },
+                })
+            },
+            previousRating() {
+                    Inertia.reload({
+                        only: ['evaluation_scores', 'xevaluationForm'],
+                        data: {
+                            employee_id: this.employee_id,
+                            evaluation_id: this.previousRating
+                        },
+                        onSuccess: ()=>{
+                            this.yevaluationForm.length = 0
+                            this.xevaluationForm.forEach((ev, index) => {
+                                    this.yevaluationForm.push({
+                                        id: ev.id,
+                                        employee_id: ev.employee_id,
+                                        output: ev.output,
+                                        success_indicators: ev.success_indicators,
+                                        actual_accomplishments: ev.actual_accomplishments,
+                                        quality_indicators: ev.quality_indicators,
+                                        efficiency_indicators: ev.efficiency_indicators,
+                                        timeliness_indicators: ev.timeliness_indicators,
+                                        status: ev.status,
+                                        quality: this.evaluation_scores[index].quality_average,
+                                        efficiency: this.evaluation_scores[index].efficiency_average,
+                                        timeliness: this.evaluation_scores[index].timeliness_average,
+                                    })  
+                            })
+                            this.openEvaluateEmployee = !this.openEvaluateEmployee
+                        }
+                    })
+
+                    // this.xevaluationForm.forEach(ev => {
+                    //     this.yevaluationForm.push({
+                    //         id: ev.id,
+                    //         employee_id: ev.employee_id,
+                    //         output: ev.output,
+                    //         success_indicators: ev.success_indicators,
+                    //         actual_accomplishments: ev.actual_accomplishments,
+                    //         quality_indicators: ev.quality_indicators,
+                    //         efficiency_indicators: ev.efficiency_indicators,
+                    //         timeliness_indicators: ev.timeliness_indicators,
+                    //         status: ev.status,
+                    //         quality: 2,
+                    //         efficiency: 2,
+                    //         timeliness: 3,
+                    //         average: 4,
+                    //     })    
+                    // })
+            },
             showAssignedTaskSuccess() {
                 setTimeout(() => {
                     this.showAssignedTaskSuccess = false
@@ -717,32 +860,64 @@
                 }, 1000);
             },
             evaluateFormAssignTo() {
-                this.evaluationForm.length = 0
-                this.xevaluationForm.forEach(ev => {
-                    if (ev.employee_id === this.evaluateFormAssignTo) {
-                        this.evaluationForm.push({
-                            id: ev.id,
-                            employee_id: ev.employee_id,
-                            output: ev.output,
-                            success_indicators: ev.success_indicators,
-                            quality_indicators: ev.quality_indicators,
-                            efficiency_indicators: ev.efficiency_indicators,
-                            timeliness_indicators: ev.timeliness_indicators,
-                            status: ev.status,
-                        })
+                Inertia.reload({
+                    only: ['xevaluationForm'],
+                    data: {
+                        employee_id: this.evaluateFormAssignTo,
+                    },
+                    onSuccess: ()=>{
+                        console.log('reload success')
+                        this.evaluationForm.length = 0
+                        if (this.evaluateFormAssignTo === 0) {
+                            this.evaluationForm.push({
+                                id: '',
+                                output: '',
+                                success_indicators: '',
+                                actual_accomplishments: '',
+                                quality_indicators: '', 
+                                efficiency_indicators: '', 
+                                timeliness_indicators: '',
+                                status: 'active', 
+                            })
+                        } else {
+                            this.xevaluationForm.forEach(ev => {
+                            this.evaluationForm.push({
+                                        id: ev.id,
+                                        employee_id: ev.employee_id,
+                                        output: ev.output,
+                                        success_indicators: ev.success_indicators,
+                                        quality_indicators: ev.quality_indicators,
+                                        efficiency_indicators: ev.efficiency_indicators,
+                                        timeliness_indicators: ev.timeliness_indicators,
+                                        status: ev.status,
+                                })
+                            })
+                        }
+
                     }
                 })
             },
             evaluateFormAssignToMode() {
-                if (this.evaluateFormAssignToMode === 'all') {
-                    
-                    this.evaluationForm.length = 0
-                }
+                // Inertia.reload()
+                this.evaluationForm.length = 0
+                this.evaluateFormAssignTo = 0
+                this.evaluationForm.push({
+                    id: '',
+                    output: '',
+                    success_indicators: '',
+                    actual_accomplishments: '',
+                    quality_indicators: '', 
+                    efficiency_indicators: '', 
+                    timeliness_indicators: '',
+                    status: 'active', 
+                })
+                
             },
 
         },  
         
         mounted() {
+            
         }
     }
 </script>

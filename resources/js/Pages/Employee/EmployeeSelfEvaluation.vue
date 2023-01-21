@@ -282,7 +282,7 @@ import TableCell from '@/Components/Table/TableCell.vue';
 import Dialog from '@/Components/Dialog/CustomDialog.vue';
 import Error from '@/Components/Error.vue';
 import {useForm} from '@inertiajs/inertia-vue3'
-
+import { Inertia } from '@inertiajs/inertia';
 export default {
     components: {
         EmployeeLayout,
@@ -302,12 +302,14 @@ export default {
             exitViewEvaluation: false,
             evaluation: useForm({
                 employee_id: '',
+                evaluated_by: this.employee.id,
                 start_date: '',
                 end_date: '',
                 self: true,
                 totalAverageRating: 0,
                 finalAverageRating: 0,
                 adjectivalRating: '',
+                scores: [],
             }),
             viewEvaluation: {
                 rating: '',
@@ -404,7 +406,6 @@ export default {
                 
                 this.yevaluationForm.forEach(a => {
                     ave += a.average
-                    console.log(a.average)
                 })
 
                 this.evaluation.totalAverageRating = ave
@@ -415,9 +416,17 @@ export default {
             },
             submitEvaluationForm() {
                 this.evaluation.employee_id = this.employee.id
-                this.getAdjectivalRating()
-                this.getFinalAverageRating()
-                this.getSumOfAverages()
+                // this.getAdjectivalRating()
+                // this.getFinalAverageRating()
+                // this.getSumOfAverages()
+                this.yevaluationForm.forEach(ev => {
+                    this.evaluation.scores.push({
+                        quality_average: ev.quality,
+                        efficiency_average: ev.efficiency,
+                        timeliness_average: ev.timeliness,
+                    })
+                })
+
                 this.evaluation.post('/evaluate', {
                     onSuccess: ()=>{
                         this.exitEvaluateEmployee = !this.exitEvaluateEmployee

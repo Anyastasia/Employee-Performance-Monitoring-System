@@ -36,7 +36,7 @@ class LoginEmployee extends Controller
         if ($attempt) {
             $request->session()->regenerate();
 
-            return Redirect::intended('/home');
+            return Redirect::intended('/profile');
         }
 
         return back()->withErrors([
