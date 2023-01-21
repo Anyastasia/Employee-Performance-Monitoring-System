@@ -226,6 +226,7 @@ export default {
 
         closeDialog(){
             this.close = !this.close
+            this.addEmployeeForm.reset()
         },
 
         openEditEmployeeForm(employee) {
