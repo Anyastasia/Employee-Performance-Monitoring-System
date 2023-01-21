@@ -243,7 +243,9 @@ export default {
 
         submitEditEmployeeForm() {
             this.editEmployeeForm.post("/employee/profile/changeEmployeeDetails", {
-                onSuccess: ()=> {this.showAlertEditEmployeeForm = true; this.exitEditEmployeeForm = !this.exitEditEmployeeForm
+                onSuccess: ()=> {
+                    this.showAlertEditEmployeeForm = true; this.exitEditEmployeeForm = !this.exitEditEmployeeForm
+                    this.submitEditEmployeeForm.reset()
                 }
             })
         },
@@ -260,6 +262,7 @@ export default {
                 onSuccess: () => {
                     this.showSuccessAlertAddEmployeeForm = true
                     this.close = !this.close
+                    this.addEmployeeForm.reset()
                 }
             })
         },
