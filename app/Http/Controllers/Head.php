@@ -47,6 +47,7 @@ use Illuminate\Support\Facades\Auth;
             ->where('is_division_head', false)
             ->get(['id', 'first_name', 'last_name', 'email', 'division_id', 'position']);
             
+            // dd(Employee::where('employee_id', $request->employee_id)->get('first_name', 'last_name')->first());
             return Inertia::render('Head/HeadHome', [
                 'employees' => $employees,
                 'divisions' => Division::where('id', $division_id)->get(['id', 'name'])->first(),

@@ -570,8 +570,9 @@
             openEvaluateEmployee(id) {
                 this.employee_id = id
                 this.evaluation.employee_id = id
+                this.self_evaluation_id = 0
                 Inertia.reload({
-                    only: ['xevaluationForm', 'evaluations', 'self_evaluations'],
+                    only: ['xevaluationForm', 'evaluations', 'self_evaluations', 'xemployee'],
                     data: {
                         employee_id: id
                     },
@@ -602,6 +603,7 @@
                 })
             },
             closeEvaluateEmployee(){
+                this.self_evaluation_id = 0
                 this.exitEvaluateEmployee = !this.exitEvaluateEmployee
             },
             openOutputForm() {
@@ -652,6 +654,10 @@
                 else {
                     this.closeAssignTasks = !this.closeAssignTasks
                 }
+            },
+            getEmployee(id){
+                const employee = this.employees.find(e => e.id === id)
+                return `${employee.first_name} ${employee.last_name}`
             },
             addRow() {
                     this.evaluationForm.push(
@@ -800,7 +806,7 @@
             },
             previousRating() {
                     Inertia.reload({
-                        only: ['evaluation_scores', 'xevaluationForm'],
+                        only: ['evaluation_scores', 'xevaluationForm', 'xemployee'],
                         data: {
                             employee_id: this.employee_id,
                             evaluation_id: this.previousRating
@@ -852,7 +858,7 @@
             },
             showEvaluateEmployeeSuccess() {
                 setTimeout(() => {
-                    this.showEvaluateSuccess = false
+                    this.showEvaluateEmployeeSuccess = false
                 }, 1000);
             },
             evaluateFormAssignTo() {
