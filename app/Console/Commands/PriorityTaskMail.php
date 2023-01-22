@@ -33,9 +33,7 @@ class PriorityTaskMail extends Command
     {
         $current_date = Carbon::now('UTC');
         $submitted_task = AssignedTask::
-        // join('submitted_tasks', 'assigned_tasks.id', '=', 'submitted_tasks.task_id')
         where('status', 'active')->orWhere('status', 'revise')->
-        // ->where('assigned_tasks.status', 'active')
         get();
         foreach($submitted_task as $task) {
             $task_date = Carbon::parse($task->submission_due_date, 'UTC');
@@ -50,7 +48,7 @@ class PriorityTaskMail extends Command
                 $model->save();
             }
         }
-        
+
         $prio_tasks = AssignedTask::where('is_priority', true)->join('employees', 'assigned_tasks.employee_id', '=','employees.id')->
         get(['assigned_tasks.id', 'assigned_tasks.employee_id', 'employees.first_name', 'employees.email', 'task_title', 'task_description', 'submission_due_date']);
 
