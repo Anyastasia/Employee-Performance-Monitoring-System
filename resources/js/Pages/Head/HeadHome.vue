@@ -572,12 +572,11 @@
                 this.evaluation.employee_id = id
                 this.self_evaluation_id = 0
                 Inertia.reload({
-                    only: ['xevaluationForm', 'evaluations', 'self_evaluations', 'xemployee'],
+                    only: ['xevaluationForm', 'evaluations', 'self_evaluations', 'xemployee', 'self_evaluation'],
                     data: {
                         employee_id: id
                     },
                     onSuccess: () => {
-                        console.log(this.self_evaluations)
                         this.showEvaluateEmployee = !this.showEvaluateEmployee
                         this.yevaluationForm.length = 0
                         this.xevaluationForm.forEach(ev => {
