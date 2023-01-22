@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('pmail:send')->dailyAt('07:00')->days([0,1,2,3,4]);
+        // $schedule->command('pmail:send')->everyMinute();
     }
 
     /**

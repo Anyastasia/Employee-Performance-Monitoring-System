@@ -191,7 +191,6 @@ use Inertia\inertia;
                     $employee->priority_task_given = false;
                     $model->save();
                 }
-                
             }
 
             if ($request->has('new_task_given')) {
