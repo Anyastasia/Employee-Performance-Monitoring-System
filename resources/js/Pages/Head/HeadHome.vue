@@ -828,7 +828,7 @@
                                         timeliness: this.evaluation_scores[index].timeliness_average,
                                     })  
                             })
-                            this.openEvaluateEmployee = !this.openEvaluateEmployee
+                            // this.openEvaluateEmployee = !this.openEvaluateEmployee
                         }
                     })
 
