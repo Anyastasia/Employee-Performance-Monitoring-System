@@ -107,20 +107,17 @@
                                 <Error v-if="errors.rating_required" :message="errors.rating_required"></Error>
                                 <article class="my-1">
                                     <!-- <p class="mb-1">Total Average Rating: {{ evaluations[evIndex].tot }}</p> -->
-                                    <p class="mb-1">Final Average Rating: {{ viewEvaluation.rating }}</p>
-                                    <p class="mb-1">Adjectival Rating: {{ viewEvaluation.adjectivalRating}}</p>
+                                    <p class="mb-1">Self Evaluated Final Average Rating: {{ viewEvaluation.rating }}</p>
+                                    <p class="mb-1">Self Evaluated Adjectival Rating: {{ viewEvaluation.adjectivalRating}}</p>
+
+                                    <p class="mb-1">Division Head Final Average Rating: {{ viewEvaluation.division_head_rating }}</p>
+                                    <p class="mb-1">Division Head Adjectival Rating: {{ viewEvaluation.division_head_adjectivalRating}}</p>
                                 </article>
     
     
                                     <div class="flex mt-2">
                                         <PrimaryButton @click="closeViewEvaluation">Close</PrimaryButton>
                                     </div>
-                                
-
-
-
-
-
                         </section>
                     </Dialog>
 
@@ -259,7 +256,7 @@
                                     <TableCell> {{ ev.created_at }} </TableCell>
                                     <TableCell>
                                         <div>
-                                            <PrimaryButton @click="openViewEvaluation(index)">View</PrimaryButton>
+                                            <PrimaryButton @click="openViewEvaluation(ev.id)">View</PrimaryButton>
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -315,6 +312,8 @@ export default {
                 rating: '',
                 start_date: '',
                 end_date: '',
+                division_head_rating: '',
+                division_head_adjectivalRating: '',
                 adjectivalRating: '',
             },
             yevaluationForm: [],
@@ -340,7 +339,7 @@ export default {
             scores: [5,4,3,2,1],
         }
     },
-    props: ['employee', 'errors', 'evaluations', 'xevaluationForm'],
+    props: ['employee', 'errors', 'evaluations', 'xevaluationForm', 'xevaluation'],
     methods: {
             openEvaluateEmployee(){
                 // this.evaluationForm.forEach(ev => {
@@ -366,12 +365,29 @@ export default {
             closeEvaluateEmployee(){
                 this.exitEvaluateEmployee = !this.exitEvaluateEmployee
             },
-            openViewEvaluation(index){
-                this.viewEvaluation.rating = this.evaluations[index].rating
-                this.viewEvaluation.start_date = new Date(this.evaluations[index].start_date).toDateString()
-                this.viewEvaluation.end_date = new Date(this.evaluations[index].end_date).toDateString()
-                this.viewEvaluation.adjectivalRating = this.evaluations[index].adjectival_rating
-                this.showViewEvaluation = !this.showViewEvaluation
+            openViewEvaluation(id){
+                // this.viewEvaluation.rating = this.evaluations[index].rating
+                // this.viewEvaluation.start_date = new Date(this.evaluations[index].start_date).toDateString()
+                // this.viewEvaluation.end_date = new Date(this.evaluations[index].end_date).toDateString()
+                // this.viewEvaluation.adjectivalRating = this.evaluations[index].adjectival_rating
+                Inertia.reload({
+                    data: {
+                        self_evaluation_id: id
+                    },
+                    only: ['xevaluation'],
+                    onSuccess: ()=> {
+                        console.log(this.xevaluation)
+                        
+                        this.viewEvaluation.rating = this.xevaluation.self_evaluation.rating
+                        this.viewEvaluation.start_date = new Date(this.xevaluation.self_evaluation.start_date).toDateString()
+                        this.viewEvaluation.end_date = new Date(this.xevaluation.self_evaluation.end_date).toDateString()
+                        this.viewEvaluation.adjectivalRating = this.xevaluation.self_evaluation.adjectival_rating
+                        this.viewEvaluation.division_head_rating = this.xevaluation.division_head.rating,
+                        this.viewEvaluation.division_head_adjectivalRating = this.xevaluation.division_head.adjectival_rating
+                        this.showViewEvaluation = !this.showViewEvaluation
+                        console.log(this.viewEvaluation)
+                    }
+                })
             },
             closeViewEvaluation(){
                 this.exitViewEvaluation = !this.exitViewEvaluation
@@ -393,12 +409,10 @@ export default {
                 return ave
             },
             getFinalAverageRating() {
-                console.log('FA' + this.evaluation.finalAverageRating)
                 return this.evaluation.finalAverageRating
             },
             getAdjectivalRating() {
                 this.evaluation.adjectivalRating = this.adjRating[Math.floor(this.evaluation.finalAverageRating) - 1]
-                console.log('AR' + this.evaluation.adjectivalRating)
                 return this.adjRating[Math.floor(this.evaluation.finalAverageRating) - 1]
             },
             getSumOfAverages() {

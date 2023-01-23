@@ -215,13 +215,28 @@ use Inertia\inertia;
             ]);
         }
 
-        public function evaluation() {
+        public function evaluation(Request $request) {
             $evaluationForm = EvaluationForm::where('employee_id', Auth::guard('employee')->id())->where('status', 'active')->get();
             $evaluations = Evaluation::where('employee_id', Auth::guard('employee')->id())->where('self', true)->get();
+            $xevaluation = [
+                "self_evaluation" => Evaluation::where('id', $request->self_evaluation_id)->get()->first(),
+                "division_head" => Evaluation::where('self_evaluation_id', $request->self_evaluation_id)->get(['rating', 'adjectival_rating'])->first(),
+            ];
+            // dd($xevaluation);
+            if (!$xevaluation['division_head']){
+                $xevaluation['division_head']['rating'] = 0;
+                $xevaluation['division_head']['adjectival_rating'] = "N/A";
+            }
+
+            if (!$xevaluation['self_evaluation']){
+                $xevaluation['self_evaluation']['rating'] = 0;
+                $xevaluation['self_evaluation']['adjectival_rating'] = "N/A";
+            }
             
             return Inertia('Employee/EmployeeSelfEvaluation', [
                 'xevaluationForm' => $evaluationForm,
                 "evaluations" => $evaluations,
+                "xevaluation" => Inertia::lazy(fn () => $xevaluation),
             ]);
         }
 

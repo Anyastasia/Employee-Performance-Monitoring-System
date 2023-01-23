@@ -174,7 +174,7 @@
                                             </select>
                                         </div>
 
-                                        <div v-if="self_evaluation_id !== 0">
+                                        <div v-if="self_evaluation">
                                             <p class="mb-1">Final Average Rating: {{ self_evaluation.rating }}</p>
                                             <p class="mb-1">Adjectival Rating: {{ self_evaluation.adjectival_rating}}</p>
                                         </div>
@@ -313,7 +313,7 @@
 
                             <section class="mb-1">
                                 <h2 class="mb--5">Attachments</h2>
-                                <input @change="uploadAttachmen1ts" ref="attachments" type="file" name="taskAttachments" id="">
+                                <input @change="uploadAttachments" ref="attachments" type="file" name="taskAttachments" id="">
                             </section>
                             
                             <section>
@@ -519,6 +519,7 @@
                 evaluation: useForm({
                     employee_id: '',
                     evaluated_by: this.employee.id,
+                    self_evaluation_id: this.self_evaluation_id,
                     start_date: '',
                     end_date: '',
                     self: false,
@@ -570,9 +571,8 @@
             openEvaluateEmployee(id) {
                 this.employee_id = id
                 this.evaluation.employee_id = id
-                this.self_evaluation_id = 0
                 Inertia.reload({
-                    only: ['xevaluationForm', 'evaluations', 'self_evaluations', 'xemployee', 'self_evaluation'],
+                    only: ['xevaluationForm', 'evaluations', 'self_evaluations', 'xemployee'],
                     data: {
                         employee_id: id
                     },
@@ -602,7 +602,6 @@
                 })
             },
             closeEvaluateEmployee(){
-                this.self_evaluation_id = 0
                 this.exitEvaluateEmployee = !this.exitEvaluateEmployee
             },
             openOutputForm() {
@@ -629,7 +628,7 @@
                 this.exitOutputForm = !this.exitOutputForm
             },
             uploadAttachments() {
-                this.taskForm.attachments = this.$refs.attachments.files
+                this.taskForm.attachments = this.$refs.attachments.files[0]
             },
             toggleAssignTasks(flag, id) {
                 this.assignTo = id
@@ -752,6 +751,7 @@
 
             submitEvaluationForm() {
                 this.yevaluationForm.forEach(ev => {
+                    this.evaluation.self_evaluation_id = this.self_evaluation_id
                     this.evaluation.scores.push({
                         evaluation_form_id: ev.id,
                         quality_average: ev.quality,
@@ -794,12 +794,11 @@
             //         });
             //     }
             // },
-
             self_evaluation_id() {
                 Inertia.reload({
                     only: ['self_evaluation'],
                     data: {
-                        evaluation_id: this.self_evaluation_id
+                        self_evaluation_id: this.self_evaluation_id
                     },
                 })
             },
@@ -867,7 +866,6 @@
                         employee_id: this.evaluateFormAssignTo,
                     },
                     onSuccess: ()=>{
-                        console.log('reload success')
                         this.evaluationForm.length = 0
                         if (this.evaluateFormAssignTo === 0) {
                             this.evaluationForm.push({
@@ -918,7 +916,6 @@
         },  
         
         mounted() {
-            
         }
     }
 </script>

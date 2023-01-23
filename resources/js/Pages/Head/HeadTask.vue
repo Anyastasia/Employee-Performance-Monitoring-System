@@ -48,7 +48,7 @@
 
                             <section class="mb-1">
                                 <h2 class="mb--5">Attachments</h2>
-                                <input @change="uploadAttachments" ref="attachments" type="file" name="taskAttachments" id="">
+                                <input @change="uploadAttachments" ref="attachments" type="file" name="attachments" id="">
                             </section>
                             
                             <section>
@@ -124,14 +124,18 @@ export default {
 
     methods: {
         openEditForm(task) {
+            
             this.editForm.id = task.id
             this.editForm.task_title = task.task_title
             this.editForm.task_description = task.task_description
             this.editForm.submission_start_date = new Date(task.submission_start_date)
             // this.editForm.submission_due_date = new Date(task.submission_due_date).toISOString().slice(0,16)
             this.editForm.submission_due_date = new Date(task.submission_due_date)
+            
             this.editForm.submission_start_date = `${this.editForm.submission_start_date.getFullYear()}-${this.editForm.submission_start_date.getMonth() + 1}-${this.editForm.submission_start_date.getDate()}T${this.editForm.submission_start_date.getHours()}:${this.editForm.submission_start_date.getMinutes()}`
             this.editForm.submission_due_date = `${this.editForm.submission_due_date.getFullYear()}-${this.editForm.submission_due_date.getMonth() + 1}-${this.editForm.submission_due_date.getDate()}T${this.editForm.submission_due_date.getHours()}:${this.editForm.submission_due_date.getMinutes()}`
+            console.log(this.editForm.submission_due_date)
+            console.log(task.submission_due_date)
             this.showEditForm= !this.showEditForm
         },
         formatDate(date) {

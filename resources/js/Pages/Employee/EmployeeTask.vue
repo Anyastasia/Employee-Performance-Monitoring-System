@@ -13,7 +13,7 @@
                     <h3 class="my-1">{{task.task_description}}</h3>
                 </section>
                 
-                <a :href="`/download/${task.attachments}`">Download</a>
+                <a v-if="task.attachments" :href="`/download/${task.attachments}`">Download</a>
 
                 <form v-if="task.submission_status === 'submitted'" @submit.prevent="update">
                     <section class="task-submission-container">

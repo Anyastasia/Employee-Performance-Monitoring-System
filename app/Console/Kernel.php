@@ -21,7 +21,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('pmail:send')->everyMinute();
     }
 
-    /**
+    /**S
      * Register the commands for the application.
      *
      * @return void

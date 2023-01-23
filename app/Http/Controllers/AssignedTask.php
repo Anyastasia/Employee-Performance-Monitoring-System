@@ -41,7 +41,8 @@ class AssignedTask extends Controller
     // ]);
     $file_name = '';
     if ($request->hasFile('attachments')) {
-        $file_name = Storage::putFile('uploads', $request->attachments[0]);
+        // $file_name = Storage::putFile('uploads', $request->attachments[0]);
+        $file_name = $request->file('attachments')->store('uploads');
     }
     // $model->employees()->createMany($employee);
     // for ($index = 0; $index < $length; $index++) {

@@ -55,7 +55,7 @@ use Illuminate\Support\Facades\Auth;
                 "evaluations" => Inertia::lazy(fn () => Evaluation::where('evaluated_by', Auth::guard('employee')->id())->where('employee_id', $request->employee_id)->get()),
                 "evaluation_scores" => Inertia::lazy(fn () => EvaluationScore::where('evaluation_id', $request->evaluation_id)->get()),
                 "self_evaluations" => Inertia::lazy(fn () => Evaluation::where('evaluated_by', $request->employee_id)->where('employee_id', $request->employee_id)->where('self', true)->get(['id', 'start_date', 'end_date'])),
-                "self_evaluation" => Inertia::lazy(fn () => Evaluation::where('id', $request->evaluation_id)->get(['id', 'rating', 'adjectival_rating'])->first()),
+                "self_evaluation" => Inertia::lazy(fn () => Evaluation::where('id', $request->self_evaluation_id)->get(['id', 'rating', 'adjectival_rating'])->first()),
                 // "evaluation_scores" => Inertia::lazy(fn () => EvaluationScore::join('evaluation_forms', 'evaluation_scores.evaluation_form_id', '=', 'evaluation_forms.id')->join('evaluations', 'evaluation_scores.evaluation_id', '=', 'evaluations.id')->where('evaluation_forms.division_id', $division_id)->get()),
                 // get(['evaluation_forms.id', 'evaluations.id','quality_average', 'efficiency_average', 'timeliness_average', 'start_date', 'end_date', 'total_average_rating', 'rating', 'adjectival_rating']
             ]);

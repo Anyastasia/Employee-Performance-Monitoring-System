@@ -22,6 +22,7 @@ class Evaluation extends Controller
         
         $model = Model::create([
             "employee_id" => $request->employee_id,
+            "self_evaluation_id" => $request->self_evaluation_id,
             "evaluated_by" => $request->evaluated_by,
             "start_date" => $request->start_date,
             "end_date" => $request->end_date,
@@ -32,7 +33,6 @@ class Evaluation extends Controller
         ]);
 
         // $model->save();
-
         if ($request->self == true) {
             return Redirect::route('employee.evaluation')->with('success', 'Evaluation Successful');
         }
