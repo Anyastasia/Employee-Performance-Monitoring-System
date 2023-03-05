@@ -52,7 +52,7 @@ use Illuminate\Support\Facades\Auth;
                 'employees' => $employees,
                 'divisions' => Division::where('id', $division_id)->get(['id', 'name'])->first(),
                 "xevaluationForm" => Inertia::lazy(fn () => EvaluationForm::where('status', 'active')->where('employee_id', $request->employee_id)->get()),
-                "evaluations" => Inertia::lazy(fn () => Evaluation::where('evaluated_by', Auth::guard('employee')->id())->where('employee_id', $request->employee_id)->get()),
+                "evaluations" => Inertia::lazy(fn () => Evaluation::where('evaluated_by', Auth::guard('employee')->id())->where('employee_id', $request->employee_id)->where('self', false)->get()),
                 "evaluation_scores" => Inertia::lazy(fn () => EvaluationScore::where('evaluation_id', $request->evaluation_id)->get()),
                 "self_evaluations" => Inertia::lazy(fn () => Evaluation::where('evaluated_by', $request->employee_id)->where('employee_id', $request->employee_id)->where('self', true)->get(['id', 'start_date', 'end_date'])),
                 "self_evaluation" => Inertia::lazy(fn () => Evaluation::where('id', $request->self_evaluation_id)->get(['id', 'rating', 'adjectival_rating'])->first()),
@@ -60,6 +60,11 @@ use Illuminate\Support\Facades\Auth;
                 // get(['evaluation_forms.id', 'evaluations.id','quality_average', 'efficiency_average', 'timeliness_average', 'start_date', 'end_date', 'total_average_rating', 'rating', 'adjectival_rating']
             ]);
         }  
+
+        public function ipcr(Request $request){
+            
+            return Inertia::render('Head/IPCR');
+        }
 
         public function employee($id){
             $user = Model::where('id', Auth::guard('employee')->id())->get(['first_name', 'last_name', 'email', 'position', 'is_admin', 'is_division_head'])->first();

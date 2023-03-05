@@ -35,6 +35,19 @@
                                 </div>
 
                                 <div>
+                                    <label for="birthday" class="required">Birthday</label>
+                                    <input class="display-block" type="date" name="birthday" v-model="addEmployeeForm.birthday" id="birthday" required>
+                                </div>
+
+                                <div>
+                                    <label for="employee_status" class="required">Status</label>
+                                    <select v-model="addEmployeeForm.employee_status" class="display-block">
+                                        <option disabled value="0">Status</option>
+                                        <option v-for="status in employee_statuses" :key="status.key">{{ status }}</option>
+                                    </select>
+                                </div>
+
+                                <div>
                                     <Error v-if="errors.email" :message="errors.email">Invalid Email</Error>
                                     <label for="text" class="required">Email</label>
                                     <input type="text" name="email" v-model="addEmployeeForm.email" id="email" required>
@@ -76,6 +89,19 @@
                                         <label  for="last_name" class='display-block mb--5'>Last Name</label>
                                          <input class="px--75 py--5" v-model='editEmployeeForm.last_name' type="text" name="name" id="">
                                     </div>
+                                </div>
+
+                                <div class="mb-1">
+                                    <label for="birthday" class="required display-block mb--5">Birthday</label>
+                                    <input class="display-block" type="date" name="birthday" v-model="editEmployeeForm.birthday" id="birthday" required>
+                                </div>
+
+                                <div class="mb-1">
+                                    <label for="employee_status" class="required display-block mb--5">Status</label>
+                                    <select v-model="editEmployeeForm.employee_status" class="display-block">
+                                        <option disabled value="0">Status</option>
+                                        <option v-for="status in employee_statuses" :key="status.key">{{ status }}</option>
+                                    </select>
                                 </div>
 
                                 <div class="mb-1">
@@ -195,9 +221,14 @@ export default {
             showAlertEditEmployeeForm: false,
             showAlertDeleteEmployee: false,
             showErrorAlert: false,
+            employee_statuses: [
+                'Non-regular', 'Regular', 'Plantila'
+            ],
             addEmployeeForm: useForm({
                     first_name: '',
                     last_name: '',
+                    birthday: '',
+                    employee_status: '',
                     email: '',
                     avatar_path: '',
                     division_id: 0,
@@ -208,6 +239,8 @@ export default {
                 id: '',
                 first_name: '',
                 last_name: '',
+                birthday: '',
+                employee_status: '',
                 position: '',
                 division_id: '',
                 is_division_head: false,
@@ -245,8 +278,9 @@ export default {
         submitEditEmployeeForm() {
             this.editEmployeeForm.post("/employee/profile/changeEmployeeDetails", {
                 onSuccess: ()=> {
-                    this.showAlertEditEmployeeForm = true; this.exitEditEmployeeForm = !this.exitEditEmployeeForm
-                    this.submitEditEmployeeForm.reset()
+                    this.showAlertEditEmployeeForm = true; 
+                    this.exitEditEmployeeForm = !this.exitEditEmployeeForm
+                    this.editEmployeeForm.reset()
                 }
             })
         },

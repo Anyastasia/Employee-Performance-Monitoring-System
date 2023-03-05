@@ -20,5 +20,6 @@ class Evaluation extends Model
         "rating",
         'self',
         "adjectival_rating",
+        'comments',
     ];
 }

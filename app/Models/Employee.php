@@ -10,6 +10,6 @@ class Employee extends Authenticatable
     use HasFactory;
 
     protected $guard = 'employee';
-    protected $fillable = ['first_name', 'last_name', 'email', 'division_id', 'position', 'avatar_path', 'password', 'new_task_given', 'priority_task_given'];
+    protected $fillable = ['first_name', 'last_name', 'birthday', 'employee_status', 'email', 'division_id', 'position', 'avatar_path', 'password', 'new_task_given', 'priority_task_given'];
 
 }

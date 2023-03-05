@@ -84,3 +84,7 @@ table {
 }
 
 /* END OF CSS RESET */
+
+.display-inline {
+    display: inline-block;
+}

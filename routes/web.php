@@ -22,6 +22,7 @@ use App\Http\Controllers\Change\Head\Password as HeadChangePassword;
 use App\Http\Controllers\Download;
 use App\Http\Controllers\Evaluation;
 use App\Http\Controllers\EvaluationForm;
+use App\Http\Controllers\GenerateIPCR;
 use App\Http\Controllers\Leave;
 use App\Http\Controllers\SendMail;
 use App\Http\Controllers\SubmittedTask;
@@ -116,6 +117,8 @@ Route::middleware([CheckHead::class])->group(function() {
     Route::post('/head/evaluationForm/store', [EvaluationForm::class, 'store']);
     Route::post('/head/evaluationForm/store', [EvaluationForm::class, 'store']);
     Route::get('/email/send', [SendMail::class, 'index']);
+    Route::get('/view/ipcr/{employee_id}/{head_id}/{evaluation_id}', [GenerateIPCR::class, 'ipcr']);
+    Route::get('/view/xpcr', [GenerateIPCR::class, 'xpcr']);
     // Route::post('/assign/task/store', [AssignedTask::class, 'store']);
     // Route::post('/head/task/approve/{id}', [AssignedTask::class, 'update_status']);
     // Route::post('/head/task/revise/{id}', [AssignedTask::class, 'revise']);

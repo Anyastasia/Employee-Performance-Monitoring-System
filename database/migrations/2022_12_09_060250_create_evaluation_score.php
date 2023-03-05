@@ -24,6 +24,7 @@ return new class extends Migration
             $table->float('rating')->default(0);
             $table->boolean('self')->default(false);
             $table->string('adjectival_rating');
+            $table->string('comments')->nullable();
             $table->timestamps();
         });
     }

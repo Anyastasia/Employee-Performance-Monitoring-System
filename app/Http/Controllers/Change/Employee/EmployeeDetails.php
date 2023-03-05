@@ -13,12 +13,12 @@ class EmployeeDetails extends Controller
 
     public function update(Request $request){
         $model = Employee::where('id', $request->id)->get()->first();
-
         $model->first_name = $request->first_name;
 
         $model->first_name = $request->first_name;
         $model->last_name = $request->last_name;
-        
+        $model->birthday = $request->birthday;
+        $model->employee_status = $request->employee_status;
         
         if ($request->is_division_head == true) {
             $division_heads = Employee::where('division_id', $model->division_id)->where('is_division_head', true)->where('status', 'active')->get();

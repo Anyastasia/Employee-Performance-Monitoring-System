@@ -22,11 +22,14 @@ class RegisterEmployee extends Controller
         //     'password' => 'required',
         // ]);
 
+        // dd(bcrypt($request->password));
 
         $validate = $request->validate([
             'first_name' => ['required', 'max:255'],
             'last_name' => ['required', 'max:255'],
             'email' => ['required', 'email', Rule::unique($this->table, 'email')],
+            'birthday' => ['required'],
+            'employee_status' => ['required'],
             'division_id' => ['required'],
             'position' => ['required'],
             'password' => ['required'],
@@ -36,6 +39,8 @@ class RegisterEmployee extends Controller
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
+            'birthday' => $request->birthday,
+            'employee_status' => $request->employee_status,
             'division_id' => $request->division_id,
             'position' => $request->position,
             'avatar_path' => $request->avatar_path,

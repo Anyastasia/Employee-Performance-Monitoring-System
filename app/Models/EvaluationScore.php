@@ -12,6 +12,8 @@ class EvaluationScore extends Model
     protected $fillable = [
         "evaluation_form_id",
         "evaluation_id",
+        "actual_accomplishments",
+        "remarks",
         "quality_average",
         "efficiency_average",
         "timeliness_average",

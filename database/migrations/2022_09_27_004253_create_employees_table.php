@@ -18,8 +18,10 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('first_name');
             $table->string('last_name');
+            $table->date('birthday');
             $table->foreignId('division_id')->constrained('divisions');
             $table->string('position');
+            $table->string('employee_status');
             $table->string('password');
             $table->string('avatar_path')->nullable();
             $table->string('status')->default('active');

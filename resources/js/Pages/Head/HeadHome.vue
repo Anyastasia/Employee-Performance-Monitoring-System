@@ -196,6 +196,9 @@
                                             Actual Accomplishments
                                         </TableCell>
                                         <TableCell :isHeader="true">
+                                            Remarks
+                                        </TableCell>
+                                        <TableCell :isHeader="true">
                                             Rating
                                         </TableCell>
                                     </TableRow>
@@ -214,8 +217,13 @@
                                         </TableCell>
                                         <TableCell>
                                             <div class="flex">
-                                                <textarea rows="5" v-model="ev.actual_accomplishments"></textarea>
-                                            </div>
+                                                <textarea rows="5"  v-model="ev.actual_accomplishments"></textarea>
+                                            </div> 
+                                        </TableCell>
+                                        <TableCell>
+                                            <div class="flex">
+                                                <textarea rows="5" v-model="ev.remarks"></textarea>
+                                            </div> 
                                         </TableCell>
                                         <TableCell>
                                             <Table class="mx-auto my-auto">
@@ -269,6 +277,11 @@
                                 </template>
                             </Table>
 
+                            <div class="my-1">
+                                <label for="evaluation_comments" class="display-block mb--5">Comments</label>
+                                <textarea name="evaluation_comments" rows="4" cols="50" v-model="evaluation.comments"></textarea>
+                            </div>
+
                             <Error v-if="errors.rating_required" :message="errors.rating_required"></Error>
                             <article class="my-1">
                                 <p class="mb-1">Total Average Rating: {{ getSumOfAverages() }}</p>
@@ -279,11 +292,18 @@
 
                                 <div class="flex mt-2">
                                     <TextButton type="button" class='ml-auto' @click="closeEvaluateEmployee">Close</TextButton>
-                                    <PrimaryButton type="submit">Submit</PrimaryButton>
+                                    <a v-if="previousRating" :href="`/view/ipcr/${selected_employee}/${employee.id}/
+                                    ${previousRating}`">
+                                        Generate PDF
+                                    </a>
+                                    <PrimaryButton v-else type="submit">Submit</PrimaryButton>
                                 </div>
                             </form>
                         </section>
                     </Dialog>
+
+                   
+
 
                     <Dialog :show="showAssignTasks" :exit="closeAssignTasks" class="my-3">
                         
@@ -405,7 +425,7 @@
                             </template>
                             
                             <template #table-body> 
-                                <TableRow v-for="xemployee in employees" :key="xemployee.id">
+                                <TableRow v-for="(xemployee, index) in employees" :key="xemployee.id">
                                     <TableCell>{{xemployee.first_name}}</TableCell>
                                     <TableCell>{{xemployee.last_name}}</TableCell>
                                     <TableCell>{{xemployee.email}}</TableCell>
@@ -420,7 +440,7 @@
                                                 <i class="bi bi-plus mr--5"></i>
                                                 Assign Task
                                             </PrimaryButton>
-                                            <PrimaryButton @click="openEvaluateEmployee(xemployee.id)">Evaluate</PrimaryButton>
+                                            <PrimaryButton @click="openEvaluateEmployee(xemployee.id, index)">Evaluate</PrimaryButton>
                                             <LinkButton :href="`/head/employee/${xemployee.id}`">View</LinkButton>
                                         </div>
                                     </TableCell>
@@ -438,7 +458,7 @@
     import EmployeeLayout from '@/Layouts/EmployeeLayout.vue';
     import PrimaryButton from '@/Components/Button/PrimaryButton.vue';
     import OutlineButton from '@/Components/Button/OutlineButton.vue'
-    import Link from '@inertiajs/inertia-vue3'
+    import {Link} from '@inertiajs/inertia-vue3'
     import LinkButton from '@/Components/Button/LinkButton.vue';
     import TextButton from '@/Components/Button/TextButton.vue';
     import Table from '@/Components/Table/Table.vue';
@@ -491,6 +511,7 @@
                     output: '',
                     target: '',
                 }),
+                selected_employee: '',
                 self_evaluation_id: 0,
                 previousRating: 0,
                 quality: [1,2,3,4,5],
@@ -509,6 +530,7 @@
                         output: '',
                         success_indicators: '',
                         actual_accomplishments: '',
+                        remarks: '',
                         quality_indicators: '', 
                         efficiency_indicators: '', 
                         timeliness_indicators: '',
@@ -527,7 +549,9 @@
                     finalAverageRating: 0,
                     adjectivalRating: '',
                     scores: [],
+                    comments: '',
                 }),
+                comment : '',
                 // evaluationForm: [],
                 adjRating: [
                     "Poor",
@@ -568,7 +592,7 @@
             closeDialog(){
                 this.close = !this.close
             },
-            openEvaluateEmployee(id) {
+            openEvaluateEmployee(id, index) {
                 this.employee_id = id
                 this.evaluation.employee_id = id
                 Inertia.reload({
@@ -577,6 +601,7 @@
                         employee_id: id
                     },
                     onSuccess: () => {
+                        this.selected_employee = this.employees[index].id
                         this.showEvaluateEmployee = !this.showEvaluateEmployee
                         this.yevaluationForm.length = 0
                         this.xevaluationForm.forEach(ev => {
@@ -627,7 +652,7 @@
             closeOutputForm(){
                 this.exitOutputForm = !this.exitOutputForm
             },
-            uploadAttachments() {
+            uploadAttachments() {router
                 this.taskForm.attachments = this.$refs.attachments.files[0]
             },
             toggleAssignTasks(flag, id) {
@@ -754,10 +779,11 @@
                     this.evaluation.self_evaluation_id = this.self_evaluation_id
                     this.evaluation.scores.push({
                         evaluation_form_id: ev.id,
+                        actual_accomplishments: ev.actual_accomplishments,
+                        remarks: ev.remarks,
                         quality_average: ev.quality,
                         efficiency_average: ev.efficiency,
                         timeliness_average: ev.timeliness,
-                        
                     })
                 })
                 this.evaluation.post('/head/evaluate', {
@@ -777,6 +803,19 @@
                 //         this.showEvaluateEmployeeSuccess = true
                 //     }
                 // })
+            },
+
+            generatePDF() {
+                // Inertia.visit('/view/xpcr', {
+                //     method: 'get',
+                //     data: {
+                //         evaluations: this.evaluations,
+                //         employee_id: this.selected_employee,
+                //         head_id: this.employee.id,
+                //         evaluation_id: this.previousRating,
+                //     }
+                // });
+                this.$router.push('/view/xpcr')
             }
 
         },
@@ -817,7 +856,7 @@
                                         employee_id: ev.employee_id,
                                         output: ev.output,
                                         success_indicators: ev.success_indicators,
-                                        actual_accomplishments: ev.actual_accomplishments,
+                                        actual_accomplishments: this.evaluation_scores[index].actual_accomplishments,
                                         quality_indicators: ev.quality_indicators,
                                         efficiency_indicators: ev.efficiency_indicators,
                                         timeliness_indicators: ev.timeliness_indicators,
@@ -825,7 +864,9 @@
                                         quality: this.evaluation_scores[index].quality_average,
                                         efficiency: this.evaluation_scores[index].efficiency_average,
                                         timeliness: this.evaluation_scores[index].timeliness_average,
-                                    })  
+                                        remarks: this.evaluation_scores[index].remarks,
+                                    })
+                                    this.evaluation.comments = this.evaluations[index].comments
                             })
                             // this.openEvaluateEmployee = !this.openEvaluateEmployee
                         }
@@ -871,6 +912,7 @@
                             this.evaluationForm.push({
                                 id: '',
                                 output: '',
+                                remarks: '',
                                 success_indicators: '',
                                 actual_accomplishments: '',
                                 quality_indicators: '', 
@@ -884,6 +926,7 @@
                                         id: ev.id,
                                         employee_id: ev.employee_id,
                                         output: ev.output,
+                                        remarks: ev.remarks,
                                         success_indicators: ev.success_indicators,
                                         quality_indicators: ev.quality_indicators,
                                         efficiency_indicators: ev.efficiency_indicators,
@@ -919,3 +962,16 @@
         }
     }
 </script>
+
+<style scoped>
+
+a {
+    background-color: var(--primary);
+    color: var(--white);
+    padding-inline: 1em;
+    padding-block: .5em;
+    font-size: 0.90rem;
+    border-radius: var(--corner-radius);
+}
+
+</style>

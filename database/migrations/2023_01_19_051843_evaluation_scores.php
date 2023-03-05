@@ -18,6 +18,8 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('evaluation_form_id');
             $table->bigInteger('evaluation_id');
+            $table->string('actual_accomplishments')->nullable();
+            $table->string('remarks')->nullable();
             $table->float('quality_average')->nullable();
             $table->float('efficiency_average')->nullable();
             $table->float('timeliness_average')->nullable();

@@ -27,9 +27,9 @@ class Evaluation extends Controller
             "start_date" => $request->start_date,
             "end_date" => $request->end_date,
             "total_average_rating" => $request->totalAverageRating,
-            "rating" => $request->finalAverageRating,
             "adjectival_rating" => $request->adjectivalRating,
-            "self" => $request->self                        ,
+            "self" => $request->self,
+            'comments' => $request->comments,
         ]);
 
         // $model->save();
@@ -45,6 +45,8 @@ class Evaluation extends Controller
                 "quality_average" => $request->scores[$i]['quality_average'],
                 "efficiency_average" => $request->scores[$i]['efficiency_average'],
                 "timeliness_average" => $request->scores[$i]['timeliness_average'],
+                "actual_accomplishments" => $request->scores[$i]['actual_accomplishments'],
+                "remarks" => $request->scores[$i]['remarks'],
             ]);
         }
         // EvaluationScore::upsert(
